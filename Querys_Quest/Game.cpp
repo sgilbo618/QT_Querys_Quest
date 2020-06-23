@@ -8,10 +8,10 @@
 
 #include "Game.hpp"
 #include "Wall.hpp"
-//#include "Free.hpp"
-//#include "Ice.hpp"
-//#include "Fire.hpp"
-//#include "Water.hpp"
+#include "Free.hpp"
+#include "Ice.hpp"
+#include "Fire.hpp"
+#include "Water.hpp"
 //#include "Door.hpp"
 //#include "Key.hpp"
 //#include "Boots.hpp"
@@ -247,7 +247,7 @@ void Game::createGameBoard()
     createWaterRoom();
     createMixRoom();
     createFinishRoom();
-//	fillInEmptySpaces();
+    fillInEmptySpaces();
 //	setSpacePointers();
 }
 
@@ -302,34 +302,34 @@ void Game::createIceRoom()
     gameBoard[11][4] = new Wall;
 
     // Free
-//    gameBoard[1][3] = new Free; gameBoard[2][1] = new Free;
-//    gameBoard[2][6] = new Free; gameBoard[4][7] = new Free; gameBoard[4][10] = new Free;
-//    gameBoard[5][3] = new Free; gameBoard[5][6] = new Free; gameBoard[7][4] = new Free;
-//    gameBoard[7][9] = new Free; gameBoard[9][1] = new Free; gameBoard[9][7] = new Free;
-//    gameBoard[10][4] = new Free;
+    gameBoard[1][3] = new Free; gameBoard[2][1] = new Free;
+    gameBoard[2][6] = new Free; gameBoard[4][7] = new Free; gameBoard[4][10] = new Free;
+    gameBoard[5][3] = new Free; gameBoard[5][6] = new Free; gameBoard[7][4] = new Free;
+    gameBoard[7][9] = new Free; gameBoard[9][1] = new Free; gameBoard[9][7] = new Free;
+    gameBoard[10][4] = new Free;
 
     // Water
-//    for (int i = 0; i < 11; i++)
-//    {
-//        gameBoard[0][i] = new Water;
-//        gameBoard[i][0] = new Water;
-//        gameBoard[i][11] = new Water;
-//    }
-//    gameBoard[10][1] = new Water; gameBoard[10][2] = new Water; gameBoard[10][3] = new Water;
+    for (int i = 0; i < 11; i++)
+    {
+        gameBoard[0][i] = new Water;
+        gameBoard[i][0] = new Water;
+        gameBoard[i][11] = new Water;
+    }
+    gameBoard[10][1] = new Water; gameBoard[10][2] = new Water; gameBoard[10][3] = new Water;
 
     // Ice
-//    for (int i = 1; i <= 9; i++)
-//    {
-//        for (int j = 1; j <= 10; j++)
-//        {
-//            if (gameBoard[i][j] == nullptr)
-//            {
-//                gameBoard[i][j] = new Ice;
-//            }
-//        }
-//    }
-//    gameBoard[10][5] = new Ice; gameBoard[10][6] = new Ice; gameBoard[10][7] = new Ice;
-//    gameBoard[10][8] = new Ice; gameBoard[10][9] = new Ice;
+    for (int i = 1; i <= 9; i++)
+    {
+        for (int j = 1; j <= 10; j++)
+        {
+            if (gameBoard[i][j] == nullptr)
+            {
+                gameBoard[i][j] = new Ice;
+            }
+        }
+    }
+    gameBoard[10][5] = new Ice; gameBoard[10][6] = new Ice; gameBoard[10][7] = new Ice;
+    gameBoard[10][8] = new Ice; gameBoard[10][9] = new Ice;
 }
 
 
@@ -366,7 +366,7 @@ void Game::createMazeRoom()
     gameBoard[23][9] = new Wall; gameBoard[24][9] = new Wall;
 
     // Fire
-    //gameBoard[21][8] = new Fire;
+    gameBoard[21][8] = new Fire;
 }
 
 
@@ -391,13 +391,13 @@ void Game::createWaterRoom()
     gameBoard[22][18] = new Wall; gameBoard[23][18] = new Wall; gameBoard[24][18] = new Wall;
 
     // Water
-//    gameBoard[19][11] = new Water; gameBoard[19][12] = new Water; gameBoard[19][13] = new Water;
-//    gameBoard[19][14] = new Water; gameBoard[19][15] = new Water; gameBoard[19][16] = new Water;
-//    gameBoard[19][17] = new Water; gameBoard[20][11] = new Water; gameBoard[21][11] = new Water;
-//    gameBoard[21][13] = new Water; gameBoard[21][14] = new Water; gameBoard[21][15] = new Water;
-//    gameBoard[21][16] = new Water; gameBoard[22][11] = new Water; gameBoard[22][16] = new Water;
-//    gameBoard[23][11] = new Water; gameBoard[23][12] = new Water; gameBoard[23][13] = new Water;
-//    gameBoard[23][14] = new Water; gameBoard[23][15] = new Water; gameBoard[23][16] = new Water;
+    gameBoard[19][11] = new Water; gameBoard[19][12] = new Water; gameBoard[19][13] = new Water;
+    gameBoard[19][14] = new Water; gameBoard[19][15] = new Water; gameBoard[19][16] = new Water;
+    gameBoard[19][17] = new Water; gameBoard[20][11] = new Water; gameBoard[21][11] = new Water;
+    gameBoard[21][13] = new Water; gameBoard[21][14] = new Water; gameBoard[21][15] = new Water;
+    gameBoard[21][16] = new Water; gameBoard[22][11] = new Water; gameBoard[22][16] = new Water;
+    gameBoard[23][11] = new Water; gameBoard[23][12] = new Water; gameBoard[23][13] = new Water;
+    gameBoard[23][14] = new Water; gameBoard[23][15] = new Water; gameBoard[23][16] = new Water;
 }
 
 
@@ -425,23 +425,23 @@ void Game::createMixRoom()
         // Walls
         gameBoard[11][i] = new Wall;
 
-//        // Fire
-//        gameBoard[12][i] = new Fire; gameBoard[19][i] = new Fire; gameBoard[22][i] = new Fire;
+        // Fire
+        gameBoard[12][i] = new Fire; gameBoard[19][i] = new Fire; gameBoard[22][i] = new Fire;
 
-//        // Ice
-//        gameBoard[17][i] = new Ice; gameBoard[18][i] = new Ice;
-//        if (i >= 21 && i <= 23)
-//        {
-//            gameBoard[14][i] = new Ice; gameBoard[15][i] = new Ice; gameBoard[16][i] = new Ice;
-//        }
+        // Ice
+        gameBoard[17][i] = new Ice; gameBoard[18][i] = new Ice;
+        if (i >= 21 && i <= 23)
+        {
+            gameBoard[14][i] = new Ice; gameBoard[15][i] = new Ice; gameBoard[16][i] = new Ice;
+        }
     }
-//    // More ice
-//    gameBoard[13][19] = new Ice; gameBoard[13][20] = new Ice; gameBoard[13][22] = new Ice;
-//    gameBoard[13][23] = new Ice;
+    // More ice
+    gameBoard[13][19] = new Ice; gameBoard[13][20] = new Ice; gameBoard[13][22] = new Ice;
+    gameBoard[13][23] = new Ice;
 
-//    // More fire
-//    gameBoard[13][24] = new Fire; gameBoard[14][24] = new Fire; gameBoard[15][24] = new Fire;
-//    gameBoard[16][24] = new Fire; gameBoard[17][24] = new Fire; gameBoard[18][24] = new Fire;
+    // More fire
+    gameBoard[13][24] = new Fire; gameBoard[14][24] = new Fire; gameBoard[15][24] = new Fire;
+    gameBoard[16][24] = new Fire; gameBoard[17][24] = new Fire; gameBoard[18][24] = new Fire;
 }
 
 
@@ -480,42 +480,42 @@ void Game::createFinishRoom()
     gameBoard[9][23] = new Wall; gameBoard[10][19] = new Wall; gameBoard[10][23] = new Wall;
 
     // Ice
-//    gameBoard[6][16] = new Ice; gameBoard[7][16] = new Ice; gameBoard[8][16] = new Ice;
-//    gameBoard[9][15] = new Ice; gameBoard[9][16] = new Ice; gameBoard[9][17] = new Ice;
-//    gameBoard[9][20] = new Ice; gameBoard[9][21] = new Ice; gameBoard[9][22] = new Ice;
-//    gameBoard[10][15] = new Ice; gameBoard[10][16] = new Ice; gameBoard[10][17] = new Ice;
-//    gameBoard[10][20] = new Ice; gameBoard[10][21] = new Ice; gameBoard[10][22] = new Ice;
+    gameBoard[6][16] = new Ice; gameBoard[7][16] = new Ice; gameBoard[8][16] = new Ice;
+    gameBoard[9][15] = new Ice; gameBoard[9][16] = new Ice; gameBoard[9][17] = new Ice;
+    gameBoard[9][20] = new Ice; gameBoard[9][21] = new Ice; gameBoard[9][22] = new Ice;
+    gameBoard[10][15] = new Ice; gameBoard[10][16] = new Ice; gameBoard[10][17] = new Ice;
+    gameBoard[10][20] = new Ice; gameBoard[10][21] = new Ice; gameBoard[10][22] = new Ice;
 
     // Fire
-//    gameBoard[5][18] = new Fire; gameBoard[5][19] = new Fire; gameBoard[5][20] = new Fire;
-//    gameBoard[6][18] = new Fire; gameBoard[6][19] = new Fire; gameBoard[6][20] = new Fire;
+    gameBoard[5][18] = new Fire; gameBoard[5][19] = new Fire; gameBoard[5][20] = new Fire;
+    gameBoard[6][18] = new Fire; gameBoard[6][19] = new Fire; gameBoard[6][20] = new Fire;
 
     // Water
-//    gameBoard[8][13] = new Water; gameBoard[8][14] = new Water; gameBoard[8][15] = new Water;
-//    gameBoard[8][17] = new Water; gameBoard[8][18] = new Water; gameBoard[9][13] = new Water;
-//    gameBoard[9][14] = new Water; gameBoard[9][18] = new Water; gameBoard[10][14] = new Water;
-//    gameBoard[10][18] = new Water;
+    gameBoard[8][13] = new Water; gameBoard[8][14] = new Water; gameBoard[8][15] = new Water;
+    gameBoard[8][17] = new Water; gameBoard[8][18] = new Water; gameBoard[9][13] = new Water;
+    gameBoard[9][14] = new Water; gameBoard[9][18] = new Water; gameBoard[10][14] = new Water;
+    gameBoard[10][18] = new Water;
 }
 
 
-///******************************************************************************
-//** Function: fillInEmptySpaces()
-//** Description: Loops through gameBoard and creates a free space where
-//**				ever there is a nullptr.
-//******************************************************************************/
-//void Board::fillInEmptySpaces()
-//{
-//	for (int i = 0; i < ROWS; i++)
-//	{
-//		for (int j = 0; j < COLS; j++)
-//		{
-//			if (gameBoard[i][j] == nullptr)
-//			{
-//				gameBoard[i][j] = new Free;
-//			}
-//		}
-//	}
-//}
+/******************************************************************************
+** Function: fillInEmptySpaces()
+** Description: Loops through gameBoard and creates a free space where ever
+**      there is a nullptr.
+******************************************************************************/
+void Game::fillInEmptySpaces()
+{
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLS; j++)
+        {
+            if (gameBoard[i][j] == nullptr)
+            {
+                gameBoard[i][j] = new Free;
+            }
+        }
+    }
+}
 
 
 ///******************************************************************************

@@ -25,7 +25,11 @@ SOURCES += \
     Game.cpp \
     Space.cpp \
     Wall.cpp \
-    Player.cpp
+    Player.cpp \
+    Free.cpp \
+    Ice.cpp \
+    Fire.cpp \
+    Water.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -36,7 +40,11 @@ HEADERS += \
     Space.hpp \
     Game.hpp \
     Wall.hpp \
-    Player.hpp
+    Player.hpp \
+    Free.hpp \
+    Ice.hpp \
+    Fire.hpp \
+    Water.hpp
 
 RESOURCES += \
     res.qrc

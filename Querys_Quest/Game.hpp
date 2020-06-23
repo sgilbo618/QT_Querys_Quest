@@ -49,7 +49,7 @@ public:
     void createWaterRoom();
     void createMixRoom();
     void createFinishRoom();
-//    void fillInEmptySpaces();
+    void fillInEmptySpaces();
 
 //    // Element Methods
 //    void checkForElements();

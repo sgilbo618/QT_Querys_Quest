@@ -21,7 +21,7 @@ Wall::Wall()
     spaceType = WALL;
     symbol = "# ";
 
-    setPixmap(QPixmap(":/images/basic_wall.png"));
+    setPixmap(QPixmap(":/images/wall.png"));
 }
 
 

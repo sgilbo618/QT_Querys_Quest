@@ -1,8 +1,10 @@
 <RCC>
     <qresource prefix="/images">
-        <file>tower_grass.png</file>
-        <file>basic_wall.png</file>
         <file>floor.png</file>
         <file>walking_guy.png</file>
+        <file>wall.png</file>
+        <file>ice.png</file>
+        <file>fire.png</file>
+        <file>water.png</file>
     </qresource>
 </RCC>
