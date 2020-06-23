@@ -30,7 +30,10 @@ SOURCES += \
     Ice.cpp \
     Fire.cpp \
     Water.cpp \
-    Door.cpp
+    Door.cpp \
+    Key.cpp \
+    Boots.cpp \
+    Query.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -46,7 +49,10 @@ HEADERS += \
     Ice.hpp \
     Fire.hpp \
     Water.hpp \
-    Door.hpp
+    Door.hpp \
+    Key.hpp \
+    Boots.hpp \
+    Query.hpp
 
 RESOURCES += \
     res.qrc

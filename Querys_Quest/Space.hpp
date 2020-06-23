@@ -16,7 +16,7 @@
 
 enum SpaceType {FREE, WALL, DOOR, KEY, ELEMENT, BOOTS, QUERY};
 enum ElementType {NON, ICE, FIRE, WATER};
-enum ItemType {NONE, REDKEY, BLUEKEY, GREENKEY, WATERBOOTS, FIREBOOTS, ICEBOOTS};
+enum ItemType {NONE, ORANGEKEY, YELLOWKEY, GREENKEY, WATERBOOTS, FIREBOOTS, ICEBOOTS};
 
 class Space : public QObject, public QGraphicsPixmapItem
 {

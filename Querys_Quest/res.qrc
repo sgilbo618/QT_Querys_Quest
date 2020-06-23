@@ -7,7 +7,16 @@
         <file>fire.png</file>
         <file>water.png</file>
         <file>green_door.png</file>
-        <file>red_door.png</file>
         <file>yellow_door.png</file>
+        <file>locked_portal.png</file>
+        <file>unlocked_portal.png</file>
+        <file>green_key.png</file>
+        <file>yellow_key.png</file>
+        <file>orange_door.png</file>
+        <file>orange_key.png</file>
+        <file>fire_boots.png</file>
+        <file>ice_boots.png</file>
+        <file>query.png</file>
+        <file>water_boots.png</file>
     </qresource>
 </RCC>

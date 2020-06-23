@@ -34,9 +34,9 @@ Door::Door(std::string symbol)
     this->symbol = symbol;
     isLocked = true;
 
-    if (symbol == "R ")
+    if (symbol == "O ")
     {
-        setPixmap(QPixmap(":/images/red_door.png"));
+        setPixmap(QPixmap(":/images/orange_door.png"));
     }
     else if (symbol == "G ")
     {
@@ -48,7 +48,7 @@ Door::Door(std::string symbol)
     }
     else if (symbol == "! ")
     {
-        //setPixmap(QPixmap(":/images/final_door.png"));
+        setPixmap(QPixmap(":/images/locked_portal.png"));
     }
 }
 
@@ -88,9 +88,9 @@ void Door::displayMessage()
     // When a door is locked, it cannot be passed
     if (isLocked)
     {
-        if (symbol == "R ")
+        if (symbol == "O ")
         {
-            std::cout << "This door is locked - Query needs the red key to go in here." << std::endl;
+            std::cout << "This door is locked - Query needs the orange key to go in here." << std::endl;
         }
         else if (symbol == "G ")
         {
@@ -108,9 +108,9 @@ void Door::displayMessage()
     // The door is unlocked messages
     else
     {
-        if (symbol == "R ")
+        if (symbol == "O ")
         {
-            std::cout << "Query used the red key to unlock the red door!" << std::endl;
+            std::cout << "Query used the orange key to unlock the orange door!" << std::endl;
         }
         else if (symbol == "G ")
         {

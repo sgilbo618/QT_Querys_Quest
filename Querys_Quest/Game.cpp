@@ -13,9 +13,9 @@
 #include "Fire.hpp"
 #include "Water.hpp"
 #include "Door.hpp"
-//#include "Key.hpp"
-//#include "Boots.hpp"
-//#include "Query.hpp"
+#include "Key.hpp"
+#include "Boots.hpp"
+#include "Query.hpp"
 
 #include <iostream>
 
@@ -259,11 +259,11 @@ void Game::createGameBoard()
 ******************************************************************************/
 void Game::createMainRoom()
 {
-    // Blue Key
-    //gameBoard[13][6] = new Key("b ", BLUEKEY, "b");
+    // Yellow Key
+    gameBoard[13][6] = new Key("y ", YELLOWKEY, "y");
 
     // Queries
-    //gameBoard[15][8] = new Query;
+    gameBoard[15][8] = new Query;
 
     // Walls
     gameBoard[11][5] = new Wall; gameBoard[11][6] = new Wall; gameBoard[11][7] = new Wall;
@@ -288,10 +288,10 @@ void Game::createMainRoom()
 void Game::createIceRoom()
 {
     // Green Key
-    //gameBoard[1][5] = new Key("g ", GREENKEY, "g");
+    gameBoard[1][5] = new Key("g ", GREENKEY, "g");
 
     // Queries
-    //gameBoard[10][10] = new Query; // gameBoard[][] = new Query; gameBoard[][] = new Query;
+    gameBoard[10][10] = new Query; // gameBoard[][] = new Query; gameBoard[][] = new Query;
 
     // Walls
     gameBoard[0][12] = new Wall; gameBoard[1][12] = new Wall; gameBoard[2][12] = new Wall;
@@ -339,14 +339,14 @@ void Game::createIceRoom()
 ******************************************************************************/
 void Game::createMazeRoom()
 {
-    // Red Key
-    //gameBoard[22][8] = new Key("r ", REDKEY, "r");
+    // Orange Key
+    gameBoard[22][8] = new Key("o ", ORANGEKEY, "o");
 
     // Water boots
-    //gameBoard[22][4] = new Boots("W ", WATERBOOTS, "W");
+    gameBoard[22][4] = new Boots("W ", WATERBOOTS, "W");
 
     // Queries
-    //gameBoard[13][3] = new Query; gameBoard[17][2] = new Query; gameBoard[24][8] = new Query;
+    gameBoard[13][3] = new Query; gameBoard[17][2] = new Query; gameBoard[24][8] = new Query;
 
     // Walls
     gameBoard[13][1] = new Wall; gameBoard[13][2] = new Wall; gameBoard[14][1] = new Wall;
@@ -380,10 +380,10 @@ void Game::createWaterRoom()
     gameBoard[17][13] = new Door("G ");
 
     // Fire Boots
-    //gameBoard[22][15] = new Boots("F ", FIREBOOTS, "F");
+    gameBoard[22][15] = new Boots("F ", FIREBOOTS, "F");
 
     // Queries
-    //gameBoard[18][17] = new Query; gameBoard[24][17] = new Query; // gameBoard[][] = new Query;
+    gameBoard[18][17] = new Query; gameBoard[24][17] = new Query; // gameBoard[][] = new Query;
 
     // Walls
     gameBoard[18][18] = new Wall;
@@ -411,16 +411,16 @@ void Game::createMixRoom()
     gameBoard[15][18] = new Door("Y ");
 
     // Ice Boots
-    //gameBoard[24][22] = new Boots("I ", ICEBOOTS, "I");
+    gameBoard[24][22] = new Boots("I ", ICEBOOTS, "I");
 
     // Queries
     //gameBoard[13][21] = new Query;
 
     for (int i = 19; i <= 24; i++)
     {
-//        // Queries
-//        gameBoard[20][i] = new Query;
-//        gameBoard[21][i] = new Query;
+        // Queries
+        gameBoard[20][i] = new Query;
+        gameBoard[21][i] = new Query;
 
         // Walls
         gameBoard[11][i] = new Wall;
@@ -452,14 +452,14 @@ void Game::createMixRoom()
 void Game::createFinishRoom()
 {
     // Final Door
-    //gameBoard[0][24] = new Door("! ");
+    gameBoard[0][24] = new Door("! ");
 
-    // Red Door
-    gameBoard[11][16] = new Door("R ");
+    // Orange Door
+    gameBoard[11][16] = new Door("O ");
 
     // Queries
-//    gameBoard[0][13] = new Query; gameBoard[2][20] = new Query; gameBoard[3][13] = new Query;
-//    gameBoard[10][13] = new Query; gameBoard[10][24] = new Query;
+    gameBoard[0][13] = new Query; gameBoard[2][20] = new Query; gameBoard[3][13] = new Query;
+    gameBoard[10][13] = new Query; gameBoard[10][24] = new Query;
 
     // Walls
     gameBoard[0][17] = new Wall; gameBoard[0][23] = new Wall; gameBoard[1][17] = new Wall;
