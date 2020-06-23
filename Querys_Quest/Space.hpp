@@ -10,8 +10,6 @@
 #define SPACE_HPP
 
 #include <string>
-//#include <QBrush>
-//#include <QGraphicsPolygonItem>
 #include <QObject>
 #include <QGraphicsPixmapItem>
 

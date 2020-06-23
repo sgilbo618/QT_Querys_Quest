@@ -6,5 +6,8 @@
         <file>ice.png</file>
         <file>fire.png</file>
         <file>water.png</file>
+        <file>green_door.png</file>
+        <file>red_door.png</file>
+        <file>yellow_door.png</file>
     </qresource>
 </RCC>

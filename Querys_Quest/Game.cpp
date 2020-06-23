@@ -12,7 +12,7 @@
 #include "Ice.hpp"
 #include "Fire.hpp"
 #include "Water.hpp"
-//#include "Door.hpp"
+#include "Door.hpp"
 //#include "Key.hpp"
 //#include "Boots.hpp"
 //#include "Query.hpp"
@@ -377,7 +377,7 @@ void Game::createMazeRoom()
 void Game::createWaterRoom()
 {
     // Green Door
-    //gameBoard[17][13] = new Door("G ");
+    gameBoard[17][13] = new Door("G ");
 
     // Fire Boots
     //gameBoard[22][15] = new Boots("F ", FIREBOOTS, "F");
@@ -407,8 +407,8 @@ void Game::createWaterRoom()
 ******************************************************************************/
 void Game::createMixRoom()
 {
-    // Blue Door
-    //gameBoard[15][18] = new Door("B ");
+    // Yellow Door
+    gameBoard[15][18] = new Door("Y ");
 
     // Ice Boots
     //gameBoard[24][22] = new Boots("I ", ICEBOOTS, "I");
@@ -455,7 +455,7 @@ void Game::createFinishRoom()
     //gameBoard[0][24] = new Door("! ");
 
     // Red Door
-    //gameBoard[11][16] = new Door("R ");
+    gameBoard[11][16] = new Door("R ");
 
     // Queries
 //    gameBoard[0][13] = new Query; gameBoard[2][20] = new Query; gameBoard[3][13] = new Query;
