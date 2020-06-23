@@ -62,6 +62,12 @@ Game::Game(QWidget *parent)
     //player->playerPtr->setSpaceSymbol("Q ");
     player->setPos(15*30, 15*30);
     scene->addItem(player);
+
+    // Make player focusalbe and set it to current focus
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+
+    show();
 }
 
 

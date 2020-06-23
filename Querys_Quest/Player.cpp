@@ -15,6 +15,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
+#include <QKeyEvent>
 
 
 /******************************************************************************
@@ -71,24 +72,41 @@ Player::~Player()
 //}
 
 
-///******************************************************************************
-//** Function: movePlayer()
-//** Description: Gets and validates user input for player movement and
-//**				moves the player if the move is valid.
-//******************************************************************************/
-//void Player::movePlayer()
-//{
-//    int move = 0;
-
-//      // Get move from user
-//    std::cout << "Enter move: ";
-//#ifdef __linux__  // use getch() from getCharInput.cpp for linux
-//    move = getch();
-//#else
-//    move = _getch(); // use _getch() from conios.h for windows
-//#endif
-//    //move = std::cin.get(); // For testing character moves
-//    std::cout << std::endl;
+/******************************************************************************
+** Function: getPlayerMove(QKeyEvent* event)
+** Description: Gets and validates user input for player movement and
+**				moves the player if the move is valid.
+******************************************************************************/
+void Player::keyPressEvent(QKeyEvent *event)
+{
+    // Up
+    if (event->key() == Qt::Key_Up)
+    {
+        setPos(x(), y()-GRID_STEP);
+    }
+    // Down
+    else if (event->key() == Qt::Key_Down)
+    {
+        setPos(x(), y()+GRID_STEP);
+    }
+    // Left
+    else if (event->key() == Qt::Key_Left)
+    {
+       // Don't move off board
+       if (pos().x() > 0)
+       {
+            setPos(x()-GRID_STEP, y());
+       }
+    }
+    // Right
+    else if (event->key() == Qt::Key_Right)
+    {
+        // Don't move off board
+        if (pos().x() + 100 < 800)
+        {
+            setPos(x()+GRID_STEP, y());
+        }
+    }
 
 //    // Up
 //    if ((move == 72 || move == 'A') && playerPtr->getUp() != nullptr) // && is for boundry checking
@@ -129,7 +147,7 @@ Player::~Player()
 //    {
 //        std::cout << std::endl << "** Invalid Move" << std::endl;
 //    }
-//}
+}
 
 
 ///******************************************************************************

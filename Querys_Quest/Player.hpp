@@ -26,6 +26,7 @@
 
 #define MAX_STEPS 600
 #define QUERIES_NEEDED 25
+#define GRID_STEP 30
 
 enum Direction { UP, DOWN, LEFT, RIGHT };
 
@@ -51,7 +52,7 @@ public:
 //    bool checkIsAlive();
 
     // Move methods
-//    void movePlayer();
+    void keyPressEvent(QKeyEvent* event);
 //    void makeMove(Space* moveSpace);
 //    bool checkLegalMove(Space* moveSpace);
 //    void resetSpaceSymbol();
