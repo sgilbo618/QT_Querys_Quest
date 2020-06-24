@@ -18,6 +18,7 @@
 
 #define ROWS 25 // i
 #define COLS 25 // j
+#define GRID_STEP 30
 
 class Game: public QGraphicsView
 {
@@ -30,6 +31,7 @@ private:
 public:
     // Data
     QGraphicsScene *scene;
+    QGraphicsView *view;
 
     // Constructor - Destructor
     Game(QWidget *parent = NULL);
@@ -37,8 +39,7 @@ public:
 
 //    // Utility Methods
 //    void runGame();
-//    void printGameBoard();
-//    void setSpacePointers();
+    void setSpacePointers();
     void addAllItemsToScene();
 
     // Create Room methods

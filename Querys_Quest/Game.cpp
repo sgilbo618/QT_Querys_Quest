@@ -20,22 +20,23 @@
 #include <iostream>
 
 
-/*********************************************************************
+/******************************************************************************
 ** Function: Game()
 ** Description: Game constructor.
-*********************************************************************/
+******************************************************************************/
 Game::Game(QWidget *parent)
 {
-    // Create and set scene
-    scene = new QGraphicsScene();
+    /* Create and set scene */
+    scene = new QGraphicsScene(this);
     setScene(scene);
 
-    // Set size of window
+    // Set size of scene
     scene->setSceneRect(0, 0, 810, 810);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // Build 2D array of Spaces
+
+    /* Build 2D board */
     gameBoard = new Space**[ROWS];
 
     for (int i = 0; i < COLS; i++)
@@ -52,15 +53,20 @@ Game::Game(QWidget *parent)
         }
     }
 
-    // Build game board
+    // Add rooms
     createGameBoard();
     addAllItemsToScene();
 
-    // Build player
+
+    /* Build player */
     player = new Player;
-    //player->playerPtr = gameBoard[15][15];
-    //player->playerPtr->setSpaceSymbol("Q ");
-    player->setPos(15*30, 15*30);
+
+    // Attach player to board
+    player->playerPtr = gameBoard[15][15];
+    player->playerPtr->setSpaceSymbol("Q ");
+
+    // Attach player to scene
+    player->setPos(15*GRID_STEP, 15*GRID_STEP);
     scene->addItem(player);
 
     // Make player focusalbe and set it to current focus
@@ -93,7 +99,7 @@ Game::~Game()
 ///******************************************************************************
 //** Function: runGame()
 //** Description: Driver function for the game. Each round, it checks
-//**				for game ending conditions and if the game is not
+//**                for game ending conditions and if the game is not
 //**				over it calls functions to display items, the board,
 //**				get and make moves, and checks for elements, items,
 //**				and queries.
@@ -126,72 +132,43 @@ Game::~Game()
 //}
 
 
-///******************************************************************************
-//** Function: printGameBoard()
-//** Description: Loops through gameBoard and prints each Spaces's char.
-//******************************************************************************/
-//void Board::printGameBoard()
-//{
-//	// Print items
-//	//player.displayItems();
+/******************************************************************************
+** Function: setSpacePointers()
+** Description: Loop through gameBoard and set all of the Space's directional
+**      pointers to its surrounding Spaces.
+******************************************************************************/
+void Game::setSpacePointers()
+{
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLS; j++)
+        {
+            // Set ups - not top row
+            if (i != 0)
+            {
+                gameBoard[i][j]->setUp(gameBoard[i - 1][j]);
+            }
 
-//	// Print top boarder
-//	std::cout << std::endl;
-//	std::cout << "# # # # # # # # # # # # # # # # # # # # # # # # # # #" << std::endl;
+            // Set downs - not bottom row
+            if (i != ROWS - 1)
+            {
+                gameBoard[i][j]->setDown(gameBoard[i + 1][j]);
+            }
 
-//	// Print gameBoard
-//	for (int i = 0; i < ROWS; i++)
-//	{
-//		std::cout << "# ";
-//		for (int j = 0; j < COLS; j++)
-//		{
-//			std::cout << gameBoard[i][j]->getSpaceSymbol();
-//		}
-//		std::cout << "#" << std::endl;
-//	}
+            // Set lefts - not first col
+            if (j != 0)
+            {
+                gameBoard[i][j]->setLeft(gameBoard[i][j - 1]);
+            }
 
-//	// Print bottom boarder
-//	std::cout << "# # # # # # # # # # # # # # # # # # # # # # # # # # #" << std::endl;
-//}
-
-
-///******************************************************************************
-//** Function: setSpacePointers()
-//** Description: Loop through gameBoard and set all of the Space's
-//**				directional pointers to its surrounding Spaces.
-//******************************************************************************/
-//void Board::setSpacePointers()
-//{
-//	for (int i = 0; i < ROWS; i++)
-//	{
-//		for (int j = 0; j < COLS; j++)
-//		{
-//			// Set ups - not top row
-//			if (i != 0)
-//			{
-//				gameBoard[i][j]->setUp(gameBoard[i - 1][j]);
-//			}
-
-//			// Set downs - not bottom row
-//			if (i != ROWS - 1)
-//			{
-//				gameBoard[i][j]->setDown(gameBoard[i + 1][j]);
-//			}
-
-//			// Set lefts - not first col
-//			if (j != 0)
-//			{
-//				gameBoard[i][j]->setLeft(gameBoard[i][j - 1]);
-//			}
-
-//			// Set rights - not last col
-//			if (j != COLS - 1)
-//			{
-//				gameBoard[i][j]->setRight(gameBoard[i][j + 1]);
-//			}
-//		}
-//	}
-//}
+            // Set rights - not last col
+            if (j != COLS - 1)
+            {
+                gameBoard[i][j]->setRight(gameBoard[i][j + 1]);
+            }
+        }
+    }
+}
 
 
 /******************************************************************************
@@ -207,31 +184,35 @@ void Game::addAllItemsToScene()
         {
             if (gameBoard[i][j])
             {
-                gameBoard[i][j]->setPos(j*30+30, i*30+30);
+                //gameBoard[i][j]->setPos(j*GRID_STEP+GRID_STEP, i*GRID_STEP+GRID_STEP);
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
         }
     }
 
     // Add border walls
-    for (int i = 0; i < COLS+2; i++)
+    for (int i = 0; i < COLS+1; i++)
     {
         Wall *wr = new Wall;
-        wr->setPos(0, i*30);
+        wr->setPos(-GRID_STEP, i*GRID_STEP);
         scene->addItem(wr);
 
         Wall *wl = new Wall;
-        wl->setPos(COLS*30+30, i*30);
+        wl->setPos(COLS*GRID_STEP, i*GRID_STEP);
         scene->addItem(wl);
 
         Wall *wt = new Wall;
-        wt->setPos(i*30, 0);
+        wt->setPos(i*GRID_STEP, -GRID_STEP);
         scene->addItem(wt);
 
         Wall *wb = new Wall;
-        wb->setPos(i*30, COLS*30+30);
+        wb->setPos(i*GRID_STEP, COLS*GRID_STEP);
         scene->addItem(wb);
     }
+    Wall *tc = new Wall;
+    tc->setPos(-GRID_STEP, -GRID_STEP);
+    scene->addItem(tc);
 }
 
 
@@ -248,14 +229,13 @@ void Game::createGameBoard()
     createMixRoom();
     createFinishRoom();
     fillInEmptySpaces();
-//	setSpacePointers();
+    setSpacePointers();
 }
 
 
 /******************************************************************************
 ** Function: createMainRoom()
-** Description: Adds all the spaces that make up the central starting
-**				room.
+** Description: Adds all the spaces that make up the central starting room.
 ******************************************************************************/
 void Game::createMainRoom()
 {
@@ -414,7 +394,7 @@ void Game::createMixRoom()
     gameBoard[24][22] = new Boots("I ", ICEBOOTS, "I");
 
     // Queries
-    //gameBoard[13][21] = new Query;
+    gameBoard[13][21] = new Query;
 
     for (int i = 19; i <= 24; i++)
     {

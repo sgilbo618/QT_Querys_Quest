@@ -9,9 +9,9 @@
 ******************************************************************************/
 
 #include "Player.hpp"
-//#include "Door.hpp"
-//#include "Key.hpp"
-//#include "Boots.hpp"
+#include "Door.hpp"
+#include "Key.hpp"
+#include "Boots.hpp"
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
@@ -24,12 +24,12 @@
 ******************************************************************************/
 Player::Player()
 {
-//    playerPtr = nullptr;
-//    direction = UP;
-//    isAlive = true;
-//    steps = MAX_STEPS;
-//    numberOfItems = 0;
-//    queries = QUERIES_NEEDED;
+    playerPtr = nullptr;
+    direction = UP;
+    isAlive = true;
+    steps = MAX_STEPS;
+    numberOfItems = 0;
+    queries = QUERIES_NEEDED;
 
     setPixmap(QPixmap(":/images/walking_guy.png"));
 }
@@ -44,95 +44,65 @@ Player::~Player()
 }
 
 
-///******************************************************************************
-//** Description: Getter for direction.
-//******************************************************************************/
-//Direction Player::getDirection()
-//{
-//    return direction;
-//}
+/******************************************************************************
+** Description: Getter for direction.
+******************************************************************************/
+Direction Player::getDirection()
+{
+    return direction;
+}
 
 
-///******************************************************************************
-//** Function: checkIsAlive()
-//** Description: Checks number of steps and what space the player is on
-//**				and determines if the player is still alive or not.
-//**				Sets and returns isAlive. Will return true if still
-//**				alive or false if not.
-//******************************************************************************/
-//bool Player::checkIsAlive()
-//{
-//    if (steps == 0)
-//    {
-//        std::cout << "Query ran out of steps and died!" << std::endl;
-//        isAlive = false;
-//    }
+/******************************************************************************
+** Function: checkIsAlive()
+** Description: Checks number of steps and what space the player is on and
+**      determines if the player is still alive or not. Sets and returns
+**      isAlive. Will return true if still alive or false if not.
+******************************************************************************/
+bool Player::checkIsAlive()
+{
+    if (steps == 0)
+    {
+        std::cout << "Query ran out of steps and died!" << std::endl;
+        isAlive = false;
+    }
 
-//    return isAlive;
-//}
+    return isAlive;
+}
 
 
 /******************************************************************************
 ** Function: getPlayerMove(QKeyEvent* event)
-** Description: Gets and validates user input for player movement and
-**				moves the player if the move is valid.
+** Description: Gets and validates user input for player movement and moves the
+**      player if the move is valid.
 ******************************************************************************/
 void Player::keyPressEvent(QKeyEvent *event)
 {
     // Up
-    if (event->key() == Qt::Key_Up)
+    if (event->key() == Qt::Key_Up && playerPtr->getUp() != nullptr) // && is for bounds checking
     {
-        setPos(x(), y()-GRID_STEP);
+        makeMove(playerPtr->getUp(), x(), y()-GRID_STEP);
+        direction = UP;
     }
     // Down
-    else if (event->key() == Qt::Key_Down)
+    else if (event->key() == Qt::Key_Down && playerPtr->getDown() != nullptr)
     {
-        setPos(x(), y()+GRID_STEP);
+        makeMove(playerPtr->getDown(), x(), y()+GRID_STEP);
+        direction = DOWN;
     }
     // Left
-    else if (event->key() == Qt::Key_Left)
+    else if (event->key() == Qt::Key_Left && playerPtr->getLeft() != nullptr)
     {
-       // Don't move off board
-       if (pos().x() > 0)
-       {
-            setPos(x()-GRID_STEP, y());
-       }
+        makeMove(playerPtr->getLeft(), x()-GRID_STEP, y());
+        direction = LEFT;
     }
     // Right
-    else if (event->key() == Qt::Key_Right)
+    else if (event->key() == Qt::Key_Right && playerPtr->getRight() != nullptr)
     {
-        // Don't move off board
-        if (pos().x() + 100 < 800)
-        {
-            setPos(x()+GRID_STEP, y());
-        }
+        makeMove(playerPtr->getRight(), x()+GRID_STEP, y());
+        direction = RIGHT;
     }
 
-//    // Up
-//    if ((move == 72 || move == 'A') && playerPtr->getUp() != nullptr) // && is for boundry checking
-//    {
-//        // Pass disired move to makeMove
-//        makeMove(playerPtr->getUp());
-//        direction = UP;
-//    }
-//    // Down
-//    else if ((move == 80 || move == 'B') && playerPtr->getDown() != nullptr)
-//    {
-//        makeMove(playerPtr->getDown());
-//        direction = DOWN;
-//    }
-//    // Left
-//    else if ((move == 75 || move == 'D') && playerPtr->getLeft() != nullptr)
-//    {
-//        makeMove(playerPtr->getLeft());
-//        direction = LEFT;
-//    }
-//    // Right
-//    else if ((move == 77 || move == 'C') && playerPtr->getRight() != nullptr)
-//    {
-//        makeMove(playerPtr->getRight());
-//        direction = RIGHT;
-//    }
 //    // q/Q allows user to exit game
 //    else if (move == 'q' || move == 'Q')
 //    {
@@ -150,126 +120,129 @@ void Player::keyPressEvent(QKeyEvent *event)
 }
 
 
-///******************************************************************************
-//** Function: makeMove(Space*)
-//** Description: Takes in the space the player is attempting to move to
-//**				and moves there if it is a legal move.
-//******************************************************************************/
-//void Player::makeMove(Space * moveSpace)
-//{
-//    // Check if space is legal move
-//    if (checkLegalMove(moveSpace))
-//    {
-//        // reset symbol to original
-//        resetSpaceSymbol();
+/******************************************************************************
+** Function: makeMove(Space*, qreal, qreal)
+** Description: Takes in the space of the game board and the coordinates of the
+**      game display that the player is attempting to move to and moves there
+**      if it is a legal move.
+******************************************************************************/
+void Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
+{
+    // Check if space is legal move
+    if (checkLegalMove(moveSpace))
+    {
+        // reset symbol to original
+        resetSpaceSymbol();
 
-//        // Move player to new space
-//        playerPtr = moveSpace;
+        // Move player to new space
+        playerPtr = moveSpace;
 
-//        // set new space symbol to Q
-//        playerPtr->setSpaceSymbol("Q ");
+        // set new space symbol to Q
+        playerPtr->setSpaceSymbol("Q ");
 
-//        // decrement steps
-//        steps--;
-//    }
-//}
+        // decrement steps
+        steps--;
 
-
-///******************************************************************************
-//** Function: checkLegalMove(Space*)
-//** Description: Checks the space Player is attempting to access and
-//**				determines if the space is a legal move. Returns true
-//**				if it is, false if it is not.
-//******************************************************************************/
-//bool Player::checkLegalMove(Space* moveSpace)
-//{
-//    bool isLegal = true;
-//    SpaceType moveType = moveSpace->getSpaceType();
-
-//    // Checks if next space is a wall
-//    if (moveType == WALL)
-//    {
-//        moveSpace->displayMessage();
-//        isLegal = false;
-//    }
-
-//    // Checks if Door is locked
-//    if (moveType == DOOR)
-//    {
-//        if (static_cast<Door*>(moveSpace)->getIsLocked())
-//        {
-//            moveSpace->displayMessage();
-//            isLegal = false;
-//        }
-//        else
-//        {
-//            moveSpace->displayMessage();
-//        }
-//    }
-
-//    return isLegal;
-//}
+        // Move player on display
+        setPos(move_x, move_y);
+    }
+}
 
 
-///******************************************************************************
-//** Function: resetSpaceSymbol()
-//** Description: Looks up the space type that the player is on and
-//**				changes its symbol back to its orignal state.
-//******************************************************************************/
-//void Player::resetSpaceSymbol()
-//{
-//    SpaceType type = playerPtr->getSpaceType();
-//    ElementType elementType = playerPtr->getElementType();
+/******************************************************************************
+** Function: checkLegalMove(Space*)
+** Description: Checks the space Player is attempting to access and determines
+**      if the space is a legal move. Returns true if it is, false if not.
+******************************************************************************/
+bool Player::checkLegalMove(Space* moveSpace)
+{
+    bool isLegal = true;
+    SpaceType moveType = moveSpace->getSpaceType();
 
-//    switch (type)
-//    {
-//    case FREE:
-//        playerPtr->setSpaceSymbol("  ");
-//        break;
-//        // Unlocked Doors and items become vacant spaces after collection
-//    case DOOR:
-//        playerPtr->setSpaceSymbol("  ");
-//        break;
+    // Checks if next space is a wall
+    if (moveType == WALL)
+    {
+        moveSpace->displayMessage();
+        isLegal = false;
+    }
 
-//    case KEY:
-//        playerPtr->setSpaceSymbol("  ");
-//        break;
+    // Checks if Door is locked
+    if (moveType == DOOR)
+    {
+        if (static_cast<Door*>(moveSpace)->getIsLocked())
+        {
+            moveSpace->displayMessage();
+            isLegal = false;
+        }
+        else
+        {
+            moveSpace->displayMessage();
+        }
+    }
 
-//    case BOOTS:
-//        playerPtr->setSpaceSymbol("  ");
-//        break;
+    return isLegal;
+}
 
-//    case QUERY:
-//        playerPtr->setSpaceSymbol("  ");
-//        break;
 
-//    default:
-//        break;
+/******************************************************************************
+** Function: resetSpaceSymbol()
+** Description: Looks up the space type that the player is on and changes its
+**      symbol back to its orignal state.
+******************************************************************************/
+void Player::resetSpaceSymbol()
+{
+    SpaceType type = playerPtr->getSpaceType();
+    ElementType elementType = playerPtr->getElementType();
 
-//        // Elements return to their prevous symbol
-//    case ELEMENT:
-//    {
-//        switch (elementType)
-//        {
-//        case ICE:
-//            playerPtr->setSpaceSymbol("/ ");
-//            break;
+    switch (type)
+    {
+    case FREE:
+        playerPtr->setSpaceSymbol("  ");
+        break;
+        // Unlocked Doors and items become vacant spaces after collection
+    case DOOR:
+        playerPtr->setSpaceSymbol("  ");
+        break;
 
-//        case FIRE:
-//            playerPtr->setSpaceSymbol("* ");
-//            break;
+    case KEY:
+        playerPtr->setSpaceSymbol("  ");
+        break;
 
-//        case WATER:
-//            playerPtr->setSpaceSymbol("~ ");
-//            break;
+    case BOOTS:
+        playerPtr->setSpaceSymbol("  ");
+        break;
 
-//        default:
-//            break;
-//        }
-//        break;
-//    }
-//    }
-//}
+    case QUERY:
+        playerPtr->setSpaceSymbol("  ");
+        break;
+
+    default:
+        break;
+
+        // Elements return to their prevous symbol
+    case ELEMENT:
+    {
+        switch (elementType)
+        {
+        case ICE:
+            playerPtr->setSpaceSymbol("/ ");
+            break;
+
+        case FIRE:
+            playerPtr->setSpaceSymbol("* ");
+            break;
+
+        case WATER:
+            playerPtr->setSpaceSymbol("~ ");
+            break;
+
+        default:
+            break;
+        }
+        break;
+    }
+    }
+}
 
 
 ///******************************************************************************

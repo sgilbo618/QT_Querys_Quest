@@ -15,15 +15,6 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 
-// Set up different input methods for linux and windows
-#ifdef __linux__
-    #include <termios.h>
-    #include "getCharInput.h"
-#else
-    #include <conio.h>
-#endif
-
-
 #define MAX_STEPS 600
 #define QUERIES_NEEDED 25
 #define GRID_STEP 30
@@ -35,27 +26,27 @@ class Player : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 private:
-//    Space* playerPtr;
-//    Direction direction;
-//    bool isAlive;
-//    int steps;
-//    Space* items[6];
-//    int numberOfItems;
-//    int queries;
+    Space* playerPtr;
+    Direction direction;
+    bool isAlive;
+    int steps;
+    Space* items[6];
+    int numberOfItems;
+    int queries;
 
 public:
     // Constructor and Destructor
     Player();
     ~Player();
 
-//    Direction getDirection();
-//    bool checkIsAlive();
+    Direction getDirection();
+    bool checkIsAlive();
 
     // Move methods
     void keyPressEvent(QKeyEvent* event);
-//    void makeMove(Space* moveSpace);
-//    bool checkLegalMove(Space* moveSpace);
-//    void resetSpaceSymbol();
+    void makeMove(Space* moveSpace, qreal move_x, qreal move_y);
+    bool checkLegalMove(Space* moveSpace);
+    void resetSpaceSymbol();
 
     // Item methods
 //    bool hasThisItem(ItemType item);
