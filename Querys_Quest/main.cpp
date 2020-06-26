@@ -6,19 +6,28 @@
 ** Description: Contains main function for the game Query's Quest.
 ******************************************************************************/
 
-#include "Game.hpp"
-#include <iostream>
+#include "mainwindow.hpp"
 #include <QApplication>
+
 
 int main(int argc, char *argv[])
 {
-    const int RESTART = 1000;
     QApplication a(argc, argv);
-    do
-    {
-        Game* game = new Game();
-        game->show();
-    } while (a.exec() == RESTART);
+    MainWindow w;
+
+    w.show();
+
+    return a.exec();
+
+
+
+//    const int RESTART = 1000;
+//    QApplication a(argc, argv);
+//    do
+//    {
+//        Game* game = new Game();
+//        game->show();
+//    } while (a.exec() == RESTART);
 
 //    QApplication a(argc, argv);
 
@@ -28,7 +37,7 @@ int main(int argc, char *argv[])
 
 //    a.exec();
 
-    return 0;
+//    return 0;
 }
 
 

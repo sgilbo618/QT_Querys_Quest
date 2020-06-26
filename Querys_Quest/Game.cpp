@@ -16,6 +16,7 @@
 #include "Key.hpp"
 #include "Boots.hpp"
 #include "Query.hpp"
+#include "mainwindow.hpp"
 
 #include <iostream>
 #include <QApplication>
@@ -190,7 +191,7 @@ void Game::keyPressEvent(QKeyEvent *event)
         checkForItems();
         checkForQueries();
         if (!player->checkIsAlive())
-            qApp->exit(1000);
+            //qApp->exit(1000);
         checkForWin();
     }
 }

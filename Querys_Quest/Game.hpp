@@ -15,6 +15,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QKeyEvent>
+#include <QDialog>
 
 #define ROWS 25 // i
 #define COLS 25 // j
@@ -31,8 +32,6 @@ private:
 public:
     // Data
     QGraphicsScene *scene;
-    QGraphicsView *view;
-    QApplication *app;
 
     // Constructor - Destructor
     Game(QWidget *parent = nullptr);
