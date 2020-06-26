@@ -32,13 +32,15 @@ public:
     // Data
     QGraphicsScene *scene;
     QGraphicsView *view;
+    QApplication *app;
 
     // Constructor - Destructor
-    Game(QWidget *parent = NULL);
+    Game(QWidget *parent = nullptr);
     ~Game();
 
-//    // Utility Methods
+    // Utility Methods
 //    void runGame();
+    void keyPressEvent(QKeyEvent* event);
     void setSpacePointers();
     void addAllItemsToScene();
 
@@ -52,18 +54,18 @@ public:
     void createFinishRoom();
     void fillInEmptySpaces();
 
-//    // Element Methods
-//    void checkForElements();
-//    void onIce();
-//    void onFire();
-//    void onWater();
+    // Element Methods
+    void checkForElements();
+    void onIce();
+    void onFire();
+    void onWater();
 
-//    // Item Methods
-//    void checkForItems();
-//    void unlockDoor();
-//    void checkForQueries();
+    // Item Methods
+    void checkForItems();
+    void unlockDoor();
+    void checkForQueries();
 
-//    bool checkForWin();
+    bool checkForWin();
 };
 
 #endif // GAME_HPP

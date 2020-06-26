@@ -43,13 +43,13 @@ public:
     bool checkIsAlive();
 
     // Move methods
-    void keyPressEvent(QKeyEvent* event);
-    void makeMove(Space* moveSpace, qreal move_x, qreal move_y);
+//    void keyPressEvent(QKeyEvent* event);
+    bool makeMove(Space* moveSpace, qreal move_x, qreal move_y);
     bool checkLegalMove(Space* moveSpace);
     void resetSpaceSymbol();
 
     // Item methods
-//    bool hasThisItem(ItemType item);
+    bool hasThisItem(ItemType item);
 //    void displayItems();
 
 //    void displayMapKey();

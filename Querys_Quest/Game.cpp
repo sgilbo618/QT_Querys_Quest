@@ -18,6 +18,7 @@
 #include "Query.hpp"
 
 #include <iostream>
+#include <QApplication>
 
 
 /******************************************************************************
@@ -131,6 +132,68 @@ Game::~Game()
 //	printGameBoard();
 //}
 
+
+/******************************************************************************
+** Function: getPlayerMove(QKeyEvent* event)
+** Description: Gets and validates user input for player movement and moves the
+**      player if the move is valid.
+******************************************************************************/
+void Game::keyPressEvent(QKeyEvent *event)
+{
+    qreal x = player->x();
+    qreal y = player->y();
+    bool made_move = false;
+
+    // Up
+    if (event->key() == Qt::Key_Up && player->playerPtr->getUp() != nullptr) // && is for bounds checking
+    {
+        made_move = player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP);
+        player->direction = UP;
+    }
+    // Down
+    else if (event->key() == Qt::Key_Down && player->playerPtr->getDown() != nullptr)
+    {
+        made_move = player->makeMove(player->playerPtr->getDown(), x, y+GRID_STEP);
+        player->direction = DOWN;
+    }
+    // Left
+    else if (event->key() == Qt::Key_Left && player->playerPtr->getLeft() != nullptr)
+    {
+        made_move = player->makeMove(player->playerPtr->getLeft(), x-GRID_STEP, y);
+        player->direction = LEFT;
+    }
+    // Right
+    else if (event->key() == Qt::Key_Right && player->playerPtr->getRight() != nullptr)
+    {
+        made_move = player->makeMove(player->playerPtr->getRight(), x+GRID_STEP, y);
+        player->direction = RIGHT;
+    }
+
+//    // q/Q allows user to exit game
+//    else if (move == 'q' || move == 'Q')
+//    {
+//        isAlive = false;
+//    }
+//    // i/I allows user to print game information
+//    else if (move == 'i' || move == 'I')
+//    {
+//        displayMapKey();
+//    }
+//    else
+//    {
+//        std::cout << std::endl << "** Invalid Move" << std::endl;
+//    }
+
+    if (made_move)
+    {
+        checkForElements();
+        checkForItems();
+        checkForQueries();
+        if (!player->checkIsAlive())
+            qApp->exit(1000);
+        checkForWin();
+    }
+}
 
 /******************************************************************************
 ** Function: setSpacePointers()
@@ -498,285 +561,282 @@ void Game::fillInEmptySpaces()
 }
 
 
-///******************************************************************************
-//** Function: checkForElements()
-//** Description: Gets the player's current position and checks to see
-//**				if player is on any element spaces. If it is, it
-//**				calls the appropriate element function.
-//******************************************************************************/
-//void Board::checkForElements()
-//{
-//	// Gets the current space element type
-//	ElementType elementType = player.playerPtr->getElementType();
+/******************************************************************************
+** Function: checkForElements()
+** Description: Gets the player's current position and checks to see if player
+**      is on any element spaces. If it is, it calls the appropriate element
+**      function.
+******************************************************************************/
+void Game::checkForElements()
+{
+    // Gets the current space element type
+    ElementType elementType = player->playerPtr->getElementType();
 
-//	switch (elementType)
-//	{
-//	case ICE:
-//		onIce();
-//		break;
+    switch (elementType)
+    {
+    case ICE:
+        onIce();
+        break;
 
-//	case FIRE:
-//		onFire();
-//		break;
+    case FIRE:
+        onFire();
+        break;
 
-//	case WATER:
-//		onWater();
-//		break;
+    case WATER:
+        onWater();
+        break;
 
-//	default:
-//		break;
-//	}
-//}
-
-
-///******************************************************************************
-//** Function: onIce()
-//** Description: Checks if player has ice boots. If they don't, player
-//**				slides until not on ice anymore. If they do, player
-//**				walks like normal.
-//******************************************************************************/
-//void Board::onIce()
-//{
-//	// When player has ice boots the ice spaces act like free spaces
-//	if (player.hasThisItem(ICEBOOTS))
-//	{
-//		std::cout << std::endl;
-//		std::cout << "** Query has Ice Boots so he can walk on ice" << std::endl;
-//	}
-//	// No ice boots makes player slide to next non-ice space
-//	else
-//	{
-//		// Get direction
-//		Direction direction = player.getDirection();
-
-//		while (player.playerPtr->getElementType() == ICE)
-//		{
-//			switch (direction)
-//			{
-//			case UP:
-//				// Next space is not a border or wall
-//				if (player.playerPtr->getUp() != nullptr && player.playerPtr->getUp()->getType() != WALL)
-//				{
-//					// Move player to the next space up
-//					// Does not call makeMove() because do not want it to count as a step
-//					player.resetSpaceSymbol();
-//					player.playerPtr = player.playerPtr->getUp();
-//					player.playerPtr->setSpaceSymbol("Q ");
-//				}
-//				// Next space is a border or wall
-//				else
-//				{
-//					// Change to opposite direction to bounce player back
-//					direction = DOWN;
-//				}
-//				break;
-
-//			case DOWN:
-//				if (player.playerPtr->getDown() != nullptr && player.playerPtr->getDown()->getType() != WALL)
-//				{
-//					player.resetSpaceSymbol();
-//					player.playerPtr = player.playerPtr->getDown();
-//					player.playerPtr->setSpaceSymbol("Q ");
-//				}
-//				else
-//				{
-//					direction = UP;
-//				}
-//				break;
-
-//			case LEFT:
-//				if (player.playerPtr->getLeft() != nullptr && player.playerPtr->getLeft()->getType() != WALL)
-//				{
-//					player.resetSpaceSymbol();
-//					player.playerPtr = player.playerPtr->getLeft();
-//					player.playerPtr->setSpaceSymbol("Q ");
-//				}
-//				else
-//				{
-//					direction = RIGHT;
-//				}
-//				break;
-
-//			case RIGHT:
-//				if (player.playerPtr->getRight() != nullptr && player.playerPtr->getRight()->getType() != WALL)
-//				{
-//					player.resetSpaceSymbol();
-//					player.playerPtr = player.playerPtr->getRight();
-//					player.playerPtr->setSpaceSymbol("Q ");
-//				}
-//				else
-//				{
-//					direction = LEFT;
-//				}
-//				break;
-
-//			default:
-//				break;
-//			}
-
-//			// Print board to show each step of the slide
-//			printGameBoard();
-
-//			// Create a dummy ice space to display the correct message
-//			Ice iceSpace;
-//			iceSpace.displayMessage();
-//		}
-
-//		// Check for elements in case the slide ends on fire or water
-//		checkForElements();
-//	}
-//}
+    default:
+        break;
+    }
+}
 
 
-///******************************************************************************
-//** Function: onFire()
-//** Description: Checks if player has fire boots. If it does not, sets
-//**				isAlive to false. Displays fire message.
-//******************************************************************************/
-//void Board::onFire()
-//{
-//	// Fire boots make fire spaces act like free spaces
-//	if (player.hasThisItem(FIREBOOTS))
-//	{
-//		std::cout << std::endl;
-//		std::cout << "** Query has Fire Boots so he can walk on fire" << std::endl;
-//	}
-//	// No fire boots kills Query and ends game
-//	else
-//	{
-//		player.isAlive = false;
-//		player.playerPtr->displayMessage();
-//	}
-//}
+/******************************************************************************
+** Function: onIce()
+** Description: Checks if player has ice boots. If they don't, player slides
+**      until not on ice anymore. If they do, player walks like normal.
+******************************************************************************/
+void Game::onIce()
+{
+    // When player has ice boots the ice spaces act like free spaces
+    if (player->hasThisItem(ICEBOOTS))
+    {
+        std::cout << std::endl;
+        std::cout << "** Query has Ice Boots so he can walk on ice" << std::endl;
+    }
+    // No ice boots makes player slide to next non-ice space
+    else
+    {
+        // Get direction
+        Direction direction = player->getDirection();
+        qreal x;
+        qreal y;
+
+        while (player->playerPtr->getElementType() == ICE)
+        {
+            x = player->x();
+            y = player->y();
+
+            switch (direction)
+            {
+            case UP:
+                // Next space is not a border or wall
+                if (player->playerPtr->getUp() != nullptr && player->playerPtr->getUp()->getSpaceType() != WALL)
+                {
+                    // Move player to the next space up
+                    player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP);
+//                    player->setPos(x, y-GRID_STEP);
+//                    player->resetSpaceSymbol();
+//                    player->playerPtr = player->playerPtr->getUp();
+//                    player->playerPtr->setSpaceSymbol("Q ");
+                }
+                // Next space is a border or wall
+                else
+                {
+                    // Change to opposite direction to bounce player back
+                    direction = DOWN;
+                }
+                break;
+
+            case DOWN:
+                if (player->playerPtr->getDown() != nullptr && player->playerPtr->getDown()->getSpaceType() != WALL)
+                {
+                    player->makeMove(player->playerPtr->getDown(), x, y+GRID_STEP);
+                }
+                else
+                {
+                    direction = UP;
+                }
+                break;
+
+            case LEFT:
+                if (player->playerPtr->getLeft() != nullptr && player->playerPtr->getLeft()->getSpaceType() != WALL)
+                {
+                    player->makeMove(player->playerPtr->getLeft(), x-GRID_STEP, y);
+                }
+                else
+                {
+                    direction = RIGHT;
+                }
+                break;
+
+            case RIGHT:
+                if (player->playerPtr->getRight() != nullptr && player->playerPtr->getRight()->getSpaceType() != WALL)
+                {
+                    player->makeMove(player->playerPtr->getRight(), x+GRID_STEP, y);
+                }
+                else
+                {
+                    direction = LEFT;
+                }
+                break;
+            }
+
+            // Print board to show each step of the slide
+            //printGameBoard();
+
+            // Create a dummy ice space to display the correct message
+            Ice iceSpace;
+            iceSpace.displayMessage();
+        }
+
+        // Check for elements in case the slide ends on fire or water
+        checkForElements();
+    }
+}
 
 
-///******************************************************************************
-//** Function: onWater()
-//** Description: Checks if player has water boots. If it does not, sets
-//**				isAlive to false. Displays water message.
-//******************************************************************************/
-//void Board::onWater()
-//{
-//	// Water boots make water spaces act like free spaces
-//	if (player.hasThisItem(WATERBOOTS))
-//	{
-//		std::cout << std::endl;
-//		std::cout << "** Query has Water Boots so he can walk on water" << std::endl;
-//	}
-//	// No water boots kills Query and ends game
-//	else
-//	{
-//		player.isAlive = false;
-//		player.playerPtr->displayMessage();
-//	}
-//}
+/******************************************************************************
+** Function: onFire()
+** Description: Checks if player has fire boots. If it does not, sets isAlive
+**      to false. Displays fire message.
+******************************************************************************/
+void Game::onFire()
+{
+    // Fire boots make fire spaces act like free spaces
+    if (player->hasThisItem(FIREBOOTS))
+    {
+        std::cout << std::endl;
+        std::cout << "** Query has Fire Boots so he can walk on fire" << std::endl;
+    }
+    // No fire boots kills Query and ends game
+    else
+    {
+        player->isAlive = false;
+        player->playerPtr->displayMessage();
+    }
+}
 
 
-///******************************************************************************
-//** Function: checkForItems()
-//** Description: Determines if the current space is an item. If it is
-//**				the item is added to the item array.
-//******************************************************************************/
-//void Board::checkForItems()
-//{
-//	// Gets space type and item type
-//	SpaceType type = player.playerPtr->getType();
-//	ItemType itemType = player.playerPtr->getItemType();
-
-//	// Player has not landed on this space before
-//	if (!player.hasThisItem(itemType))
-//	{
-//		switch (type)
-//		{
-//		case KEY:
-//			// Unlocks corresponding door
-//			unlockDoor();
-//			player.playerPtr->displayMessage();
-
-//			// Add item to item container
-//			player.items[player.numberOfItems] = player.playerPtr;
-//			player.numberOfItems++;
-//			break;
-
-//		case BOOTS:
-//			player.playerPtr->displayMessage();
-
-//			// Add item to item container
-//			player.items[player.numberOfItems] = player.playerPtr;
-//			player.numberOfItems++;
-//			break;
-
-//		default:
-//			break;
-//		}
-//	}
-//}
+/******************************************************************************
+** Function: onWater()
+** Description: Checks if player has water boots. If it does not, sets isAlive
+**      to false. Displays water message.
+******************************************************************************/
+void Game::onWater()
+{
+    // Water boots make water spaces act like free spaces
+    if (player->hasThisItem(WATERBOOTS))
+    {
+        std::cout << std::endl;
+        std::cout << "** Query has Water Boots so he can walk on water" << std::endl;
+    }
+    // No water boots kills Query and ends game
+    else
+    {
+        player->isAlive = false;
+        player->playerPtr->displayMessage();
+    }
+}
 
 
-///******************************************************************************
-//** Function: unlockDoor()
-//** Description: When a key is found this function gets the type of key
-//**				and unlocks the corrisponding door.
-//******************************************************************************/
-//void Board::unlockDoor()
-//{
-//	// Get the item on current space to use in switch
-//	switch (player.playerPtr->getItemType())
-//	{
-//	case REDKEY:
-//		static_cast<Door*>(gameBoard[11][16])->setIsLocked(false);
-//		break;
+/******************************************************************************
+** Function: checkForItems()
+** Description: Determines if the current space is an item. If it is the item
+**      is added to the item array.
+******************************************************************************/
+void Game::checkForItems()
+{
+    // Gets space type and item type
+    SpaceType type = player->playerPtr->getSpaceType();
+    ItemType itemType = player->playerPtr->getItemType();
 
-//	case BLUEKEY:
-//		static_cast<Door*>(gameBoard[15][18])->setIsLocked(false);
-//		break;
+    // Player has not landed on this space before
+    if (!player->hasThisItem(itemType))
+    {
+        switch (type)
+        {
+        case KEY:
+            // Unlocks corresponding door
+            unlockDoor();
+            player->playerPtr->displayMessage();
 
-//	case GREENKEY:
-//		static_cast<Door*>(gameBoard[17][13])->setIsLocked(false);
-//		break;
+            // Add item to item container
+            player->items[player->numberOfItems] = player->playerPtr;
+            player->numberOfItems++;
+            break;
 
-//	default:
-//		break;
-//	}
-//}
+        case BOOTS:
+            player->playerPtr->displayMessage();
 
+            // Add item to item container
+            player->items[player->numberOfItems] = player->playerPtr;
+            player->numberOfItems++;
+            break;
 
-///******************************************************************************
-//** Function: checkForQueries()
-//** Description: Gets the space type and if it is a query, one is added
-//**				to the total number of queries found.
-//******************************************************************************/
-//void Board::checkForQueries()
-//{
-//	// Current space is a query and this is the first time on this space
-//	if (player.playerPtr->getType() == QUERY && !static_cast<Query*>(player.playerPtr)->getHasBeenCollected())
-//	{
-//		player.queries--;
-//		player.playerPtr->displayMessage();
-
-//		// Update space to indicate this query has been collected already
-//		static_cast<Query*>(player.playerPtr)->setHasBeenCollected(true);
-//	}
-
-//	// Lets player in final door only if they have all the queries
-//	if (player.queries == 0)
-//	{
-//		static_cast<Door*>(gameBoard[0][24])->setIsLocked(false);
-//	}
-//}
+        default:
+            break;
+        }
+    }
+}
 
 
-///******************************************************************************
-//** Function: checkForWin()
-//** Description: Returns true if player is on the final door and they
-//**				have all the queries. Returns false otherwise
-//******************************************************************************/
-//bool Board::checkForWin()
-//{
-//	if (player.playerPtr == gameBoard[0][24] && player.queries == 0)
-//	{
-//		return true;
-//	}
+/******************************************************************************
+** Function: unlockDoor()
+** Description: When a key is found this function gets the type of key and
+**      unlocks the corrisponding door.
+******************************************************************************/
+void Game::unlockDoor()
+{
+    // Get the item on current space to use in switch
+    switch (player->playerPtr->getItemType())
+    {
+    case ORANGEKEY:
+        static_cast<Door*>(gameBoard[11][16])->setIsLocked(false);
+        break;
 
-//	return false;
-//}
+    case YELLOWKEY:
+        static_cast<Door*>(gameBoard[15][18])->setIsLocked(false);
+        break;
+
+    case GREENKEY:
+        static_cast<Door*>(gameBoard[17][13])->setIsLocked(false);
+        break;
+
+    default:
+        break;
+    }
+}
+
+
+/******************************************************************************
+** Function: checkForQueries()
+** Description: Gets the space type and if it is a query, one is added to the
+**      total number of queries found.
+******************************************************************************/
+void Game::checkForQueries()
+{
+    // Current space is a query and this is the first time on this space
+    if (player->playerPtr->getSpaceType() == QUERY && !static_cast<Query*>(player->playerPtr)->getHasBeenCollected())
+    {
+        player->queries--;
+        player->playerPtr->displayMessage();
+
+        // Update space to indicate this query has been collected already
+        static_cast<Query*>(player->playerPtr)->setHasBeenCollected(true);
+    }
+
+    // Lets player in final door only if they have all the queries
+    if (player->queries == 0)
+    {
+        static_cast<Door*>(gameBoard[0][24])->setIsLocked(false);
+    }
+}
+
+
+/******************************************************************************
+** Function: checkForWin()
+** Description: Returns true if player is on the final door and they have all
+**      the queries. Returns false otherwise
+******************************************************************************/
+bool Game::checkForWin()
+{
+    if (player->playerPtr == gameBoard[0][24] && player->queries == 0)
+    {
+        player->playerPtr->setPixmap(QPixmap(":/images/unlocked_portal.png"));
+        return true;
+    }
+
+    return false;
+}

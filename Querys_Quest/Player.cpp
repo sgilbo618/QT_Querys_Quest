@@ -71,37 +71,37 @@ bool Player::checkIsAlive()
 }
 
 
-/******************************************************************************
-** Function: getPlayerMove(QKeyEvent* event)
-** Description: Gets and validates user input for player movement and moves the
-**      player if the move is valid.
-******************************************************************************/
-void Player::keyPressEvent(QKeyEvent *event)
-{
-    // Up
-    if (event->key() == Qt::Key_Up && playerPtr->getUp() != nullptr) // && is for bounds checking
-    {
-        makeMove(playerPtr->getUp(), x(), y()-GRID_STEP);
-        direction = UP;
-    }
-    // Down
-    else if (event->key() == Qt::Key_Down && playerPtr->getDown() != nullptr)
-    {
-        makeMove(playerPtr->getDown(), x(), y()+GRID_STEP);
-        direction = DOWN;
-    }
-    // Left
-    else if (event->key() == Qt::Key_Left && playerPtr->getLeft() != nullptr)
-    {
-        makeMove(playerPtr->getLeft(), x()-GRID_STEP, y());
-        direction = LEFT;
-    }
-    // Right
-    else if (event->key() == Qt::Key_Right && playerPtr->getRight() != nullptr)
-    {
-        makeMove(playerPtr->getRight(), x()+GRID_STEP, y());
-        direction = RIGHT;
-    }
+///******************************************************************************
+//** Function: getPlayerMove(QKeyEvent* event)
+//** Description: Gets and validates user input for player movement and moves the
+//**      player if the move is valid.
+//******************************************************************************/
+//void Player::keyPressEvent(QKeyEvent *event)
+//{
+//    // Up
+//    if (event->key() == Qt::Key_Up && playerPtr->getUp() != nullptr) // && is for bounds checking
+//    {
+//        makeMove(playerPtr->getUp(), x(), y()-GRID_STEP);
+//        direction = UP;
+//    }
+//    // Down
+//    else if (event->key() == Qt::Key_Down && playerPtr->getDown() != nullptr)
+//    {
+//        makeMove(playerPtr->getDown(), x(), y()+GRID_STEP);
+//        direction = DOWN;
+//    }
+//    // Left
+//    else if (event->key() == Qt::Key_Left && playerPtr->getLeft() != nullptr)
+//    {
+//        makeMove(playerPtr->getLeft(), x()-GRID_STEP, y());
+//        direction = LEFT;
+//    }
+//    // Right
+//    else if (event->key() == Qt::Key_Right && playerPtr->getRight() != nullptr)
+//    {
+//        makeMove(playerPtr->getRight(), x()+GRID_STEP, y());
+//        direction = RIGHT;
+//    }
 
 //    // q/Q allows user to exit game
 //    else if (move == 'q' || move == 'Q')
@@ -117,25 +117,29 @@ void Player::keyPressEvent(QKeyEvent *event)
 //    {
 //        std::cout << std::endl << "** Invalid Move" << std::endl;
 //    }
-}
+//}
 
 
 /******************************************************************************
 ** Function: makeMove(Space*, qreal, qreal)
 ** Description: Takes in the space of the game board and the coordinates of the
 **      game display that the player is attempting to move to and moves there
-**      if it is a legal move.
+**      if it is a legal move. Returns true if the move is made, and false if
+**      the move is not made.
 ******************************************************************************/
-void Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
+bool Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
 {
     // Check if space is legal move
     if (checkLegalMove(moveSpace))
     {
-        // reset symbol to original
-        resetSpaceSymbol();
+        // Move player on display
+        setPos(move_x, move_y);
 
         // Move player to new space
         playerPtr = moveSpace;
+
+        // reset symbol to original
+        resetSpaceSymbol();
 
         // set new space symbol to Q
         playerPtr->setSpaceSymbol("Q ");
@@ -143,9 +147,9 @@ void Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
         // decrement steps
         steps--;
 
-        // Move player on display
-        setPos(move_x, move_y);
+        return true;
     }
+    return false;
 }
 
 
@@ -202,18 +206,22 @@ void Player::resetSpaceSymbol()
         // Unlocked Doors and items become vacant spaces after collection
     case DOOR:
         playerPtr->setSpaceSymbol("  ");
+        playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     case KEY:
         playerPtr->setSpaceSymbol("  ");
+        playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     case BOOTS:
         playerPtr->setSpaceSymbol("  ");
+        playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     case QUERY:
         playerPtr->setSpaceSymbol("  ");
+        playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     default:
@@ -245,23 +253,22 @@ void Player::resetSpaceSymbol()
 }
 
 
-///******************************************************************************
-//** Function: hasThisItem(ItemType)
-//** Description: Takes in an ItemType and loops through the item array
-//**				to search for it. Returns true if the item is found,
-//**				false if it is not found.
-//******************************************************************************/
-//bool Player::hasThisItem(ItemType item)
-//{
-//    for (int i = 0; i < numberOfItems; i++)
-//    {
-//        if (items[i]->getItemType() == item)
-//        {
-//            return true;
-//        }
-//    }
-//    return false;
-//}
+/******************************************************************************
+** Function: hasThisItem(ItemType)
+** Description: Takes in an ItemType and loops through the item array to search
+**      for it. Returns true if the item is found, false if it is not found.
+******************************************************************************/
+bool Player::hasThisItem(ItemType item)
+{
+    for (int i = 0; i < numberOfItems; i++)
+    {
+        if (items[i]->getItemType() == item)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 ///******************************************************************************

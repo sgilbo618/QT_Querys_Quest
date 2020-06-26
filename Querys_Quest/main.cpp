@@ -7,17 +7,28 @@
 ******************************************************************************/
 
 #include "Game.hpp"
+#include <iostream>
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
+    const int RESTART = 1000;
     QApplication a(argc, argv);
+    do
+    {
+        Game* game = new Game();
+        game->show();
+    } while (a.exec() == RESTART);
 
-    Game* game = new Game();
+//    QApplication a(argc, argv);
 
-    game->show();
+//    Game* game = new Game();
 
-    return a.exec();
+//    game->show();
+
+//    a.exec();
+
+    return 0;
 }
 
 
