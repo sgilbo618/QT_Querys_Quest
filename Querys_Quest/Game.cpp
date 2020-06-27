@@ -20,6 +20,8 @@
 
 #include <iostream>
 #include <QApplication>
+#include <QPushButton>
+#include <QLabel>
 
 
 /******************************************************************************
@@ -28,6 +30,9 @@
 ******************************************************************************/
 Game::Game(QWidget *parent)
 {
+    // Make view bigger
+    this->resize(900, 900);
+
     /* Create and set scene */
     scene = new QGraphicsScene(this);
     setScene(scene);
@@ -37,7 +42,79 @@ Game::Game(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    /* Create main scene */
 
+    // Play game button
+    QPushButton *playBtn = new QPushButton();
+    playBtn->setGeometry(QRect(400, 400, 100, 75));
+    playBtn->setText("Play Game");
+    connect(playBtn, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
+    QGraphicsProxyWidget *proxy = scene->addWidget(playBtn);
+
+//    /* Build 2D board */
+//    gameBoard = new Space**[ROWS];
+
+//    for (int i = 0; i < COLS; i++)
+//    {
+//        gameBoard[i] = new Space*[COLS];
+//    }
+
+//    // Set all pointers to nullptr
+//    for (int i = 0; i < ROWS; i++)
+//    {
+//        for (int j = 0; j < COLS; j++)
+//        {
+//            gameBoard[i][j] = nullptr;
+//        }
+//    }
+
+//    // Add rooms
+//    createGameBoard();
+//    addAllItemsToScene();
+
+
+//    /* Build player */
+//    player = new Player;
+
+//    // Attach player to board
+//    player->playerPtr = gameBoard[15][15];
+//    player->playerPtr->setSpaceSymbol("Q ");
+
+//    // Attach player to scene
+//    player->setPos(15*GRID_STEP, 15*GRID_STEP);
+//    scene->addItem(player);
+
+//    // Make player focusalbe and set it to current focus
+//    player->setFlag(QGraphicsItem::ItemIsFocusable);
+//    player->setFocus();
+}
+
+
+/******************************************************************************
+** Function: ~Game()
+** Description: Destructor for Board object.
+******************************************************************************/
+Game::~Game()
+{
+    // Clear game board
+//    for (int i = 0; i < ROWS; i++)
+//    {
+//        for (int j = 0; j < COLS; j++)
+//        {
+//            delete gameBoard[i][j];
+//        }
+//        delete[] gameBoard[i];
+//    }
+//    delete[] gameBoard;
+}
+
+
+/******************************************************************************
+** Function: resetGame()
+** Description: Creates new game board, player, and scene.
+******************************************************************************/
+void Game::resetGame()
+{
     /* Build 2D board */
     gameBoard = new Space**[ROWS];
 
@@ -74,64 +151,29 @@ Game::Game(QWidget *parent)
     // Make player focusalbe and set it to current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
-
-    show();
 }
 
 
 /******************************************************************************
-** Function: ~Game()
-** Description: Destructor for Board object.
+** Function: gameOver()
+** Description: Clears the game scene, deletes the board, and displays game
+**          over options.
 ******************************************************************************/
-Game::~Game()
+void Game::gameOver()
 {
-    // Clear game board
-    for (int i = 0; i < ROWS; i++)
-    {
-        for (int j = 0; j < COLS; j++)
-        {
-            delete gameBoard[i][j];
-        }
-        delete[] gameBoard[i];
-    }
-    delete[] gameBoard;
+    scene->clear();
+
+    // Add game over image
+    QPixmap goim(":/images/game_over.png");
+    scene->addPixmap(goim);
+
+    // Add play again button
+    QPushButton *playAgain = new QPushButton();
+    playAgain->setGeometry(QRect(400, 400, 100, 75));
+    playAgain->setText("Play Again");
+    connect(playAgain, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
+    QGraphicsProxyWidget *proxy = scene->addWidget(playAgain);
 }
-
-
-///******************************************************************************
-//** Function: runGame()
-//** Description: Driver function for the game. Each round, it checks
-//**                for game ending conditions and if the game is not
-//**				over it calls functions to display items, the board,
-//**				get and make moves, and checks for elements, items,
-//**				and queries.
-//******************************************************************************/
-//void Board::runGame()
-//{
-//	// Display map key once at the beginning of game
-//	player.displayMapKey();
-
-//	// Run rounds until player is dead or has won
-//	while (player.checkIsAlive() && !checkForWin())
-//	{
-//		// Display
-//		player.displayItems();
-//		std::cout << std::endl << "** Make a move";
-//		std::cout << std::endl;
-//		printGameBoard();
-
-//		// Make move;
-//		player.movePlayer();
-
-//		// Check new space for stuff
-//		checkForElements();
-//		checkForItems();
-//		checkForQueries();
-//	}
-
-//	// Print final game board
-//	printGameBoard();
-//}
 
 
 /******************************************************************************
@@ -180,10 +222,6 @@ void Game::keyPressEvent(QKeyEvent *event)
 //    {
 //        displayMapKey();
 //    }
-//    else
-//    {
-//        std::cout << std::endl << "** Invalid Move" << std::endl;
-//    }
 
     if (made_move)
     {
@@ -191,7 +229,7 @@ void Game::keyPressEvent(QKeyEvent *event)
         checkForItems();
         checkForQueries();
         if (!player->checkIsAlive())
-            //qApp->exit(1000);
+            gameOver();//qApp->exit(1000);
         checkForWin();
     }
 }
@@ -841,3 +879,15 @@ bool Game::checkForWin()
 
     return false;
 }
+
+
+/******************************************************************************
+** Function: on_pushButton_clicked()
+** Description: Ran when 'play' button is clicked. Creates an instance of the
+**      Game and plays it.
+******************************************************************************/
+void Game::onPlayBtnClicked()
+{
+    resetGame();
+}
+

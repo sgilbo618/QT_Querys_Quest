@@ -16,10 +16,13 @@
 ** Description: MainWindow constructor. Sets up the main window ui.
 ******************************************************************************/
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent)//,
+    //ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    //ui->setupUi(this);
+    Game *game = new Game();
+    setCentralWidget(game);
+    game->show();
 }
 
 
@@ -29,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 ******************************************************************************/
 MainWindow::~MainWindow()
 {
-    delete ui;
+    //delete ui;
 }
 
 

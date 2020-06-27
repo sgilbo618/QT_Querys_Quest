@@ -18,5 +18,6 @@
         <file>ice_boots.png</file>
         <file>query.png</file>
         <file>water_boots.png</file>
+        <file>game_over.png</file>
     </qresource>
 </RCC>

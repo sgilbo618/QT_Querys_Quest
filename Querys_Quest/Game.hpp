@@ -15,7 +15,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QKeyEvent>
-#include <QDialog>
+#include <QWidget>
 
 #define ROWS 25 // i
 #define COLS 25 // j
@@ -38,7 +38,8 @@ public:
     ~Game();
 
     // Utility Methods
-//    void runGame();
+    void resetGame();
+    void gameOver();
     void keyPressEvent(QKeyEvent* event);
     void setSpacePointers();
     void addAllItemsToScene();
@@ -65,6 +66,9 @@ public:
     void checkForQueries();
 
     bool checkForWin();
+
+private slots:
+    void onPlayBtnClicked();
 };
 
 #endif // GAME_HPP
