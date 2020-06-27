@@ -40,6 +40,7 @@ public:
     // Utility Methods
     void resetGame();
     void gameOver();
+    void gameWon();
     void keyPressEvent(QKeyEvent* event);
     void setSpacePointers();
     void addAllItemsToScene();

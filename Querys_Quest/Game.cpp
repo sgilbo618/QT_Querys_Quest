@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QPushButton>
 #include <QLabel>
+#include <QMessageBox>
 
 
 /******************************************************************************
@@ -141,11 +142,11 @@ void Game::resetGame()
     player = new Player;
 
     // Attach player to board
-    player->playerPtr = gameBoard[15][15];
+    player->playerPtr = gameBoard[2][24];  //[15][15]
     player->playerPtr->setSpaceSymbol("Q ");
 
     // Attach player to scene
-    player->setPos(15*GRID_STEP, 15*GRID_STEP);
+    player->setPos(24*GRID_STEP, 2*GRID_STEP);  //15, 15
     scene->addItem(player);
 
     // Make player focusalbe and set it to current focus
@@ -174,6 +175,32 @@ void Game::gameOver()
     connect(playAgain, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
     QGraphicsProxyWidget *proxy = scene->addWidget(playAgain);
 }
+
+
+/******************************************************************************
+** Function: gameWon()
+** Description: Clears the game scene, deletes the board, and displays game
+**          won options.
+******************************************************************************/
+void Game::gameWon()
+{
+    // Create winning message box
+    QMessageBox *winBox = new QMessageBox();
+    winBox->setText("You won!");
+
+    // Add buttons
+    QAbstractButton *playAgain = winBox->addButton("Play Again", QMessageBox::YesRole);
+    QAbstractButton *quit = winBox->addButton("Quit", QMessageBox::NoRole);
+
+    winBox->exec();
+
+    if (winBox->clickedButton() == playAgain)
+        resetGame();
+    else
+        exit(0);
+}
+
+
 
 
 /******************************************************************************
@@ -230,7 +257,8 @@ void Game::keyPressEvent(QKeyEvent *event)
         checkForQueries();
         if (!player->checkIsAlive())
             gameOver();//qApp->exit(1000);
-        checkForWin();
+        if (checkForWin())
+            gameWon();
     }
 }
 

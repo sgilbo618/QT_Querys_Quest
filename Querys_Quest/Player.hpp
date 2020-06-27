@@ -16,7 +16,7 @@
 #include <QGraphicsPixmapItem>
 
 #define MAX_STEPS 600
-#define QUERIES_NEEDED 25
+#define QUERIES_NEEDED 0 //25
 #define GRID_STEP 30
 
 enum Direction { UP, DOWN, LEFT, RIGHT };
