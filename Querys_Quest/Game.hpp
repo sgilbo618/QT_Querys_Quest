@@ -28,6 +28,9 @@ private:
     // Data
     Space*** gameBoard;
     Player *player;
+    QGraphicsTextItem *query_count;
+    QGraphicsTextItem *items;
+    int item_x;
 
 public:
     // Data
@@ -54,6 +57,7 @@ public:
     void createMixRoom();
     void createFinishRoom();
     void fillInEmptySpaces();
+    void createItemsDisplay();
 
     // Element Methods
     void checkForElements();

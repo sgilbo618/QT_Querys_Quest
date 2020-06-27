@@ -16,7 +16,7 @@
 #include <QGraphicsPixmapItem>
 
 #define MAX_STEPS 600
-#define QUERIES_NEEDED 0 //25
+#define QUERIES_NEEDED 25
 #define GRID_STEP 30
 
 enum Direction { UP, DOWN, LEFT, RIGHT };
@@ -43,16 +43,13 @@ public:
     bool checkIsAlive();
 
     // Move methods
-//    void keyPressEvent(QKeyEvent* event);
     bool makeMove(Space* moveSpace, qreal move_x, qreal move_y);
     bool checkLegalMove(Space* moveSpace);
     void resetSpaceSymbol();
 
     // Item methods
     bool hasThisItem(ItemType item);
-//    void displayItems();
 
-//    void displayMapKey();
 
     friend class Game;
 };

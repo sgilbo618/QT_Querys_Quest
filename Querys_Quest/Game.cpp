@@ -23,6 +23,8 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QMessageBox>
+#include <QGraphicsTextItem>
+#include <QFont>
 
 
 /******************************************************************************
@@ -32,14 +34,14 @@
 Game::Game(QWidget *parent)
 {
     // Make view bigger
-    this->resize(900, 900);
+    this->resize(810, 900);
 
     /* Create and set scene */
     scene = new QGraphicsScene(this);
     setScene(scene);
 
     // Set size of scene
-    scene->setSceneRect(0, 0, 810, 810);
+    scene->setSceneRect(0, -90, 750, 845);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -51,43 +53,6 @@ Game::Game(QWidget *parent)
     playBtn->setText("Play Game");
     connect(playBtn, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
     QGraphicsProxyWidget *proxy = scene->addWidget(playBtn);
-
-//    /* Build 2D board */
-//    gameBoard = new Space**[ROWS];
-
-//    for (int i = 0; i < COLS; i++)
-//    {
-//        gameBoard[i] = new Space*[COLS];
-//    }
-
-//    // Set all pointers to nullptr
-//    for (int i = 0; i < ROWS; i++)
-//    {
-//        for (int j = 0; j < COLS; j++)
-//        {
-//            gameBoard[i][j] = nullptr;
-//        }
-//    }
-
-//    // Add rooms
-//    createGameBoard();
-//    addAllItemsToScene();
-
-
-//    /* Build player */
-//    player = new Player;
-
-//    // Attach player to board
-//    player->playerPtr = gameBoard[15][15];
-//    player->playerPtr->setSpaceSymbol("Q ");
-
-//    // Attach player to scene
-//    player->setPos(15*GRID_STEP, 15*GRID_STEP);
-//    scene->addItem(player);
-
-//    // Make player focusalbe and set it to current focus
-//    player->setFlag(QGraphicsItem::ItemIsFocusable);
-//    player->setFocus();
 }
 
 
@@ -97,16 +62,6 @@ Game::Game(QWidget *parent)
 ******************************************************************************/
 Game::~Game()
 {
-    // Clear game board
-//    for (int i = 0; i < ROWS; i++)
-//    {
-//        for (int j = 0; j < COLS; j++)
-//        {
-//            delete gameBoard[i][j];
-//        }
-//        delete[] gameBoard[i];
-//    }
-//    delete[] gameBoard;
 }
 
 
@@ -142,16 +97,32 @@ void Game::resetGame()
     player = new Player;
 
     // Attach player to board
-    player->playerPtr = gameBoard[2][24];  //[15][15]
+    player->playerPtr = gameBoard[15][15];
     player->playerPtr->setSpaceSymbol("Q ");
 
     // Attach player to scene
-    player->setPos(24*GRID_STEP, 2*GRID_STEP);  //15, 15
+    player->setPos(15*GRID_STEP, 15*GRID_STEP);
     scene->addItem(player);
 
     // Make player focusalbe and set it to current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
+
+    /* Draw Query tracker */
+    query_count = new QGraphicsTextItem();
+    query_count->setPlainText("Queries Left: " + QString::number(player->queries));
+    query_count->setFont(QFont("times", 16));
+    query_count->setPos(-30, -120);
+    scene->addItem(query_count);
+
+    /* Draw Items tracker */
+    items = new QGraphicsTextItem();
+    items->setPlainText("Items:");
+    items->setFont(QFont("times", 16));
+    items->setPos(-30, -90);
+    scene->addItem(items);
+
+    item_x = -30;
 }
 
 
@@ -162,25 +133,42 @@ void Game::resetGame()
 ******************************************************************************/
 void Game::gameOver()
 {
-    scene->clear();
+    // Create winning message box
+    QMessageBox *loseBox = new QMessageBox();
+    loseBox->setText("You died!");
 
-    // Add game over image
-    QPixmap goim(":/images/game_over.png");
-    scene->addPixmap(goim);
+    // Add buttons
+    QAbstractButton *playAgain = loseBox->addButton("Play Again", QMessageBox::YesRole);
+    QAbstractButton *quit = loseBox->addButton("Quit", QMessageBox::NoRole);
 
-    // Add play again button
-    QPushButton *playAgain = new QPushButton();
-    playAgain->setGeometry(QRect(400, 400, 100, 75));
-    playAgain->setText("Play Again");
-    connect(playAgain, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
-    QGraphicsProxyWidget *proxy = scene->addWidget(playAgain);
+    loseBox->exec();
+
+    if (loseBox->clickedButton() == playAgain)
+    {
+        scene->clear();
+        resetGame();
+    }
+    else
+        exit(0);
+//    scene->clear();
+
+//    // Add game over image
+//    QPixmap goim(":/images/game_over.png");
+//    scene->addPixmap(goim);
+
+//    // Add play again button
+//    QPushButton *playAgain = new QPushButton();
+//    playAgain->setGeometry(QRect(400, 400, 100, 75));
+//    playAgain->setText("Play Again");
+//    connect(playAgain, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
+//    QGraphicsProxyWidget *proxy = scene->addWidget(playAgain);
 }
 
 
 /******************************************************************************
 ** Function: gameWon()
-** Description: Clears the game scene, deletes the board, and displays game
-**          won options.
+** Description: Creates message box pop up declaring a win. Provides option to
+**      play again or quit.
 ******************************************************************************/
 void Game::gameWon()
 {
@@ -195,7 +183,10 @@ void Game::gameWon()
     winBox->exec();
 
     if (winBox->clickedButton() == playAgain)
+    {
+        scene->clear();
         resetGame();
+    }
     else
         exit(0);
 }
@@ -239,24 +230,14 @@ void Game::keyPressEvent(QKeyEvent *event)
         player->direction = RIGHT;
     }
 
-//    // q/Q allows user to exit game
-//    else if (move == 'q' || move == 'Q')
-//    {
-//        isAlive = false;
-//    }
-//    // i/I allows user to print game information
-//    else if (move == 'i' || move == 'I')
-//    {
-//        displayMapKey();
-//    }
-
+    // Made valid move so update game as needed
     if (made_move)
     {
         checkForElements();
         checkForItems();
         checkForQueries();
         if (!player->checkIsAlive())
-            gameOver();//qApp->exit(1000);
+            gameOver();
         if (checkForWin())
             gameWon();
     }
@@ -347,6 +328,16 @@ void Game::addAllItemsToScene()
 
 
 /******************************************************************************
+** Function:
+** Description:
+******************************************************************************/
+void Game::createItemsDisplay()
+{
+
+}
+
+
+/******************************************************************************
 ** Function: createGameBoard()
 ** Description: Calls all of the create room functions.
 ******************************************************************************/
@@ -360,6 +351,7 @@ void Game::createGameBoard()
     createFinishRoom();
     fillInEmptySpaces();
     setSpacePointers();
+    createItemsDisplay();
 }
 
 
@@ -740,9 +732,6 @@ void Game::onIce()
                 break;
             }
 
-            // Print board to show each step of the slide
-            //printGameBoard();
-
             // Create a dummy ice space to display the correct message
             Ice iceSpace;
             iceSpace.displayMessage();
@@ -815,6 +804,7 @@ void Game::checkForItems()
         switch (type)
         {
         case KEY:
+        {
             // Unlocks corresponding door
             unlockDoor();
             player->playerPtr->displayMessage();
@@ -822,20 +812,40 @@ void Game::checkForItems()
             // Add item to item container
             player->items[player->numberOfItems] = player->playerPtr;
             player->numberOfItems++;
-            break;
 
+            // Add item to item display
+            Key *key = new Key("X ", itemType, "X");
+            key->setPos(item_x, -60);
+            item_x += 50;
+            scene->addItem(key);
+
+            break;
+        }
         case BOOTS:
+        {
             player->playerPtr->displayMessage();
 
             // Add item to item container
             player->items[player->numberOfItems] = player->playerPtr;
             player->numberOfItems++;
-            break;
 
+            // Add item to item display
+            Boots *boot = new Boots("X ", itemType, "X");
+            boot->setPos(item_x, -60);
+            item_x += 50;
+            scene->addItem(boot);
+
+            break;
+        }
         default:
             break;
         }
     }
+//    Wall *tc = new Wall;
+//    tc->setPos(-GRID_STEP, -GRID_STEP);
+//    scene->addItem(tc);
+//    new Key("o ", ORANGEKEY, "o");
+//     new Boots("W ", WATERBOOTS, "W");
 }
 
 
@@ -877,7 +887,9 @@ void Game::checkForQueries()
     // Current space is a query and this is the first time on this space
     if (player->playerPtr->getSpaceType() == QUERY && !static_cast<Query*>(player->playerPtr)->getHasBeenCollected())
     {
+        // Update queries left and display
         player->queries--;
+        query_count->setPlainText("Queries Left: " + QString::number(player->queries));
         player->playerPtr->displayMessage();
 
         // Update space to indicate this query has been collected already
