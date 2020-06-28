@@ -50,6 +50,10 @@ Door::Door(std::string symbol)
     {
         setPixmap(QPixmap(":/images/locked_portal.png"));
     }
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/oof.wav"));
 }
 
 

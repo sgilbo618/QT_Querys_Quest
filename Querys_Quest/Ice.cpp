@@ -23,6 +23,10 @@ Ice::Ice()
     symbol = "/ ";
 
     setPixmap(QPixmap(":/images/ice.png"));
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/slip.wav"));
 }
 
 

@@ -23,6 +23,10 @@ Water::Water()
     symbol = "~ ";
 
     setPixmap(QPixmap(":/images/water.png"));
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/splash.wav"));
 }
 
 

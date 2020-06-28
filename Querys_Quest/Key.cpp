@@ -35,6 +35,7 @@ Key::Key(ItemType itemType)
     name = "k";
     this->itemType = itemType;
 
+    // Set image
     if (itemType == ORANGEKEY)
     {
         setPixmap(QPixmap(":/images/plain_orange_key.png"));
@@ -63,6 +64,7 @@ Key::Key(std::string symbol, ItemType itemType, std::string name)
     this->itemType = itemType;
     this->name = name;
 
+    // Set image
     if (itemType == ORANGEKEY)
     {
         setPixmap(QPixmap(":/images/orange_key.png"));
@@ -75,6 +77,10 @@ Key::Key(std::string symbol, ItemType itemType, std::string name)
     {
         setPixmap(QPixmap(":/images/yellow_key.png"));
     }
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/pickup.wav"));
 }
 
 
@@ -94,7 +100,6 @@ std::string Key::getName()
 {
     return name;
 }
-
 
 
 /******************************************************************************

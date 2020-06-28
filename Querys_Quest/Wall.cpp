@@ -22,6 +22,10 @@ Wall::Wall()
     symbol = "# ";
 
     setPixmap(QPixmap(":/images/wall.png"));
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/oof.wav"));
 }
 
 

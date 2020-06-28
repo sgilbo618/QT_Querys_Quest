@@ -12,7 +12,7 @@
 #include <string>
 #include <QObject>
 #include <QGraphicsPixmapItem>
-
+#include <QMediaPlayer>
 
 enum SpaceType {FREE, WALL, DOOR, KEY, ELEMENT, BOOTS, QUERY};
 enum ElementType {NON, ICE, FIRE, WATER};
@@ -31,6 +31,8 @@ protected:
     Space* down;
     Space* left;
     Space* right;
+
+    QMediaPlayer *sound;
 
 public:
     // Constructor and Destructor
@@ -56,6 +58,9 @@ public:
 
     Space* getRight();
     void setRight(Space* right);
+
+    void playSound();
+    void updateSound(QUrl url);
 
     // Methods
     virtual void displayMessage() = 0;

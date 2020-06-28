@@ -107,6 +107,7 @@ bool Player::checkLegalMove(Space* moveSpace)
     // Checks if next space is a wall
     if (moveType == WALL)
     {
+        moveSpace->playSound();
         moveSpace->displayMessage();
         isLegal = false;
     }
@@ -116,11 +117,14 @@ bool Player::checkLegalMove(Space* moveSpace)
     {
         if (static_cast<Door*>(moveSpace)->getIsLocked())
         {
+            moveSpace->playSound();
             moveSpace->displayMessage();
             isLegal = false;
         }
         else
         {
+            moveSpace->updateSound(QUrl("qrc:/sounds/unlock_door.wav"));
+            moveSpace->playSound();
             moveSpace->displayMessage();
         }
     }

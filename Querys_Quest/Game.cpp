@@ -182,6 +182,11 @@ void Game::resetGame()
 ******************************************************************************/
 void Game::gameOver()
 {
+    // Create game over sound
+    QMediaPlayer *gameOver = new QMediaPlayer;
+    gameOver->setMedia(QUrl("qrc:/sounds/game_over.wav"));
+    gameOver->play();
+
     // Create winning message box
     QMessageBox *loseBox = new QMessageBox();
     loseBox->setIconPixmap(QPixmap(":/images/game_over.png"));
@@ -212,6 +217,11 @@ void Game::gameOver()
 ******************************************************************************/
 void Game::gameWon()
 {
+    // Create level complete sound
+    QMediaPlayer *levelCom = new QMediaPlayer;
+    levelCom->setMedia(QUrl("qrc:/sounds/level_complete.wav"));
+    levelCom->play();
+
     // Create winning message box
     QMessageBox *winBox = new QMessageBox();
     winBox->setIconPixmap(QPixmap(":/images/you_win.png"));
@@ -693,12 +703,17 @@ void Game::onIce()
     // When player has ice boots the ice spaces act like free spaces
     if (player->hasThisItem(ICEBOOTS))
     {
+        player->playerPtr->updateSound(QUrl("qrc:/sounds/ice_crack.wav"));
+        player->playerPtr->playSound();
         std::cout << std::endl;
         std::cout << "** Query has Ice Boots so he can walk on ice" << std::endl;
     }
     // No ice boots makes player slide to next non-ice space
     else
     {
+        // Has to be separate call here or else too many sound calls will crash
+        player->playerPtr->playSound();
+
         // Get direction
         Direction direction = player->getDirection();
         qreal x;
@@ -781,6 +796,7 @@ void Game::onFire()
     // Fire boots make fire spaces act like free spaces
     if (player->hasThisItem(FIREBOOTS))
     {
+        player->playerPtr->updateSound(QUrl("qrc:/sounds/sizzle.wav"));
         std::cout << std::endl;
         std::cout << "** Query has Fire Boots so he can walk on fire" << std::endl;
     }
@@ -790,6 +806,7 @@ void Game::onFire()
         player->isAlive = false;
         player->playerPtr->displayMessage();
     }
+    player->playerPtr->playSound();
 }
 
 
@@ -803,6 +820,7 @@ void Game::onWater()
     // Water boots make water spaces act like free spaces
     if (player->hasThisItem(WATERBOOTS))
     {
+        player->playerPtr->updateSound(QUrl("qrc:/sounds/water_click.wav"));
         std::cout << std::endl;
         std::cout << "** Query has Water Boots so he can walk on water" << std::endl;
     }
@@ -812,6 +830,7 @@ void Game::onWater()
         player->isAlive = false;
         player->playerPtr->displayMessage();
     }
+    player->playerPtr->playSound();
 }
 
 
@@ -847,6 +866,8 @@ void Game::checkForItems()
             item_x += 50;
             scene->addItem(key);
 
+            player->playerPtr->playSound();
+
             break;
         }
         case BOOTS:
@@ -862,6 +883,8 @@ void Game::checkForItems()
             boot->setPos(item_x, -55);
             item_x += 50;
             scene->addItem(boot);
+
+            player->playerPtr->playSound();
 
             break;
         }
@@ -913,6 +936,7 @@ void Game::checkForQueries()
         // Update queries left and display
         player->queries--;
         query_count->setPlainText("Queries Left: " + QString::number(player->queries));
+        player->playerPtr->playSound();
         player->playerPtr->displayMessage();
 
         // Update space to indicate this query has been collected already

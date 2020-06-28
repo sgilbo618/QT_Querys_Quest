@@ -29,4 +29,19 @@
         <file>plain_yellow_key.png</file>
         <file>you_win.png</file>
     </qresource>
+    <qresource prefix="/sounds">
+        <file>pickup.wav</file>
+        <file>query_pickup.wav</file>
+        <file>splash.wav</file>
+        <file>water_click.wav</file>
+        <file>lava_death.wav</file>
+        <file>sizzle.wav</file>
+        <file>slip.wav</file>
+        <file>ice_crack.wav</file>
+        <file>unlock_door.wav</file>
+        <file>oof.wav</file>
+        <file>portal.mp3</file>
+        <file>game_over.wav</file>
+        <file>level_complete.wav</file>
+    </qresource>
 </RCC>

@@ -124,3 +124,17 @@ void Space::setRight(Space * right)
 {
     this->right = right;
 }
+
+
+/******************************************************************************
+** Description: Plays the sound associated with the space.
+******************************************************************************/
+void Space::playSound()
+{
+    sound->play();
+}
+
+void Space::updateSound(QUrl url)
+{
+    sound->setMedia(QUrl(url));
+}

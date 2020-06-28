@@ -22,6 +22,10 @@ Fire::Fire()
     symbol = "* ";
 
     setPixmap(QPixmap(":/images/fire.png"));
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/lava_death.wav"));
 }
 
 

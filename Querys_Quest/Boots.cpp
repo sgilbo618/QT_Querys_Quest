@@ -75,6 +75,10 @@ Boots::Boots(std::string symbol, ItemType itemType, std::string name)
     {
         setPixmap(QPixmap(":/images/ice_boots.png"));
     }
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/pickup.wav"));
 }
 
 

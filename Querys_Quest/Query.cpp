@@ -21,7 +21,12 @@ Query::Query()
     symbol = "? ";
     hasBeenCollected = false;
 
+    // Set image
     setPixmap(QPixmap(":/images/query.png"));
+
+    // Set sound
+    sound = new QMediaPlayer();
+    sound->setMedia(QUrl("qrc:/sounds/query_pickup.wav"));
 }
 
 
