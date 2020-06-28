@@ -184,7 +184,8 @@ void Game::gameOver()
 {
     // Create winning message box
     QMessageBox *loseBox = new QMessageBox();
-    loseBox->setText("You died!");
+    loseBox->setIconPixmap(QPixmap(":/images/game_over.png"));
+    //loseBox->setText("\nYou died!");
 
     // Add buttons
     QAbstractButton *playAgain = loseBox->addButton("Play Again", QMessageBox::YesRole);
@@ -201,10 +202,6 @@ void Game::gameOver()
         exit(0);
     else
         exit(0);
-
-//    // Add game over image
-//    QPixmap goim(":/images/game_over.png");
-//    scene->addPixmap(goim);
 }
 
 
@@ -217,7 +214,8 @@ void Game::gameWon()
 {
     // Create winning message box
     QMessageBox *winBox = new QMessageBox();
-    winBox->setText("You won!");
+    winBox->setIconPixmap(QPixmap(":/images/you_win.png"));
+    //winBox->setText("You won!");
 
     // Add buttons
     QAbstractButton *playAgain = winBox->addButton("Play Again", QMessageBox::YesRole);

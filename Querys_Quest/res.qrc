@@ -27,5 +27,6 @@
         <file>plain_orange_key.png</file>
         <file>plain_water_boots.png</file>
         <file>plain_yellow_key.png</file>
+        <file>you_win.png</file>
     </qresource>
 </RCC>
