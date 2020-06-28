@@ -8,7 +8,6 @@
 ******************************************************************************/
 
 #include "Boots.hpp"
-#include <iostream>
 
 
 /******************************************************************************
@@ -18,21 +17,17 @@
 Boots::Boots()
 {
     spaceType = BOOTS;
-    symbol = "D ";
-    name = "";
 }
 
 
 /******************************************************************************
-** Function: Boots(ItemType itemType)
+** Function: Boots(ItemType itemType, int dummy)
 ** Description: Constructor that takes in the itemType and creates a Boots
 **      object with the corresponding item image. Used for item display only.
 ******************************************************************************/
-Boots::Boots(ItemType itemType)
+Boots::Boots(ItemType itemType, int dummy)
 {
     spaceType = BOOTS;
-    symbol = "D ";
-    name = "";
     this->itemType = itemType;
 
     if (itemType == WATERBOOTS)
@@ -56,12 +51,10 @@ Boots::Boots(ItemType itemType)
 **      string for the boot name, and an ItemType to define what kind of boot
 **      this will be. Uses the input to create a specific version of a Boot.
 ******************************************************************************/
-Boots::Boots(std::string symbol, ItemType itemType, std::string name)
+Boots::Boots(ItemType itemType)
 {
     spaceType = BOOTS;
-    this->symbol = symbol;
     this->itemType = itemType;
-    this->name = name;
 
     if (itemType == WATERBOOTS)
     {
@@ -88,41 +81,4 @@ Boots::Boots(std::string symbol, ItemType itemType, std::string name)
 ******************************************************************************/
 Boots::~Boots()
 {
-}
-
-
-/******************************************************************************
-** Description: Getter for name.
-******************************************************************************/
-std::string Boots::getName()
-{
-    return name;
-}
-
-
-/******************************************************************************
-** Function: displayMessage()
-** Description: Displays message if player attempts to go onto a Boots space.
-******************************************************************************/
-void Boots::displayMessage()
-{
-    std::cout << std::endl;
-    std::cout << "** ";
-
-    // Displays a different message for each type of different Boot
-    if (itemType == WATERBOOTS)
-    {
-        std::cout << "Query found the water boots!" << std::endl;
-        std::cout << "Now he can walk on water!" << std::endl;
-    }
-    else if (itemType == FIREBOOTS)
-    {
-        std::cout << "Query found the fire boots!" << std::endl;
-        std::cout << "Now he can walk on fire!" << std::endl;
-    }
-    else if (itemType == ICEBOOTS)
-    {
-        std::cout << "Query found the ice boots!" << std::endl;
-        std::cout << "Now he can walk on ice!" << std::endl;
-    }
 }

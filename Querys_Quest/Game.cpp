@@ -16,12 +16,10 @@
 #include "Key.hpp"
 #include "Boots.hpp"
 #include "Query.hpp"
-#include "mainwindow.hpp"
 
-#include <iostream>
+#include <QFont>
 #include <QMessageBox>
 #include <QGraphicsTextItem>
-#include <QFont>
 #include <QGraphicsPixmapItem>
 
 
@@ -130,7 +128,6 @@ void Game::resetGame()
 
     // Attach player to board
     player->playerPtr = gameBoard[15][15];
-    player->playerPtr->setSpaceSymbol("Q ");
 
     // Attach player to scene
     player->setPos(15*GRID_STEP, 15*GRID_STEP);
@@ -309,35 +306,28 @@ void Game::setSpacePointers()
         {
             // Set ups - not top row
             if (i != 0)
-            {
                 gameBoard[i][j]->setUp(gameBoard[i - 1][j]);
-            }
 
             // Set downs - not bottom row
             if (i != ROWS - 1)
-            {
                 gameBoard[i][j]->setDown(gameBoard[i + 1][j]);
-            }
 
             // Set lefts - not first col
             if (j != 0)
-            {
                 gameBoard[i][j]->setLeft(gameBoard[i][j - 1]);
-            }
 
             // Set rights - not last col
             if (j != COLS - 1)
-            {
                 gameBoard[i][j]->setRight(gameBoard[i][j + 1]);
-            }
         }
     }
 }
 
 
 /******************************************************************************
-** Function:
-** Description:
+** Function: addAllItemsToScene()
+** Description: Loops through the game board and adds each space to the scene.
+**      Also adds a borader of wall spaces around the playing area.
 ******************************************************************************/
 void Game::addAllItemsToScene()
 {
@@ -348,7 +338,6 @@ void Game::addAllItemsToScene()
         {
             if (gameBoard[i][j])
             {
-                //gameBoard[i][j]->setPos(j*GRID_STEP+GRID_STEP, i*GRID_STEP+GRID_STEP);
                 gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
@@ -374,6 +363,7 @@ void Game::addAllItemsToScene()
         wb->setPos(i*GRID_STEP, COLS*GRID_STEP);
         scene->addItem(wb);
     }
+    // One more wall at top corner to fill in border
     Wall *tc = new Wall;
     tc->setPos(-GRID_STEP, -GRID_STEP);
     scene->addItem(tc);
@@ -382,7 +372,8 @@ void Game::addAllItemsToScene()
 
 /******************************************************************************
 ** Function: createGameBoard()
-** Description: Calls all of the create room functions.
+** Description: Calls all of the create room functions, fills in empty spaces,
+**      sets all of the board pointers.
 ******************************************************************************/
 void Game::createGameBoard()
 {
@@ -392,6 +383,7 @@ void Game::createGameBoard()
     createWaterRoom();
     createMixRoom();
     createFinishRoom();
+
     fillInEmptySpaces();
     setSpacePointers();
 }
@@ -404,7 +396,7 @@ void Game::createGameBoard()
 void Game::createMainRoom()
 {
     // Yellow Key
-    gameBoard[13][6] = new Key("y ", YELLOWKEY, "y");
+    gameBoard[13][6] = new Key(YELLOWKEY);
 
     // Queries
     gameBoard[15][8] = new Query;
@@ -432,7 +424,7 @@ void Game::createMainRoom()
 void Game::createIceRoom()
 {
     // Green Key
-    gameBoard[1][5] = new Key("g ", GREENKEY, "g");
+    gameBoard[1][5] = new Key(GREENKEY);
 
     // Queries
     gameBoard[10][10] = new Query; // gameBoard[][] = new Query; gameBoard[][] = new Query;
@@ -467,9 +459,7 @@ void Game::createIceRoom()
         for (int j = 1; j <= 10; j++)
         {
             if (gameBoard[i][j] == nullptr)
-            {
                 gameBoard[i][j] = new Ice;
-            }
         }
     }
     gameBoard[10][5] = new Ice; gameBoard[10][6] = new Ice; gameBoard[10][7] = new Ice;
@@ -484,10 +474,10 @@ void Game::createIceRoom()
 void Game::createMazeRoom()
 {
     // Orange Key
-    gameBoard[22][8] = new Key("o ", ORANGEKEY, "o");
+    gameBoard[22][8] = new Key(ORANGEKEY);
 
     // Water boots
-    gameBoard[22][4] = new Boots("W ", WATERBOOTS, "W");
+    gameBoard[22][4] = new Boots(WATERBOOTS);
 
     // Queries
     gameBoard[13][3] = new Query; gameBoard[17][2] = new Query; gameBoard[24][8] = new Query;
@@ -524,7 +514,7 @@ void Game::createWaterRoom()
     gameBoard[17][13] = new Door("G ");
 
     // Fire Boots
-    gameBoard[22][15] = new Boots("F ", FIREBOOTS, "F");
+    gameBoard[22][15] = new Boots(FIREBOOTS);
 
     // Queries
     gameBoard[18][17] = new Query; gameBoard[24][17] = new Query; // gameBoard[][] = new Query;
@@ -555,7 +545,7 @@ void Game::createMixRoom()
     gameBoard[15][18] = new Door("Y ");
 
     // Ice Boots
-    gameBoard[24][22] = new Boots("I ", ICEBOOTS, "I");
+    gameBoard[24][22] = new Boots(ICEBOOTS);
 
     // Queries
     gameBoard[13][21] = new Query;
@@ -574,6 +564,7 @@ void Game::createMixRoom()
 
         // Ice
         gameBoard[17][i] = new Ice; gameBoard[18][i] = new Ice;
+
         if (i >= 21 && i <= 23)
         {
             gameBoard[14][i] = new Ice; gameBoard[15][i] = new Ice; gameBoard[16][i] = new Ice;
@@ -654,9 +645,7 @@ void Game::fillInEmptySpaces()
         for (int j = 0; j < COLS; j++)
         {
             if (gameBoard[i][j] == nullptr)
-            {
                 gameBoard[i][j] = new Free;
-            }
         }
     }
 }
@@ -705,8 +694,6 @@ void Game::onIce()
     {
         player->playerPtr->updateSound(QUrl("qrc:/sounds/ice_crack.wav"));
         player->playerPtr->playSound();
-        std::cout << std::endl;
-        std::cout << "** Query has Ice Boots so he can walk on ice" << std::endl;
     }
     // No ice boots makes player slide to next non-ice space
     else
@@ -719,6 +706,7 @@ void Game::onIce()
         qreal x;
         qreal y;
 
+        // Slides player along each subsequent ice space
         while (player->playerPtr->getElementType() == ICE)
         {
             x = player->x();
@@ -729,55 +717,36 @@ void Game::onIce()
             case UP:
                 // Next space is not a border or wall
                 if (player->playerPtr->getUp() != nullptr && player->playerPtr->getUp()->getSpaceType() != WALL)
-                {
                     // Move player to the next space up
                     player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP);
-                }
+
                 // Next space is a border or wall
                 else
-                {
                     // Change to opposite direction to bounce player back
                     direction = DOWN;
-                }
                 break;
 
             case DOWN:
                 if (player->playerPtr->getDown() != nullptr && player->playerPtr->getDown()->getSpaceType() != WALL)
-                {
                     player->makeMove(player->playerPtr->getDown(), x, y+GRID_STEP);
-                }
                 else
-                {
                     direction = UP;
-                }
                 break;
 
             case LEFT:
                 if (player->playerPtr->getLeft() != nullptr && player->playerPtr->getLeft()->getSpaceType() != WALL)
-                {
                     player->makeMove(player->playerPtr->getLeft(), x-GRID_STEP, y);
-                }
                 else
-                {
                     direction = RIGHT;
-                }
                 break;
 
             case RIGHT:
                 if (player->playerPtr->getRight() != nullptr && player->playerPtr->getRight()->getSpaceType() != WALL)
-                {
                     player->makeMove(player->playerPtr->getRight(), x+GRID_STEP, y);
-                }
                 else
-                {
                     direction = LEFT;
-                }
                 break;
             }
-
-            // Create a dummy ice space to display the correct message
-            Ice iceSpace;
-            iceSpace.displayMessage();
         }
 
         // Check for elements in case the slide ends on fire or water
@@ -795,17 +764,12 @@ void Game::onFire()
 {
     // Fire boots make fire spaces act like free spaces
     if (player->hasThisItem(FIREBOOTS))
-    {
         player->playerPtr->updateSound(QUrl("qrc:/sounds/sizzle.wav"));
-        std::cout << std::endl;
-        std::cout << "** Query has Fire Boots so he can walk on fire" << std::endl;
-    }
+
     // No fire boots kills Query and ends game
     else
-    {
         player->isAlive = false;
-        player->playerPtr->displayMessage();
-    }
+
     player->playerPtr->playSound();
 }
 
@@ -819,17 +783,12 @@ void Game::onWater()
 {
     // Water boots make water spaces act like free spaces
     if (player->hasThisItem(WATERBOOTS))
-    {
         player->playerPtr->updateSound(QUrl("qrc:/sounds/water_click.wav"));
-        std::cout << std::endl;
-        std::cout << "** Query has Water Boots so he can walk on water" << std::endl;
-    }
+
     // No water boots kills Query and ends game
     else
-    {
         player->isAlive = false;
-        player->playerPtr->displayMessage();
-    }
+
     player->playerPtr->playSound();
 }
 
@@ -854,14 +813,13 @@ void Game::checkForItems()
         {
             // Unlocks corresponding door
             unlockDoor();
-            player->playerPtr->displayMessage();
 
             // Add item to item container
             player->items[player->numberOfItems] = player->playerPtr;
             player->numberOfItems++;
 
             // Add item to item display
-            Key *key = new Key(itemType);
+            Key *key = new Key(itemType, 0);
             key->setPos(item_x, -55);
             item_x += 50;
             scene->addItem(key);
@@ -872,14 +830,12 @@ void Game::checkForItems()
         }
         case BOOTS:
         {
-            player->playerPtr->displayMessage();
-
             // Add item to item container
             player->items[player->numberOfItems] = player->playerPtr;
             player->numberOfItems++;
 
             // Add item to item display
-            Boots *boot = new Boots(itemType);
+            Boots *boot = new Boots(itemType, 0);
             boot->setPos(item_x, -55);
             item_x += 50;
             scene->addItem(boot);
@@ -937,7 +893,6 @@ void Game::checkForQueries()
         player->queries--;
         query_count->setPlainText("Queries Left: " + QString::number(player->queries));
         player->playerPtr->playSound();
-        player->playerPtr->displayMessage();
 
         // Update space to indicate this query has been collected already
         static_cast<Query*>(player->playerPtr)->setHasBeenCollected(true);
@@ -946,11 +901,13 @@ void Game::checkForQueries()
     // Lets player in final door only if they have all the queries
     if (player->queries == 0)
     {
+        // Only play sound if final door hasn't been unlocked yet
         if (static_cast<Door*>(gameBoard[0][24])->getIsLocked())
         {
             gameBoard[0][24]->updateSound(QUrl("qrc:/sounds/portal.mp3"));
             gameBoard[0][24]->playSound();
         }
+
         static_cast<Door*>(gameBoard[0][24])->setIsLocked(false);
         gameBoard[0][24]->setPixmap(QPixmap(":/images/unlocked_portal.png"));
     }
@@ -980,9 +937,11 @@ bool Game::checkForWin()
 ******************************************************************************/
 void Game::onPlayBtnClicked()
 {
+    // Remove buttons from scene
     scene->removeItem(proxyPlay);
     scene->removeItem(proxyQuit);
     scene->removeItem(proxyInfo);
+
     resetGame();
 }
 

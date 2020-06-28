@@ -8,7 +8,6 @@
 ******************************************************************************/
 
 #include "Fire.hpp"
-#include <iostream>
 
 
 /******************************************************************************
@@ -19,7 +18,6 @@ Fire::Fire()
 {
     spaceType = ELEMENT;
     elementType = FIRE;
-    symbol = "* ";
 
     setPixmap(QPixmap(":/images/fire.png"));
 
@@ -35,15 +33,4 @@ Fire::Fire()
 ******************************************************************************/
 Fire::~Fire()
 {
-}
-
-
-/******************************************************************************
-** Function: displayMessage()
-** Description: Displays message if player attempts to go onto a Fire space.
-******************************************************************************/
-void Fire::displayMessage()
-{
-    std::cout << std::endl;
-    std::cout << "** Query is on Fire without Fire boots! - He dead" << std::endl;
 }

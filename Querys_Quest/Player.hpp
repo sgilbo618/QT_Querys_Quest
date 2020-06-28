@@ -12,8 +12,10 @@
 #define PLAYER_HPP
 
 #include "Space.hpp"
+
 #include <QObject>
 #include <QGraphicsPixmapItem>
+
 
 #define QUERIES_NEEDED 25
 #define GRID_STEP 30
@@ -47,7 +49,6 @@ public:
 
     // Item methods
     bool hasThisItem(ItemType item);
-
 
     friend class Game;
 };

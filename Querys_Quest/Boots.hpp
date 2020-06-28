@@ -15,17 +15,11 @@
 
 class Boots : public Space
 {
-private:
-    std::string name;
-
 public:
     Boots();
+    Boots(ItemType itemType, int dummy);
     Boots(ItemType itemType);
-    Boots(std::string symbol, ItemType itemType, std::string name);
     ~Boots();
-
-    std::string getName();
-    virtual void displayMessage();
 };
 
 #endif // !BOOTS_HPP

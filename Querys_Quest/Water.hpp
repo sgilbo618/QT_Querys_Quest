@@ -18,7 +18,6 @@ class Water : public Space
 public:
     Water();
     ~Water();
-    virtual void displayMessage();
 };
 
 #endif // !WATER_HPP

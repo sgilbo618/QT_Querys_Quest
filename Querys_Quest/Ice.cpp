@@ -9,7 +9,6 @@
 ******************************************************************************/
 
 #include "Ice.hpp"
-#include <iostream>
 
 
 /******************************************************************************
@@ -20,7 +19,6 @@ Ice::Ice()
 {
     spaceType = ELEMENT;
     elementType = ICE;
-    symbol = "/ ";
 
     setPixmap(QPixmap(":/images/ice.png"));
 
@@ -36,16 +34,4 @@ Ice::Ice()
 ******************************************************************************/
 Ice::~Ice()
 {
-}
-
-
-/******************************************************************************
-** Function: displayMessage()
-** Description: Displays message if player attempts to go onto a Ice space.
-******************************************************************************/
-void Ice::displayMessage()
-{
-    std::cout << std::endl;
-    std::cout << "** Query is on ice without ice boots." << std::endl;
-    std::cout << "Ice makes him slide until he gets a non-ice space" << std::endl;
 }

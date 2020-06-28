@@ -57,20 +57,6 @@ ItemType Space::getItemType()
 
 
 /******************************************************************************
-** Description: Getter and Setter for symbol.
-******************************************************************************/
-std::string Space::getSpaceSymbol()
-{
-    return symbol;
-}
-
-void Space::setSpaceSymbol(std::string symbol)
-{
-    this->symbol = symbol;
-}
-
-
-/******************************************************************************
 ** Description: Getter and Setter for up.
 ******************************************************************************/
 Space * Space::getUp()

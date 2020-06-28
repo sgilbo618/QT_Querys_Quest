@@ -23,7 +23,6 @@ public:
     ~Query();
     bool getHasBeenCollected();
     void setHasBeenCollected(bool collected);
-    virtual void displayMessage();
 };
 
 #endif // !QUERY_HPP

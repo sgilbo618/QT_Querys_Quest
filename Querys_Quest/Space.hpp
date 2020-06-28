@@ -9,7 +9,6 @@
 #ifndef SPACE_HPP
 #define SPACE_HPP
 
-#include <string>
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QMediaPlayer>
@@ -25,7 +24,6 @@ protected:
     SpaceType spaceType;
     ElementType elementType;
     ItemType itemType;
-    std::string symbol;
 
     Space* up;
     Space* down;
@@ -44,9 +42,6 @@ public:
     ElementType getElementType();
     ItemType getItemType();
 
-    std::string getSpaceSymbol();
-    void setSpaceSymbol(std::string symbol);
-
     Space* getUp();
     void setUp(Space* up);
 
@@ -61,9 +56,6 @@ public:
 
     void playSound();
     void updateSound(QUrl url);
-
-    // Methods
-    virtual void displayMessage() = 0;
 };
 
 #endif // SPACE_HPP

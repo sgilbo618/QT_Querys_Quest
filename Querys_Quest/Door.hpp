@@ -29,8 +29,6 @@ public:
 
     bool getIsFirstTimeHere();
     void setIsFirstTimeHere(bool swap);
-
-    virtual void displayMessage();
 };
 
 #endif // !DOOR_HPP

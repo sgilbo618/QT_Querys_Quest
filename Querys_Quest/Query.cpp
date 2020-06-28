@@ -8,7 +8,6 @@
 ******************************************************************************/
 
 #include "Query.hpp"
-#include <iostream>
 
 
 /******************************************************************************
@@ -18,7 +17,6 @@
 Query::Query()
 {
     spaceType = QUERY;
-    symbol = "? ";
     hasBeenCollected = false;
 
     // Set image
@@ -50,15 +48,4 @@ bool Query::getHasBeenCollected()
 void Query::setHasBeenCollected(bool collected)
 {
     this->hasBeenCollected = collected;
-}
-
-
-/******************************************************************************
-** Function: displayMessage()
-** Description: Displays the direction the Player moved.
-******************************************************************************/
-void Query::displayMessage()
-{
-    std::cout << std::endl;
-    std::cout << "** Query found a query!" << std::endl;
 }

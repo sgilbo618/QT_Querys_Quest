@@ -18,7 +18,6 @@ class Free : public Space
 public:
     Free();
     ~Free();
-    virtual void displayMessage();
 };
 
 #endif // !FREE_HPP

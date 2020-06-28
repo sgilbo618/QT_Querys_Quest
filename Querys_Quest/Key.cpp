@@ -8,7 +8,6 @@
 ******************************************************************************/
 
 #include "Key.hpp"
-#include <iostream>
 
 
 /******************************************************************************
@@ -18,21 +17,17 @@
 Key::Key()
 {
     spaceType = KEY;
-    symbol = "k ";
-    name = "k";
 }
 
 
 /******************************************************************************
-** Function: Key(ItemType itemType)
+** Function: Key(ItemType itemType, int dummy)
 ** Description: Constructor that takes in the itemType and creates a Key object
 **          with the corresponding item image. Used for item display only.
 ******************************************************************************/
-Key::Key(ItemType itemType)
+Key::Key(ItemType itemType, int dummy)
 {
     spaceType = KEY;
-    symbol = "k ";
-    name = "k";
     this->itemType = itemType;
 
     // Set image
@@ -57,12 +52,10 @@ Key::Key(ItemType itemType)
 **      a string for the name of the key, and an ItemType for the specific
 **      version of the key. Uses input to create a specific version of a Key.
 ******************************************************************************/
-Key::Key(std::string symbol, ItemType itemType, std::string name)
+Key::Key(ItemType itemType)
 {
     spaceType = KEY;
-    this->symbol = symbol;
     this->itemType = itemType;
-    this->name = name;
 
     // Set image
     if (itemType == ORANGEKEY)
@@ -90,38 +83,4 @@ Key::Key(std::string symbol, ItemType itemType, std::string name)
 ******************************************************************************/
 Key::~Key()
 {
-}
-
-
-/******************************************************************************
-** Description: Getter for name.
-******************************************************************************/
-std::string Key::getName()
-{
-    return name;
-}
-
-
-/******************************************************************************
-** Function: displayMessage()
-** Description: Displays message if player attempts to go onto a Key space.
-******************************************************************************/
-void Key::displayMessage()
-{
-    std::cout << std::endl;
-    std::cout << "** ";
-
-    // Display message based on the spefic key that was found
-    if (itemType == ORANGEKEY)
-    {
-        std::cout << "Query found the orange key!" << std::endl;
-    }
-    else if (itemType == GREENKEY)
-    {
-        std::cout << "Query found the green key!" << std::endl;
-    }
-    else if (itemType == YELLOWKEY)
-    {
-        std::cout << "Query found the yellow key!" << std::endl;
-    }
 }

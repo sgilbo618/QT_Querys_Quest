@@ -18,7 +18,6 @@ class Fire : public Space
 public:
     Fire();
     ~Fire();
-    virtual void displayMessage();
 };
 
 #endif // !FIRE_HPP

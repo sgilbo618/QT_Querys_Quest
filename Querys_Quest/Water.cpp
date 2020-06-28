@@ -8,8 +8,6 @@
 ******************************************************************************/
 
 #include "Water.hpp"
-#include <iostream>
-
 
 
 /******************************************************************************
@@ -20,7 +18,6 @@ Water::Water()
 {
     spaceType = ELEMENT;
     elementType = WATER;
-    symbol = "~ ";
 
     setPixmap(QPixmap(":/images/water.png"));
 
@@ -36,15 +33,4 @@ Water::Water()
 ******************************************************************************/
 Water::~Water()
 {
-}
-
-
-/******************************************************************************
-** Function: displayMessage()
-** Description: Displays message if player attempts to go onto a Water space.
-******************************************************************************/
-void Water::displayMessage()
-{
-    std::cout << std::endl;
-    std::cout << "** Query is on Water without Water boots! - He dead" << std::endl;
 }

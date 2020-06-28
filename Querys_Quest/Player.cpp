@@ -5,16 +5,14 @@
 ** Date: 6-20-2020
 ** Description: Contains the implementation of class Player which represents
 **      the main character, Query, in the game Query's Quest. Player has
-**      containers to keep track of keys, boots, and queries.
+**      container to keep track of keys, boots, and queries.
 ******************************************************************************/
 
 #include "Player.hpp"
 #include "Door.hpp"
 #include "Key.hpp"
 #include "Boots.hpp"
-#include <iostream>
-#include <iomanip>
-#include <stdio.h>
+
 #include <QKeyEvent>
 
 
@@ -85,9 +83,6 @@ bool Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
         // reset symbol to original
         resetSpaceSymbol();
 
-        // set new space symbol to Q
-        playerPtr->setSpaceSymbol("Q ");
-
         return true;
     }
     return false;
@@ -108,7 +103,6 @@ bool Player::checkLegalMove(Space* moveSpace)
     if (moveType == WALL)
     {
         moveSpace->playSound();
-        moveSpace->displayMessage();
         isLegal = false;
     }
 
@@ -118,7 +112,6 @@ bool Player::checkLegalMove(Space* moveSpace)
         if (static_cast<Door*>(moveSpace)->getIsLocked())
         {
             moveSpace->playSound();
-            moveSpace->displayMessage();
             isLegal = false;
         }
         else
@@ -129,7 +122,6 @@ bool Player::checkLegalMove(Space* moveSpace)
                 moveSpace->playSound();
                 static_cast<Door*>(moveSpace)->setIsFirstTimeHere(false);
             }
-            moveSpace->displayMessage();
         }
     }
 
@@ -145,59 +137,28 @@ bool Player::checkLegalMove(Space* moveSpace)
 void Player::resetSpaceSymbol()
 {
     SpaceType type = playerPtr->getSpaceType();
-    ElementType elementType = playerPtr->getElementType();
 
     switch (type)
     {
-    case FREE:
-        playerPtr->setSpaceSymbol("  ");
-        break;
         // Unlocked Doors and items become vacant spaces after collection
     case DOOR:
-        playerPtr->setSpaceSymbol("  ");
         playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     case KEY:
-        playerPtr->setSpaceSymbol("  ");
         playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     case BOOTS:
-        playerPtr->setSpaceSymbol("  ");
         playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     case QUERY:
-        playerPtr->setSpaceSymbol("  ");
         playerPtr->setPixmap(QPixmap(":/images/floor.png"));
         break;
 
     default:
         break;
-
-        // Elements return to their prevous symbol
-    case ELEMENT:
-    {
-        switch (elementType)
-        {
-        case ICE:
-            playerPtr->setSpaceSymbol("/ ");
-            break;
-
-        case FIRE:
-            playerPtr->setSpaceSymbol("* ");
-            break;
-
-        case WATER:
-            playerPtr->setSpaceSymbol("~ ");
-            break;
-
-        default:
-            break;
-        }
-        break;
-    }
     }
 }
 
@@ -212,9 +173,7 @@ bool Player::hasThisItem(ItemType item)
     for (int i = 0; i < numberOfItems; i++)
     {
         if (items[i]->getItemType() == item)
-        {
             return true;
-        }
     }
     return false;
 }

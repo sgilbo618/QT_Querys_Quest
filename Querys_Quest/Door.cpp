@@ -8,7 +8,6 @@
 ******************************************************************************/
 
 #include "Door.hpp"
-#include <iostream>
 
 
 /******************************************************************************
@@ -18,7 +17,6 @@
 Door::Door()
 {
     spaceType = DOOR;
-    symbol = "D ";
     isLocked = true;
     isFirstTimeHere = true;
 }
@@ -32,7 +30,6 @@ Door::Door()
 Door::Door(std::string symbol)
 {
     spaceType = DOOR;
-    this->symbol = symbol;
     isLocked = true;
     isFirstTimeHere = true;
 
@@ -93,56 +90,4 @@ bool Door::getIsFirstTimeHere()
 void Door::setIsFirstTimeHere(bool swap)
 {
     isFirstTimeHere = swap;
-}
-
-
-/******************************************************************************
-** Function: displayMessage()
-** Description: Displays message if player attempts to go onto a Door space.
-******************************************************************************/
-void Door::displayMessage()
-{
-    std::cout << std::endl;
-    std::cout << "** ";
-
-    // When a door is locked, it cannot be passed
-    if (isLocked)
-    {
-        if (symbol == "O ")
-        {
-            std::cout << "This door is locked - Query needs the orange key to go in here." << std::endl;
-        }
-        else if (symbol == "G ")
-        {
-            std::cout << "This door is locked - Query needs the green key to go in here." << std::endl;
-        }
-        else if (symbol == "Y ")
-        {
-            std::cout << "This door is locked - Query needs the yellow key to go in here." << std::endl;
-        }
-        else if (symbol == "! ")
-        {
-            std::cout << "The final door is locked - Query needs to collect all of the queries to win." << std::endl;
-        }
-    }
-    // The door is unlocked messages
-    else
-    {
-        if (symbol == "O ")
-        {
-            std::cout << "Query used the orange key to unlock the orange door!" << std::endl;
-        }
-        else if (symbol == "G ")
-        {
-            std::cout << "Query used the green key to unlock the green door!" << std::endl;
-        }
-        else if (symbol == "Y ")
-        {
-            std::cout << "Query used the yellow key to unlock the yellow door!" << std::endl;
-        }
-        else if (symbol == "! ")
-        {
-            std::cout << "Query completed level 1 of Query's Quest! Congrats!!" << std::endl;
-        }
-    }
 }

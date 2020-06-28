@@ -18,7 +18,6 @@ class Ice : public Space
 public:
     Ice();
     ~Ice();
-    virtual void displayMessage();
 };
 
 #endif // !ICE_HPP
