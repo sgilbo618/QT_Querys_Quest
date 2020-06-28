@@ -27,7 +27,6 @@ Player::Player()
     playerPtr = nullptr;
     direction = UP;
     isAlive = true;
-    steps = MAX_STEPS;
     numberOfItems = 0;
     queries = QUERIES_NEEDED;
 
@@ -61,12 +60,6 @@ Direction Player::getDirection()
 ******************************************************************************/
 bool Player::checkIsAlive()
 {
-    if (steps == 0)
-    {
-        std::cout << "Query ran out of steps and died!" << std::endl;
-        isAlive = false;
-    }
-
     return isAlive;
 }
 
@@ -94,9 +87,6 @@ bool Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
 
         // set new space symbol to Q
         playerPtr->setSpaceSymbol("Q ");
-
-        // decrement steps
-        steps--;
 
         return true;
     }

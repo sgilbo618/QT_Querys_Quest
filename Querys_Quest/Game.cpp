@@ -900,6 +900,7 @@ void Game::checkForQueries()
     if (player->queries == 0)
     {
         static_cast<Door*>(gameBoard[0][24])->setIsLocked(false);
+        gameBoard[0][24]->setPixmap(QPixmap(":/images/unlocked_portal.png"));
     }
 }
 
@@ -913,7 +914,6 @@ bool Game::checkForWin()
 {
     if (player->playerPtr == gameBoard[0][24] && player->queries == 0)
     {
-        player->playerPtr->setPixmap(QPixmap(":/images/unlocked_portal.png"));
         return true;
     }
 
