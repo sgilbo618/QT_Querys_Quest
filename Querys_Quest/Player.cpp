@@ -123,8 +123,12 @@ bool Player::checkLegalMove(Space* moveSpace)
         }
         else
         {
-            moveSpace->updateSound(QUrl("qrc:/sounds/unlock_door.wav"));
-            moveSpace->playSound();
+            if (static_cast<Door*>(moveSpace)->getIsFirstTimeHere())
+            {
+                moveSpace->updateSound(QUrl("qrc:/sounds/unlock_door.wav"));
+                moveSpace->playSound();
+                static_cast<Door*>(moveSpace)->setIsFirstTimeHere(false);
+            }
             moveSpace->displayMessage();
         }
     }

@@ -946,6 +946,11 @@ void Game::checkForQueries()
     // Lets player in final door only if they have all the queries
     if (player->queries == 0)
     {
+        if (static_cast<Door*>(gameBoard[0][24])->getIsLocked())
+        {
+            gameBoard[0][24]->updateSound(QUrl("qrc:/sounds/portal.mp3"));
+            gameBoard[0][24]->playSound();
+        }
         static_cast<Door*>(gameBoard[0][24])->setIsLocked(false);
         gameBoard[0][24]->setPixmap(QPixmap(":/images/unlocked_portal.png"));
     }

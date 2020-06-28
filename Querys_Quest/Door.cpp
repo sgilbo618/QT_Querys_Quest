@@ -20,6 +20,7 @@ Door::Door()
     spaceType = DOOR;
     symbol = "D ";
     isLocked = true;
+    isFirstTimeHere = true;
 }
 
 
@@ -33,6 +34,7 @@ Door::Door(std::string symbol)
     spaceType = DOOR;
     this->symbol = symbol;
     isLocked = true;
+    isFirstTimeHere = true;
 
     if (symbol == "O ")
     {
@@ -77,6 +79,20 @@ bool Door::getIsLocked()
 void Door::setIsLocked(bool isLocked)
 {
     this->isLocked = isLocked;
+}
+
+
+/******************************************************************************
+** Description: Getter and Setter for isFirstTimeHere.
+******************************************************************************/
+bool Door::getIsFirstTimeHere()
+{
+    return isFirstTimeHere;
+}
+
+void Door::setIsFirstTimeHere(bool swap)
+{
+    isFirstTimeHere = swap;
 }
 
 

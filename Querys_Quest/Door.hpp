@@ -17,6 +17,7 @@ class Door : public Space
 {
 private:
     bool isLocked;
+    bool isFirstTimeHere;
 
 public:
     Door();
@@ -25,6 +26,9 @@ public:
 
     bool getIsLocked();
     void setIsLocked(bool isLocked);
+
+    bool getIsFirstTimeHere();
+    void setIsFirstTimeHere(bool swap);
 
     virtual void displayMessage();
 };
