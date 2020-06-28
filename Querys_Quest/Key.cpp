@@ -24,6 +24,33 @@ Key::Key()
 
 
 /******************************************************************************
+** Function: Key(ItemType itemType)
+** Description: Constructor that takes in the itemType and creates a Key object
+**          with the corresponding item image. Used for item display only.
+******************************************************************************/
+Key::Key(ItemType itemType)
+{
+    spaceType = KEY;
+    symbol = "k ";
+    name = "k";
+    this->itemType = itemType;
+
+    if (itemType == ORANGEKEY)
+    {
+        setPixmap(QPixmap(":/images/plain_orange_key.png"));
+    }
+    else if (itemType == GREENKEY)
+    {
+        setPixmap(QPixmap(":/images/plain_green_key.png"));
+    }
+    else if (itemType == YELLOWKEY)
+    {
+        setPixmap(QPixmap(":/images/plain_yellow_key.png"));
+    }
+}
+
+
+/******************************************************************************
 ** Function: Key(string, ItemType, string)
 ** Description: Constructor that takes in a string for the symbol of the key,
 **      a string for the name of the key, and an ItemType for the specific

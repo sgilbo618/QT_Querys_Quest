@@ -24,6 +24,33 @@ Boots::Boots()
 
 
 /******************************************************************************
+** Function: Boots(ItemType itemType)
+** Description: Constructor that takes in the itemType and creates a Boots
+**      object with the corresponding item image. Used for item display only.
+******************************************************************************/
+Boots::Boots(ItemType itemType)
+{
+    spaceType = BOOTS;
+    symbol = "D ";
+    name = "";
+    this->itemType = itemType;
+
+    if (itemType == WATERBOOTS)
+    {
+        setPixmap(QPixmap(":/images/plain_water_boots.png"));
+    }
+    else if (itemType == FIREBOOTS)
+    {
+        setPixmap(QPixmap(":/images/plain_fire_boots.png"));
+    }
+    else if (itemType == ICEBOOTS)
+    {
+        setPixmap(QPixmap(":/images/plain_ice_boots.png"));
+    }
+}
+
+
+/******************************************************************************
 ** Function: Boots(string, ItemType, string)
 ** Description: Constructor that takes in a string for the boot symbol, a
 **      string for the boot name, and an ItemType to define what kind of boot

@@ -19,12 +19,10 @@
 #include "mainwindow.hpp"
 
 #include <iostream>
-#include <QApplication>
-#include <QPushButton>
-#include <QLabel>
 #include <QMessageBox>
 #include <QGraphicsTextItem>
 #include <QFont>
+#include <QGraphicsPixmapItem>
 
 
 /******************************************************************************
@@ -35,6 +33,7 @@ Game::Game(QWidget *parent)
 {
     // Make view bigger
     this->resize(810, 900);
+    setStyleSheet("background-image: url(:images/bg.png);");
 
     /* Create and set scene */
     scene = new QGraphicsScene(this);
@@ -45,14 +44,48 @@ Game::Game(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    /* Create main scene */
+    // Add title
+    QGraphicsTextItem *title = new QGraphicsTextItem();
+    title->setPlainText("Query's Quest");
+    title->setFont(QFont("times", 36));
+
+    title->setPos(225, -40);
+    scene->addItem(title);
+
+    // Add images
+    QPixmap big_query(":/images/big_query.gif");
+    QGraphicsPixmapItem *img1 = scene->addPixmap(big_query);
+    QGraphicsPixmapItem *img2 = scene->addPixmap(big_query);
+    QGraphicsPixmapItem *img3 = scene->addPixmap(big_query);
+    img1->setPos(-15, 75);
+    img2->setPos(251, 75);
+    img3->setPos(517, 75);
 
     // Play game button
-    QPushButton *playBtn = new QPushButton();
-    playBtn->setGeometry(QRect(400, 400, 100, 75));
+    playBtn = new QPushButton();
+    playBtn->setGeometry(QRect(225, 450, 300, 75));
     playBtn->setText("Play Game");
+    playBtn->setStyleSheet("background-color: red; "
+                           "border: 5px solid black;"
+                           "font-size: 20px;");
+    proxyPlay = scene->addWidget(playBtn);
     connect(playBtn, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
-    QGraphicsProxyWidget *proxy = scene->addWidget(playBtn);
+
+    // Exit button
+    quitBtn = new QPushButton();
+    quitBtn->setGeometry(QRect(225, 550, 140, 60));
+    quitBtn->setText("Exit");
+    quitBtn->setStyleSheet("background-color: #787878;");
+    proxyQuit = scene->addWidget(quitBtn);
+    connect(quitBtn, SIGNAL(clicked()), this, SLOT(onQuitBtnClicked()));
+
+    // Info button
+    infoBtn = new QPushButton();
+    infoBtn->setGeometry(QRect(385, 550, 140, 60));
+    infoBtn->setText("About");
+    infoBtn->setStyleSheet("background-color: #787878;");
+    proxyInfo = scene->addWidget(infoBtn);
+    connect(infoBtn, SIGNAL(clicked()), this, SLOT(onInfoBtnClicked()));
 }
 
 
@@ -70,7 +103,7 @@ Game::~Game()
 ** Description: Creates new game board, player, and scene.
 ******************************************************************************/
 void Game::resetGame()
-{
+{    
     /* Build 2D board */
     gameBoard = new Space**[ROWS];
 
@@ -92,7 +125,6 @@ void Game::resetGame()
     createGameBoard();
     addAllItemsToScene();
 
-
     /* Build player */
     player = new Player;
 
@@ -108,10 +140,26 @@ void Game::resetGame()
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
 
+    /* Draw buttons */
+    quitBtn = new QPushButton();
+    quitBtn->setGeometry(QRect(620, -110, 75, 30));
+    quitBtn->setText("Exit");
+    quitBtn->setStyleSheet("background-color: #787878;");
+    proxyQuit = scene->addWidget(quitBtn);
+    connect(quitBtn, SIGNAL(clicked()), this, SLOT(onQuitBtnClicked()));
+
+    infoBtn = new QPushButton();
+    infoBtn->setGeometry(QRect(700, -110, 75, 30));
+    infoBtn->setText("About");
+    infoBtn->setStyleSheet("background-color: #787878;");
+    proxyInfo = scene->addWidget(infoBtn);
+    connect(infoBtn, SIGNAL(clicked()), this, SLOT(onInfoBtnClicked()));
+
     /* Draw Query tracker */
     query_count = new QGraphicsTextItem();
     query_count->setPlainText("Queries Left: " + QString::number(player->queries));
     query_count->setFont(QFont("times", 16));
+    query_count->setDefaultTextColor("red");
     query_count->setPos(-30, -120);
     scene->addItem(query_count);
 
@@ -119,10 +167,11 @@ void Game::resetGame()
     items = new QGraphicsTextItem();
     items->setPlainText("Items:");
     items->setFont(QFont("times", 16));
+    items->setDefaultTextColor("red");
     items->setPos(-30, -90);
     scene->addItem(items);
 
-    item_x = -30;
+    item_x = -25;
 }
 
 
@@ -148,20 +197,14 @@ void Game::gameOver()
         scene->clear();
         resetGame();
     }
+    else if (loseBox->clickedButton() == quit)
+        exit(0);
     else
         exit(0);
-//    scene->clear();
 
 //    // Add game over image
 //    QPixmap goim(":/images/game_over.png");
 //    scene->addPixmap(goim);
-
-//    // Add play again button
-//    QPushButton *playAgain = new QPushButton();
-//    playAgain->setGeometry(QRect(400, 400, 100, 75));
-//    playAgain->setText("Play Again");
-//    connect(playAgain, SIGNAL(clicked()), this, SLOT(onPlayBtnClicked()));
-//    QGraphicsProxyWidget *proxy = scene->addWidget(playAgain);
 }
 
 
@@ -187,6 +230,8 @@ void Game::gameWon()
         scene->clear();
         resetGame();
     }
+    else if (winBox->clickedButton() == quit)
+        exit(0);
     else
         exit(0);
 }
@@ -328,16 +373,6 @@ void Game::addAllItemsToScene()
 
 
 /******************************************************************************
-** Function:
-** Description:
-******************************************************************************/
-void Game::createItemsDisplay()
-{
-
-}
-
-
-/******************************************************************************
 ** Function: createGameBoard()
 ** Description: Calls all of the create room functions.
 ******************************************************************************/
@@ -351,7 +386,6 @@ void Game::createGameBoard()
     createFinishRoom();
     fillInEmptySpaces();
     setSpacePointers();
-    createItemsDisplay();
 }
 
 
@@ -685,10 +719,6 @@ void Game::onIce()
                 {
                     // Move player to the next space up
                     player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP);
-//                    player->setPos(x, y-GRID_STEP);
-//                    player->resetSpaceSymbol();
-//                    player->playerPtr = player->playerPtr->getUp();
-//                    player->playerPtr->setSpaceSymbol("Q ");
                 }
                 // Next space is a border or wall
                 else
@@ -814,8 +844,8 @@ void Game::checkForItems()
             player->numberOfItems++;
 
             // Add item to item display
-            Key *key = new Key("X ", itemType, "X");
-            key->setPos(item_x, -60);
+            Key *key = new Key(itemType);
+            key->setPos(item_x, -55);
             item_x += 50;
             scene->addItem(key);
 
@@ -830,8 +860,8 @@ void Game::checkForItems()
             player->numberOfItems++;
 
             // Add item to item display
-            Boots *boot = new Boots("X ", itemType, "X");
-            boot->setPos(item_x, -60);
+            Boots *boot = new Boots(itemType);
+            boot->setPos(item_x, -55);
             item_x += 50;
             scene->addItem(boot);
 
@@ -841,11 +871,6 @@ void Game::checkForItems()
             break;
         }
     }
-//    Wall *tc = new Wall;
-//    tc->setPos(-GRID_STEP, -GRID_STEP);
-//    scene->addItem(tc);
-//    new Key("o ", ORANGEKEY, "o");
-//     new Boots("W ", WATERBOOTS, "W");
 }
 
 
@@ -922,12 +947,56 @@ bool Game::checkForWin()
 
 
 /******************************************************************************
-** Function: on_pushButton_clicked()
+** Function: onPlayBtnClicked()
 ** Description: Ran when 'play' button is clicked. Creates an instance of the
 **      Game and plays it.
 ******************************************************************************/
 void Game::onPlayBtnClicked()
 {
+    scene->removeItem(proxyPlay);
+    scene->removeItem(proxyQuit);
+    scene->removeItem(proxyInfo);
     resetGame();
 }
 
+
+/******************************************************************************
+** Function: onQuitBtnClicked()
+** Description: Exits applciation when quit or exit is clicked().
+******************************************************************************/
+void Game::onQuitBtnClicked()
+{
+    exit(0);
+}
+
+
+/******************************************************************************
+** Function: onInfoBtnClicked()
+** Description: Displays message pop up with information on how to play.
+******************************************************************************/
+void Game::onInfoBtnClicked()
+{
+    // Create info message box
+    QMessageBox *infoBox = new QMessageBox();
+    infoBox->setWindowTitle("About Query's Quest");
+    infoBox->setText("Query has always been curious about the meaning of the "
+                     "information around him, so naturally, he became a data "
+                     "mining explorer! Query's quest is to traverse his world in "
+                     "search of queries to help answer his questions about life - "
+                     "no matter what obstacles he may encounter.\n"
+                     "\nKeys:\n"
+                     "Use the arrow keys to navigate.\n"
+                     "\nHow to Play:\n"
+                     "In the game Query's Quest, the player, Query, must explore "
+                     "his world in search of queries (?). Query must find "
+                     "all of the queries in order to end his quest and move on to "
+                     "the next level of understanding. Along the way, Query will "
+                     "encounter different elements of his world, including water, "
+                     "fire, and ice. Be careful when traversing these elements "
+                     "because some of them may harm Query if you have not found "
+                     "the proper equipment. Also, not all places in Query's world "
+                     "will be accesible without finding the proper keys to unlock"
+                     "doors. Good luck to you on your journey!");
+
+    infoBox->exec();
+}

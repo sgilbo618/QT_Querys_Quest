@@ -20,6 +20,7 @@ private:
 
 public:
     Boots();
+    Boots(ItemType itemType);
     Boots(std::string symbol, ItemType itemType, std::string name);
     ~Boots();
 

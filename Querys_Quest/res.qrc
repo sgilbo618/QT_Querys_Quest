@@ -19,5 +19,13 @@
         <file>query.png</file>
         <file>water_boots.png</file>
         <file>game_over.png</file>
+        <file>big_query.gif</file>
+        <file>bg.png</file>
+        <file>plain_fire_boots.png</file>
+        <file>plain_green_key.png</file>
+        <file>plain_ice_boots.png</file>
+        <file>plain_orange_key.png</file>
+        <file>plain_water_boots.png</file>
+        <file>plain_yellow_key.png</file>
     </qresource>
 </RCC>

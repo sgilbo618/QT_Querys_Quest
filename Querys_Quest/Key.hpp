@@ -20,6 +20,7 @@ private:
 
 public:
     Key();
+    Key(ItemType itemType);
     Key(std::string symbol, ItemType itemType, std::string name);
     ~Key();
 

@@ -12,10 +12,12 @@
 #include "Space.hpp"
 #include "Player.hpp"
 
+#include <QPushButton>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QWidget>
+#include <QGraphicsProxyWidget>
 
 #define ROWS 25 // i
 #define COLS 25 // j
@@ -28,9 +30,17 @@ private:
     // Data
     Space*** gameBoard;
     Player *player;
+
     QGraphicsTextItem *query_count;
     QGraphicsTextItem *items;
     int item_x;
+
+    QPushButton *playBtn;
+    QGraphicsProxyWidget *proxyPlay;
+    QPushButton *quitBtn;
+    QGraphicsProxyWidget *proxyQuit;
+    QPushButton *infoBtn;
+    QGraphicsProxyWidget *proxyInfo;
 
 public:
     // Data
@@ -57,7 +67,6 @@ public:
     void createMixRoom();
     void createFinishRoom();
     void fillInEmptySpaces();
-    void createItemsDisplay();
 
     // Element Methods
     void checkForElements();
@@ -74,6 +83,8 @@ public:
 
 private slots:
     void onPlayBtnClicked();
+    void onQuitBtnClicked();
+    void onInfoBtnClicked();
 };
 
 #endif // GAME_HPP
