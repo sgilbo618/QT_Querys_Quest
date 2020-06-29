@@ -127,10 +127,10 @@ void Game::resetGame()
     player = new Player;
 
     // Attach player to board
-    player->playerPtr = gameBoard[15][15];
+    player->playerPtr = gameBoard[15][15]; //15 15
 
     // Attach player to scene
-    player->setPos(15*GRID_STEP, 15*GRID_STEP);
+    player->setPos(15*GRID_STEP, 15*GRID_STEP); //15 15
     scene->addItem(player);
 
     // Make player focusalbe and set it to current focus
@@ -258,25 +258,25 @@ void Game::keyPressEvent(QKeyEvent *event)
     // Up
     if (event->key() == Qt::Key_Up && player->playerPtr->getUp() != nullptr) // && is for bounds checking
     {
-        made_move = player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP);
+        made_move = player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP, false);
         player->direction = UP;
     }
     // Down
     else if (event->key() == Qt::Key_Down && player->playerPtr->getDown() != nullptr)
     {
-        made_move = player->makeMove(player->playerPtr->getDown(), x, y+GRID_STEP);
+        made_move = player->makeMove(player->playerPtr->getDown(), x, y+GRID_STEP, false);
         player->direction = DOWN;
     }
     // Left
     else if (event->key() == Qt::Key_Left && player->playerPtr->getLeft() != nullptr)
     {
-        made_move = player->makeMove(player->playerPtr->getLeft(), x-GRID_STEP, y);
+        made_move = player->makeMove(player->playerPtr->getLeft(), x-GRID_STEP, y, false);
         player->direction = LEFT;
     }
     // Right
     else if (event->key() == Qt::Key_Right && player->playerPtr->getRight() != nullptr)
     {
-        made_move = player->makeMove(player->playerPtr->getRight(), x+GRID_STEP, y);
+        made_move = player->makeMove(player->playerPtr->getRight(), x+GRID_STEP, y, false);
         player->direction = RIGHT;
     }
 
@@ -703,23 +703,28 @@ void Game::onIce()
 
         // Get direction
         Direction direction = player->getDirection();
-        qreal x;
-        qreal y;
+        Direction prevDir = direction;
+        qreal x_tracker = player->x();
+        qreal y_tracker = player->y();
+        bool isBounce = false;
 
         // Slides player along each subsequent ice space
         while (player->playerPtr->getElementType() == ICE)
         {
-            x = player->x();
-            y = player->y();
+            //x = player->x();
+            //y = player->y();
 
             switch (direction)
             {
             case UP:
                 // Next space is not a border or wall
                 if (player->playerPtr->getUp() != nullptr && player->playerPtr->getUp()->getSpaceType() != WALL)
+                {
                     // Move player to the next space up
-                    player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP);
-
+                    //player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP, true);
+                    player->makeMove(player->playerPtr->getUp(), 0, 0, true);
+                    y_tracker -= GRID_STEP;
+                }
                 // Next space is a border or wall
                 else
                     // Change to opposite direction to bounce player back
@@ -728,24 +733,46 @@ void Game::onIce()
 
             case DOWN:
                 if (player->playerPtr->getDown() != nullptr && player->playerPtr->getDown()->getSpaceType() != WALL)
-                    player->makeMove(player->playerPtr->getDown(), x, y+GRID_STEP);
+                {
+                    player->makeMove(player->playerPtr->getDown(), 0, 0, true);
+                    y_tracker += GRID_STEP;
+                }
                 else
                     direction = UP;
                 break;
 
             case LEFT:
                 if (player->playerPtr->getLeft() != nullptr && player->playerPtr->getLeft()->getSpaceType() != WALL)
-                    player->makeMove(player->playerPtr->getLeft(), x-GRID_STEP, y);
+                {
+                    player->makeMove(player->playerPtr->getLeft(), 0, 0, true);
+                    x_tracker -= GRID_STEP;
+                }
                 else
                     direction = RIGHT;
                 break;
 
             case RIGHT:
                 if (player->playerPtr->getRight() != nullptr && player->playerPtr->getRight()->getSpaceType() != WALL)
-                    player->makeMove(player->playerPtr->getRight(), x+GRID_STEP, y);
+                {
+                    player->makeMove(player->playerPtr->getRight(), 0, 0, true);
+                    x_tracker += GRID_STEP;
+                }
                 else
                     direction = LEFT;
                 break;
+            }
+
+            // If direction has changed call animation
+            if (prevDir != direction)
+            {
+                player->animateIce(prevDir, x_tracker, y_tracker, true);
+                prevDir = direction;
+                isBounce = true;
+            }
+            else if (player->playerPtr->getElementType() != ICE && !isBounce)
+            {
+                player->animateIce(prevDir, x_tracker, y_tracker, false);
+                prevDir = direction;
             }
         }
 

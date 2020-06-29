@@ -13,6 +13,7 @@
 
 #include "Space.hpp"
 
+#include <QTimer>
 #include <QObject>
 #include <QGraphicsPixmapItem>
 
@@ -34,6 +35,14 @@ private:
     int numberOfItems;
     int queries;
 
+    QTimer *timer;
+    qreal move_x;
+    qreal move_y;
+    Direction ice_direction;
+    qreal bounce_x;
+    qreal bounce_y;
+    bool isBounce;
+
 public:
     // Constructor and Destructor
     Player();
@@ -43,12 +52,16 @@ public:
     bool checkIsAlive();
 
     // Move methods
-    bool makeMove(Space* moveSpace, qreal move_x, qreal move_y);
+    bool makeMove(Space* moveSpace, qreal move_x, qreal move_y, bool onIce);
+    void animateIce(Direction direction, qreal x_total, qreal y_total, bool isBounce);
     bool checkLegalMove(Space* moveSpace);
     void resetSpaceSymbol();
 
     // Item methods
     bool hasThisItem(ItemType item);
+
+public slots:
+    void move();
 
     friend class Game;
 };

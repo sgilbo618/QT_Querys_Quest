@@ -69,13 +69,14 @@ bool Player::checkIsAlive()
 **      if it is a legal move. Returns true if the move is made, and false if
 **      the move is not made.
 ******************************************************************************/
-bool Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
+bool Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y, bool onIce)
 {
     // Check if space is legal move
     if (checkLegalMove(moveSpace))
     {
-        // Move player on display
-        setPos(move_x, move_y);
+        // Move player on display - don't move here if it is on ice
+        if (!onIce)
+            setPos(move_x, move_y);
 
         // Move player to new space
         playerPtr = moveSpace;
@@ -86,6 +87,112 @@ bool Player::makeMove(Space * moveSpace, qreal move_x, qreal move_y)
         return true;
     }
     return false;
+}
+
+
+/******************************************************************************
+** Function: makeMoveOnIce()
+** Description: Sets up player variables for moving on ice animation. The
+**      player will slide across the ice until it reaches the passed in x/y
+**      values. The flag isBounce is set when the player has made a move that
+**      will result in him sliding into a wall and bouncing back. Creates a
+**      timer to call move() every x milliseconds.
+******************************************************************************/
+void Player::animateIce(Direction direction, qreal x_total, qreal y_total, bool isBounce)
+{
+    // Set these so move() knows how far and direction to move player
+    move_x = x_total;
+    move_y = y_total;
+    ice_direction = direction;
+    this->isBounce = isBounce;
+    bounce_x = this->x();
+    bounce_y = this->y();
+
+    // Start timer to animate move()
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(move()));
+    timer->start(50);
+}
+
+
+/******************************************************************************
+** Function: move()
+** Description: This is a slot function that drives the animation for sliding
+**      on ice. Each call results in the player moving one grid step on the
+**      display. If the isBounce flag is set, a new timer is created and the
+**      coordinates are set to move the player back to the original space.
+******************************************************************************/
+void Player::move()
+{
+    qreal curr_x = this->x();
+    qreal curr_y = this->y();
+
+    // Only adjust coordinates if not done
+    if (curr_x != move_x || curr_y != move_y)
+    {
+        switch (ice_direction)
+        {
+        case UP:
+           curr_y -= GRID_STEP;
+           break;
+
+        case DOWN:
+           curr_y += GRID_STEP;
+           break;
+
+        case LEFT:
+           curr_x -= GRID_STEP;
+           break;
+
+        case RIGHT:
+           curr_x += GRID_STEP;
+           break;
+        }
+   }
+
+   setPos(curr_x, curr_y);
+
+   // Move coordinates match current coordinates, so stop this animation
+   if (curr_x == move_x && curr_y == move_y)
+   {
+       timer->stop();
+
+       // If this is a bounce animation, reset data to bounce player back to where he started
+       if (isBounce)
+       {
+            move_x = bounce_x;
+            move_y = bounce_y;
+            isBounce = false;
+
+            // Update direction to the opposite direction and add one more step
+            switch (ice_direction)
+            {
+            case UP:
+                ice_direction = DOWN;
+                move_y += GRID_STEP;
+                break;
+
+            case DOWN:
+                ice_direction = UP;
+                move_y -= GRID_STEP;
+                break;
+
+            case LEFT:
+                ice_direction = RIGHT;
+                move_x += GRID_STEP;
+                break;
+
+            case RIGHT:
+                ice_direction = LEFT;
+                move_x -= GRID_STEP;
+                break;
+            }
+
+            timer = new QTimer();
+            connect(timer, SIGNAL(timeout()), this, SLOT(move()));
+            timer->start(50);
+       }
+   }
 }
 
 
