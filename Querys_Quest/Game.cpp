@@ -130,7 +130,7 @@ void Game::resetGame()
     player->playerPtr = gameBoard[15][15]; //15 15
 
     // Attach player to scene
-    player->setPos(15*GRID_STEP, 15*GRID_STEP); //15 15
+    player->setPos(15*GRID_STEP+7, 15*GRID_STEP); // the +8 is just to make him centered
     scene->addItem(player);
 
     // Make player focusalbe and set it to current focus
@@ -138,6 +138,7 @@ void Game::resetGame()
     player->setFocus();
 
     /* Draw buttons */
+    // Quit
     quitBtn = new QPushButton();
     quitBtn->setGeometry(QRect(620, -110, 75, 30));
     quitBtn->setText("Exit");
@@ -145,12 +146,14 @@ void Game::resetGame()
     proxyQuit = scene->addWidget(quitBtn);
     connect(quitBtn, SIGNAL(clicked()), this, SLOT(onQuitBtnClicked()));
 
+    // Info
     infoBtn = new QPushButton();
     infoBtn->setGeometry(QRect(700, -110, 75, 30));
     infoBtn->setText("About");
     infoBtn->setStyleSheet("background-color: #787878;");
     proxyInfo = scene->addWidget(infoBtn);
     connect(infoBtn, SIGNAL(clicked()), this, SLOT(onInfoBtnClicked()));
+
 
     /* Draw Query tracker */
     query_count = new QGraphicsTextItem();
@@ -260,24 +263,28 @@ void Game::keyPressEvent(QKeyEvent *event)
     {
         made_move = player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP, false);
         player->direction = UP;
+        player->updatePixmap(QPixmap(":/images/up_guy.png"));
     }
     // Down
     else if (event->key() == Qt::Key_Down && player->playerPtr->getDown() != nullptr)
     {
         made_move = player->makeMove(player->playerPtr->getDown(), x, y+GRID_STEP, false);
         player->direction = DOWN;
+        player->updatePixmap(QPixmap(":/images/down_guy.png"));
     }
     // Left
     else if (event->key() == Qt::Key_Left && player->playerPtr->getLeft() != nullptr)
     {
         made_move = player->makeMove(player->playerPtr->getLeft(), x-GRID_STEP, y, false);
         player->direction = LEFT;
+        player->updatePixmap(QPixmap(":/images/left_guy.png"));
     }
     // Right
     else if (event->key() == Qt::Key_Right && player->playerPtr->getRight() != nullptr)
     {
         made_move = player->makeMove(player->playerPtr->getRight(), x+GRID_STEP, y, false);
         player->direction = RIGHT;
+        player->updatePixmap(QPixmap(":/images/right_guy.png"));
     }
 
     // Made valid move so update game as needed
@@ -291,6 +298,7 @@ void Game::keyPressEvent(QKeyEvent *event)
         if (checkForWin())
             gameWon();
     }
+    player->resetForwardTimer();
 }
 
 /******************************************************************************

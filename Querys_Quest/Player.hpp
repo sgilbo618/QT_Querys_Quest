@@ -43,6 +43,8 @@ private:
     qreal bounce_y;
     bool isBounce;
 
+     QTimer *forwardTimer;
+
 public:
     // Constructor and Destructor
     Player();
@@ -50,6 +52,8 @@ public:
 
     Direction getDirection();
     bool checkIsAlive();
+    void updatePixmap(QPixmap pixmap);
+    void resetForwardTimer();
 
     // Move methods
     bool makeMove(Space* moveSpace, qreal move_x, qreal move_y, bool onIce);
@@ -62,6 +66,7 @@ public:
 
 public slots:
     void move();
+    void turnPlayerForward();
 
     friend class Game;
 };

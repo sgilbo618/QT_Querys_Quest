@@ -219,9 +219,8 @@ debug\qrc_res.cpp: ..\Querys_Quest\res.qrc \
 		C:\Qt\5.12.2\msvc2017_64\bin\rcc.exe \
 		..\Querys_Quest\ice.png \
 		..\Querys_Quest\ice_boots.png \
-		..\Querys_Quest\walking_guy.png \
-		..\Querys_Quest\water.png \
 		..\Querys_Quest\water_boots.png \
+		..\Querys_Quest\water.png \
 		..\Querys_Quest\orange_door.png \
 		..\Querys_Quest\orange_key.png \
 		..\Querys_Quest\bg.png \
@@ -232,14 +231,18 @@ debug\qrc_res.cpp: ..\Querys_Quest\res.qrc \
 		..\Querys_Quest\plain_ice_boots.png \
 		..\Querys_Quest\floor.png \
 		..\Querys_Quest\you_win.png \
+		..\Querys_Quest\up_guy.png \
 		..\Querys_Quest\unlocked_portal.png \
+		..\Querys_Quest\right_guy.png \
 		..\Querys_Quest\green_door.png \
 		..\Querys_Quest\plain_fire_boots.png \
 		..\Querys_Quest\fire.png \
 		..\Querys_Quest\plain_water_boots.png \
 		..\Querys_Quest\yellow_door.png \
 		..\Querys_Quest\game_over.png \
+		..\Querys_Quest\down_guy.png \
 		..\Querys_Quest\plain_yellow_key.png \
+		..\Querys_Quest\left_guy.png \
 		..\Querys_Quest\big_query.gif \
 		..\Querys_Quest\fire_boots.png \
 		..\Querys_Quest\plain_green_key.png \
@@ -497,6 +500,9 @@ debug\moc_Game.cpp: ..\Querys_Quest\Game.hpp \
 		C:\Qt\5.12.2\msvc2017_64\include\QtMultimedia\qaudio.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtNetwork\qnetworkconfiguration.h \
 		..\Querys_Quest\Player.hpp \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\QTimer \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qtimer.h \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qbasictimer.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\QPushButton \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\qpushbutton.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\qabstractbutton.h \
@@ -647,6 +653,9 @@ debug\moc_Player.cpp: ..\Querys_Quest\Player.hpp \
 		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qmetaobject.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtMultimedia\qaudio.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtNetwork\qnetworkconfiguration.h \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\QTimer \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qtimer.h \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qbasictimer.h \
 		debug\moc_predefs.h \
 		C:\Qt\5.12.2\msvc2017_64\bin\moc.exe
 	C:\Qt\5.12.2\msvc2017_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include C:/Users/sgilb/Documents/Querys_Quest/build-Querys_Quest-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/moc_predefs.h -IC:/Qt/5.12.2/msvc2017_64/mkspecs/win32-msvc -IC:/Users/sgilb/Documents/Querys_Quest/Querys_Quest -IC:/Qt/5.12.2/msvc2017_64/include -IC:/Qt/5.12.2/msvc2017_64/include/QtMultimedia -IC:/Qt/5.12.2/msvc2017_64/include/QtWidgets -IC:/Qt/5.12.2/msvc2017_64/include/QtGui -IC:/Qt/5.12.2/msvc2017_64/include/QtANGLE -IC:/Qt/5.12.2/msvc2017_64/include/QtNetwork -IC:/Qt/5.12.2/msvc2017_64/include/QtCore -I. -I"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" ..\Querys_Quest\Player.hpp -o debug\moc_Player.cpp
@@ -787,6 +796,9 @@ debug\main.obj: ..\Querys_Quest\main.cpp ..\Querys_Quest\Game.hpp \
 		C:\Qt\5.12.2\msvc2017_64\include\QtMultimedia\qaudio.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtNetwork\qnetworkconfiguration.h \
 		..\Querys_Quest\Player.hpp \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\QTimer \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qtimer.h \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qbasictimer.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\QPushButton \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\qpushbutton.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\qabstractbutton.h \
@@ -942,6 +954,9 @@ debug\Game.obj: ..\Querys_Quest\Game.cpp ..\Querys_Quest\Game.hpp \
 		C:\Qt\5.12.2\msvc2017_64\include\QtMultimedia\qaudio.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtNetwork\qnetworkconfiguration.h \
 		..\Querys_Quest\Player.hpp \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\QTimer \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qtimer.h \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qbasictimer.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\QPushButton \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\qpushbutton.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtWidgets\qabstractbutton.h \
@@ -1328,6 +1343,9 @@ debug\Player.obj: ..\Querys_Quest\Player.cpp ..\Querys_Quest\Player.hpp \
 		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qmetaobject.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtMultimedia\qaudio.h \
 		C:\Qt\5.12.2\msvc2017_64\include\QtNetwork\qnetworkconfiguration.h \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\QTimer \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qtimer.h \
+		C:\Qt\5.12.2\msvc2017_64\include\QtCore\qbasictimer.h \
 		..\Querys_Quest\Door.hpp \
 		..\Querys_Quest\Key.hpp \
 		..\Querys_Quest\Boots.hpp \

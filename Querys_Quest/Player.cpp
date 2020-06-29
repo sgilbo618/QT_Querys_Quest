@@ -28,7 +28,12 @@ Player::Player()
     numberOfItems = 0;
     queries = QUERIES_NEEDED;
 
-    setPixmap(QPixmap(":/images/walking_guy.png"));
+    setPixmap(QPixmap(":/images/down_guy.png"));
+
+    // Start timer to animate move()
+    forwardTimer = new QTimer();
+    connect(forwardTimer, SIGNAL(timeout()), this, SLOT(turnPlayerForward()));
+    forwardTimer->start(200);
 }
 
 
@@ -59,6 +64,30 @@ Direction Player::getDirection()
 bool Player::checkIsAlive()
 {
     return isAlive;
+}
+
+
+/******************************************************************************
+** Function: updatePixmap(QPixmap pixmap)
+** Description: Destructor for Player object.
+******************************************************************************/
+void Player::updatePixmap(QPixmap pixmap)
+{
+    setPixmap(pixmap);
+}
+
+
+/******************************************************************************
+** Function: resetForwardTimer()
+** Description: Stops and restarts the forwardTimer. The forward timer makes
+**      the player image turn forward when the player is idle. Each time the
+**      player makes a move, the timer is reset so that it does not interrupt
+**      valid moves.
+******************************************************************************/
+void Player::resetForwardTimer()
+{
+    forwardTimer->stop();
+    forwardTimer->start(200);
 }
 
 
@@ -151,6 +180,7 @@ void Player::move()
    }
 
    setPos(curr_x, curr_y);
+   resetForwardTimer();
 
    // Move coordinates match current coordinates, so stop this animation
    if (curr_x == move_x && curr_y == move_y)
@@ -170,21 +200,25 @@ void Player::move()
             case UP:
                 ice_direction = DOWN;
                 move_y += GRID_STEP;
+                updatePixmap(QPixmap(":/images/down_guy.png"));
                 break;
 
             case DOWN:
                 ice_direction = UP;
                 move_y -= GRID_STEP;
+                updatePixmap(QPixmap(":/images/up_guy.png"));
                 break;
 
             case LEFT:
                 ice_direction = RIGHT;
                 move_x += GRID_STEP;
+                updatePixmap(QPixmap(":/images/right_guy.png"));
                 break;
 
             case RIGHT:
                 ice_direction = LEFT;
                 move_x -= GRID_STEP;
+                updatePixmap(QPixmap(":/images/left_guy.png"));
                 break;
             }
 
@@ -193,6 +227,17 @@ void Player::move()
             timer->start(50);
        }
    }
+}
+
+
+/******************************************************************************
+** Function: turnPlayerForward()
+** Description: Slot function that is called when forwardTimer expires. If the
+**      player is idle long enough, the player image turns forward.
+******************************************************************************/
+void Player::turnPlayerForward()
+{
+    updatePixmap(QPixmap(":/images/down_guy.png"));
 }
 
 
@@ -284,3 +329,4 @@ bool Player::hasThisItem(ItemType item)
     }
     return false;
 }
+

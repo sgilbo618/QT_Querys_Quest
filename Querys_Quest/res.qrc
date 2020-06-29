@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file>floor.png</file>
-        <file>walking_guy.png</file>
         <file>wall.png</file>
         <file>ice.png</file>
         <file>fire.png</file>
@@ -28,6 +27,10 @@
         <file>plain_water_boots.png</file>
         <file>plain_yellow_key.png</file>
         <file>you_win.png</file>
+        <file>left_guy.png</file>
+        <file>right_guy.png</file>
+        <file>down_guy.png</file>
+        <file>up_guy.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>pickup.wav</file>
