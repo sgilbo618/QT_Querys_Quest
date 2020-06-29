@@ -87,7 +87,7 @@ void Player::updatePixmap(QPixmap pixmap)
 void Player::resetForwardTimer()
 {
     forwardTimer->stop();
-    forwardTimer->start(200);
+    forwardTimer->start(300);
 }
 
 
@@ -186,6 +186,7 @@ void Player::move()
    if (curr_x == move_x && curr_y == move_y)
    {
        timer->stop();
+       isOnIce = false;
 
        // If this is a bounce animation, reset data to bounce player back to where he started
        if (isBounce)
@@ -193,6 +194,7 @@ void Player::move()
             move_x = bounce_x;
             move_y = bounce_y;
             isBounce = false;
+            isOnIce = true;
 
             // Update direction to the opposite direction and add one more step
             switch (ice_direction)

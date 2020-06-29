@@ -172,6 +172,7 @@ void Game::resetGame()
     scene->addItem(items);
 
     item_x = -25;
+    player->isOnIce = false;
 }
 
 
@@ -259,7 +260,11 @@ void Game::keyPressEvent(QKeyEvent *event)
     bool made_move = false;
 
     // Up
-    if (event->key() == Qt::Key_Up && player->playerPtr->getUp() != nullptr) // && is for bounds checking
+    if (player->isOnIce)
+    {
+        // do nothing
+    }
+    else if (event->key() == Qt::Key_Up && player->playerPtr->getUp() != nullptr) // && is for bounds checking
     {
         made_move = player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP, false);
         player->direction = UP;
@@ -706,6 +711,9 @@ void Game::onIce()
     // No ice boots makes player slide to next non-ice space
     else
     {
+        // Flag to ignore keyPressEvents
+        player->isOnIce = true;
+
         // Has to be separate call here or else too many sound calls will crash
         player->playerPtr->playSound();
 

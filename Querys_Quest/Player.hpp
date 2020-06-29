@@ -42,6 +42,7 @@ private:
     qreal bounce_x;
     qreal bounce_y;
     bool isBounce;
+    bool isOnIce;
 
      QTimer *forwardTimer;
 
