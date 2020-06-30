@@ -3,7 +3,13 @@
 ** File: Space.hpp
 ** Author: Samantha Guilbeault
 ** Date: 6-19-2020
-** Description:
+** Description: Base class for all the space types of the game board. It has
+**      enums to difine the types of spaces, the types of elements, and the
+**      types of items. Each space object will have members to categorize the
+**      type of space it is. Each space object has pointers to the four spaces
+**      that surround it for game board navigation. Spaces also have sounds.
+**      All spaces will have methods for getting and setting the default data
+**      members.
 ******************************************************************************/
 
 #ifndef SPACE_HPP

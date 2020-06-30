@@ -21,7 +21,7 @@
 
 
 /******************************************************************************
-** Function:
+** Function: Level01(Space ***&gameBoard)
 ** Description: Constructor for Level01. Takes in a reference to the gameBoard
 **      pointer and creates the layout for level01. Calls all of the create
 **      room functions and fills in empty spaces with floor.

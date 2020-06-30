@@ -18,6 +18,7 @@ Free::Free()
 {
     spaceType = FREE;
 
+    // Set image
     setPixmap(QPixmap(":/images/floor.png"));
 }
 

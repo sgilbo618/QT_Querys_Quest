@@ -3,11 +3,13 @@
 ** File: Space.cpp
 ** Author: Samantha Guilbeault
 ** Date: 6-19-2020
-** Description: Contains the implementation of the class Space which is an
-**              abstract base case that represents the basic tile of the game
-**              board for Query's Quest. Each Space has a character to signify
-**              it's type and four pointers to other Spaces in the directions
-**              of up, down, left, and right.
+** Description: Contains the implementation of the base class Space.  It has
+**      enums to difine the types of spaces, the types of elements, and the
+**      types of items. Each space object will have members to categorize the
+**      type of space it is. Each space object has pointers to the four spaces
+**      that surround it for game board navigation. Spaces also have sounds.
+**      All spaces will have methods for getting and setting the default data
+**      members.
 ******************************************************************************/
 
 #include "Space.hpp"

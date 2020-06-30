@@ -3,9 +3,10 @@
 ** File: Ice.cpp
 ** Author: Samantha Guilbeault
 ** Date: 2-26-2019
-** Description: Contains the implementation of the class Ice which
-**				is a subclass of Space and represents Ice tiles in
-**				the game board.
+** Description: Contains the implementation of the class Ice which is a
+**      subclass of Space and represents Ice tiles in the game board. Ice
+**      spaces cause the player to slip onto the next space unless the player
+**      has ice boots.
 ******************************************************************************/
 
 #include "Ice.hpp"
@@ -20,6 +21,7 @@ Ice::Ice()
     spaceType = ELEMENT;
     elementType = ICE;
 
+    // Set image
     setPixmap(QPixmap(":/images/ice.png"));
 
     // Set sound

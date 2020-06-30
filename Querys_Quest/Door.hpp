@@ -4,7 +4,10 @@
 ** Author: Samantha Guilbeault
 ** Date: 6-23-2020
 ** Description: Contains the declaration of the class Door which is a subclass
-**      of Space and represents Door tiles in the game board.
+**      of Space and represents Door tiles in the game board. Has members for
+**      tracking if the door is locked and tracking if it is the first time at
+**      the door. Has an overloaded constructor for setting door type and
+**      methods for getting/setting data members.
 ******************************************************************************/
 
 #ifndef DOOR_HPP

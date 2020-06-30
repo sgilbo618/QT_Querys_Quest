@@ -3,8 +3,11 @@
 ** File: Key.cpp
 ** Author: Samantha Guilbeault
 ** Date: 6-23-2020
-** Description: Contains the implementation of the class Key which is a
-**      subclass of Space and represents Key tiles in the game board.
+** Description: Contains the implementation of class Key which is a subclass
+**      of Space and represents Key tiles in the game board. Has two over-
+**      loaded constructors. One is used for the game board spaces. The other
+**      is a dummy for the items display. Keys are items that can be collected
+**      by the player. They are needed to unlock the corresponding colored door.
 ******************************************************************************/
 
 #include "Key.hpp"
@@ -22,15 +25,16 @@ Key::Key()
 
 /******************************************************************************
 ** Function: Key(ItemType itemType, int dummy)
-** Description: Constructor that takes in the itemType and creates a Key object
-**          with the corresponding item image. Used for item display only.
+** Description: Dummy Constructor that takes in the itemType and creates a Key
+**      object with the corresponding item image. Used for item display only.
+**      Uses dummy parameter to distinguish it from the other constructor.
 ******************************************************************************/
 Key::Key(ItemType itemType, int dummy)
 {
     spaceType = KEY;
     this->itemType = itemType;
 
-    // Set image
+    // Set image - these images are different from the game board images
     if (itemType == ORANGEKEY)
     {
         setPixmap(QPixmap(":/images/plain_orange_key.png"));
@@ -47,9 +51,8 @@ Key::Key(ItemType itemType, int dummy)
 
 
 /******************************************************************************
-** Function: Key(string, ItemType, string)
-** Description: Constructor that takes in a string for the symbol of the key,
-**      a string for the name of the key, and an ItemType for the specific
+** Function: Key(ItemType)
+** Description: Constructor that takes in an ItemType for the specific
 **      version of the key. Uses input to create a specific version of a Key.
 ******************************************************************************/
 Key::Key(ItemType itemType)

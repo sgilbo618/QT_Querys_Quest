@@ -3,8 +3,11 @@
 ** File: Door.cpp
 ** Author: Samantha Guilbeault
 ** Date: 6-23-2020
-** Description: Contains the implementation of the class Door which is a
-**      subclass of Space and represents Door tiles in the game board.
+** Description: Contains the implementation of class Door which is a subclass
+**      of Space and represents Door tiles in the game board. Has members for
+**      tracking if the door is locked and tracking if it is the first time at
+**      the door. Has an overloaded constructor for setting door type and
+**      methods for getting/setting data members.
 ******************************************************************************/
 
 #include "Door.hpp"
@@ -33,6 +36,7 @@ Door::Door(std::string symbol)
     isLocked = true;
     isFirstTimeHere = true;
 
+    // Set image
     if (symbol == "O ")
     {
         setPixmap(QPixmap(":/images/orange_door.png"));
@@ -66,7 +70,8 @@ Door::~Door()
 
 
 /******************************************************************************
-** Description: Getter and Setter for isLocked.
+** Description: Getter and Setter for isLocked. Used to prevent door use until
+**      the corresponding key is found.
 ******************************************************************************/
 bool Door::getIsLocked()
 {
@@ -80,7 +85,8 @@ void Door::setIsLocked(bool isLocked)
 
 
 /******************************************************************************
-** Description: Getter and Setter for isFirstTimeHere.
+** Description: Getter and Setter for isFirstTimeHere. Used to only play door
+**      unlocking sound the first time it is passed.
 ******************************************************************************/
 bool Door::getIsFirstTimeHere()
 {

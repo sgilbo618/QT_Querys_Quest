@@ -31,6 +31,7 @@ private:
     Space* playerPtr;
     Direction direction;
     bool isAlive;
+
     Space* items[6];
     int numberOfItems;
     int queries;
@@ -44,7 +45,7 @@ private:
     bool isBounce;
     bool isOnIce;
 
-     QTimer *forwardTimer;
+    QTimer *forwardTimer;
 
 public:
     // Constructor and Destructor

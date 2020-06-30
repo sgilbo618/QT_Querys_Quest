@@ -4,7 +4,8 @@
 ** Author: Samantha Guilbeault
 ** Date: 6-19-2020
 ** Description: Contains the declaration of the class Wall which is a subclass
-**      of Space and represents wall tiles in the game board.
+**      of Space and represents wall tiles in the game board. Wall spaces act
+**      as boundarys for the level rooms.
 ******************************************************************************/
 
 #ifndef WALL_HPP

@@ -30,11 +30,14 @@ private:
     // Data
     Space*** gameBoard;
     Player *player;
+    QGraphicsScene *scene;
 
+    // For information display
     QGraphicsTextItem *query_count;
     QGraphicsTextItem *items;
     int item_x;
 
+    // Buttons
     QPushButton *playBtn;
     QGraphicsProxyWidget *proxyPlay;
     QPushButton *quitBtn;
@@ -43,13 +46,11 @@ private:
     QGraphicsProxyWidget *proxyInfo;
 
 public:
-    // Data
-    QGraphicsScene *scene;
-
     // Constructor - Destructor
     Game(QWidget *parent = nullptr);
     ~Game();
 
+private:
     // Utility Methods
     void resetGame();
     void gameOver();
@@ -57,16 +58,6 @@ public:
     void keyPressEvent(QKeyEvent* event);
     void setSpacePointers();
     void addAllItemsToScene();
-
-    // Create Room methods
-//    void createGameBoard();
-//    void createMainRoom();
-//    void createIceRoom();
-//    void createMazeRoom();
-//    void createWaterRoom();
-//    void createMixRoom();
-//    void createFinishRoom();
-//    void fillInEmptySpaces();
 
     // Element Methods
     void checkForElements();
