@@ -30,19 +30,40 @@
 ******************************************************************************/
 Game::Game(QWidget *parent)
 {
-    // Make view bigger
+    // Set up view
     this->resize(810, 900);
-    setStyleSheet("background-image: url(:images/bg.png);");
 
-    /* Create and set scene */
-    scene = new QGraphicsScene(this);
-    setScene(scene);
-
-    // Set size of scene
-    scene->setSceneRect(0, -90, 750, 845);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    setStyleSheet("background-image: url(:images/bg.png);");
+
+    // Create and set scene
+    scene = new QGraphicsScene(this);
+    setScene(scene);
+
+    scene->setSceneRect(0, -90, 750, 845);
+
+    createMainMenuDisplay();
+}
+
+
+/******************************************************************************
+** Function: ~Game()
+** Description: Destructor for Board object.
+******************************************************************************/
+Game::~Game()
+{
+}
+
+
+/******************************************************************************
+** Function: createMainMenuDisplay()
+** Description: Creates and styles the buttons for the main menu. Adds them to
+**      the scene and connects them to their respective SLOT functions.
+******************************************************************************/
+void Game::createMainMenuDisplay()
+{
     // Add title
     QGraphicsTextItem *title = new QGraphicsTextItem();
     title->setPlainText("Query's Quest");
@@ -54,10 +75,10 @@ Game::Game(QWidget *parent)
     // Add images
     QPixmap big_query(":/images/big_query.gif");
     QGraphicsPixmapItem *img1 = scene->addPixmap(big_query);
-    QGraphicsPixmapItem *img2 = scene->addPixmap(big_query);
-    QGraphicsPixmapItem *img3 = scene->addPixmap(big_query);
     img1->setPos(-15, 75);
+    QGraphicsPixmapItem *img2 = scene->addPixmap(big_query);
     img2->setPos(251, 75);
+    QGraphicsPixmapItem *img3 = scene->addPixmap(big_query);
     img3->setPos(517, 75);
 
     // Play game button
@@ -72,28 +93,11 @@ Game::Game(QWidget *parent)
 
     // Exit button
     quitBtn = new QPushButton();
-    quitBtn->setGeometry(QRect(225, 550, 140, 60));
-    quitBtn->setText("Exit");
-    quitBtn->setStyleSheet("background-color: #787878;");
-    proxyQuit = scene->addWidget(quitBtn);
-    connect(quitBtn, SIGNAL(clicked()), this, SLOT(onQuitBtnClicked()));
+    createButton(quitBtn, 225, 550, 140, 60);
 
     // Info button
     infoBtn = new QPushButton();
-    infoBtn->setGeometry(QRect(385, 550, 140, 60));
-    infoBtn->setText("About");
-    infoBtn->setStyleSheet("background-color: #787878;");
-    proxyInfo = scene->addWidget(infoBtn);
-    connect(infoBtn, SIGNAL(clicked()), this, SLOT(onInfoBtnClicked()));
-}
-
-
-/******************************************************************************
-** Function: ~Game()
-** Description: Destructor for Board object.
-******************************************************************************/
-Game::~Game()
-{
+    createButton(infoBtn, 385, 550, 140, 60);
 }
 
 
@@ -103,7 +107,48 @@ Game::~Game()
 ******************************************************************************/
 void Game::resetGame()
 {    
-    /* Build 2D board */
+    // Reset gameBoard
+    build2DBoard();
+
+    // Add rooms
+    Level01 level01(gameBoard);
+    setSpacePointers();
+    addAllItemsToScene();
+
+    // Build player
+    player = new Player;
+    player->playerPtr = gameBoard[15][15]; // Adds player to board
+
+    player->setPos(15*GRID_STEP+7, 15*GRID_STEP); // Adds player to display
+    scene->addItem(player);
+
+    player->setFlag(QGraphicsItem::ItemIsFocusable); // Adds focus to player
+    player->setFocus();
+
+    // Draw buttons
+    quitBtn = new QPushButton();
+    createButton(quitBtn, 620, -110, 75, 30);
+
+    infoBtn = new QPushButton();
+    createButton(infoBtn, 700, -110, 75, 30);
+
+    // Draw stats display
+    drawGameInfoDisplay();
+
+    // Reset variables
+    item_x = -25;
+    player->isOnIce = false;
+}
+
+
+/******************************************************************************
+** Function: build2DBoard()
+** Description: Creates a 2D board of pointers to Space objects. Loops through
+**      the board to set all of the pointers to null to start.
+******************************************************************************/
+void Game::build2DBoard()
+{
+    // Build 2D board
     gameBoard = new Space**[ROWS];
 
     for (int i = 0; i < COLS; i++)
@@ -119,45 +164,43 @@ void Game::resetGame()
             gameBoard[i][j] = nullptr;
         }
     }
-
-    // Add rooms
-    Level01 level01(gameBoard);
-    setSpacePointers();
-    addAllItemsToScene();
-
-    /* Build player */
-    player = new Player;
-
-    // Attach player to board
-    player->playerPtr = gameBoard[15][15]; //15 15
-
-    // Attach player to scene
-    player->setPos(15*GRID_STEP+7, 15*GRID_STEP); // the +8 is just to make him centered
-    scene->addItem(player);
-
-    // Make player focusalbe and set it to current focus
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-
-    /* Draw buttons */
-    // Quit
-    quitBtn = new QPushButton();
-    quitBtn->setGeometry(QRect(620, -110, 75, 30));
-    quitBtn->setText("Exit");
-    quitBtn->setStyleSheet("background-color: #787878;");
-    proxyQuit = scene->addWidget(quitBtn);
-    connect(quitBtn, SIGNAL(clicked()), this, SLOT(onQuitBtnClicked()));
-
-    // Info
-    infoBtn = new QPushButton();
-    infoBtn->setGeometry(QRect(700, -110, 75, 30));
-    infoBtn->setText("About");
-    infoBtn->setStyleSheet("background-color: #787878;");
-    proxyInfo = scene->addWidget(infoBtn);
-    connect(infoBtn, SIGNAL(clicked()), this, SLOT(onInfoBtnClicked()));
+}
 
 
-    /* Draw Query tracker */
+/******************************************************************************
+** Function: createButton(QPushButton *button, int x, int y, int width, int height)
+** Description: Takes in a QPushButton object, its coordinates for the scene,
+**      and its dimensions. Draws the button, styles it, and adds a connection
+**      based on the type of button passed in.
+******************************************************************************/
+void Game::createButton(QPushButton *button, int x, int y, int width, int height)
+{
+    button->setGeometry(x, y, width, height);
+    button->setStyleSheet("background-color: #787878;");
+
+    if (button == quitBtn)
+    {
+        button->setText("Exit");
+        proxyQuit = scene->addWidget(button);
+        connect(button, SIGNAL(clicked()), this, SLOT(onQuitBtnClicked()));
+    }
+    else if (button == infoBtn)
+    {
+        button->setText("About");
+        proxyInfo = scene->addWidget(button);
+        connect(button, SIGNAL(clicked()), this, SLOT(onInfoBtnClicked()));
+    }
+}
+
+
+/******************************************************************************
+** Function: drawGameInfoDisplay()
+** Description: Draws and adds the area of the scene that shows the game stats.
+**      Includes the query count tracker and the items-collected display.
+******************************************************************************/
+void Game::drawGameInfoDisplay()
+{
+    // Draw query counter
     query_count = new QGraphicsTextItem();
     query_count->setPlainText("Queries Left: " + QString::number(player->queries));
     query_count->setFont(QFont("times", 16));
@@ -165,16 +208,13 @@ void Game::resetGame()
     query_count->setPos(-30, -120);
     scene->addItem(query_count);
 
-    /* Draw Items tracker */
+    // Draw Items area
     items = new QGraphicsTextItem();
     items->setPlainText("Items:");
     items->setFont(QFont("times", 16));
     items->setDefaultTextColor("red");
     items->setPos(-30, -90);
     scene->addItem(items);
-
-    item_x = -25;
-    player->isOnIce = false;
 }
 
 
@@ -193,7 +233,6 @@ void Game::gameOver()
     // Create winning message box
     QMessageBox *loseBox = new QMessageBox();
     loseBox->setIconPixmap(QPixmap(":/images/game_over.png"));
-    //loseBox->setText("\nYou died!");
 
     // Add buttons
     QAbstractButton *playAgain = loseBox->addButton("Play Again", QMessageBox::YesRole);
@@ -201,6 +240,7 @@ void Game::gameOver()
 
     loseBox->exec();
 
+    // Handle user choice
     if (loseBox->clickedButton() == playAgain)
     {
         scene->clear();
@@ -236,6 +276,7 @@ void Game::gameWon()
 
     winBox->exec();
 
+    // Handle user choice
     if (winBox->clickedButton() == playAgain)
     {
         scene->clear();
@@ -246,8 +287,6 @@ void Game::gameWon()
     else
         exit(0);
 }
-
-
 
 
 /******************************************************************************
@@ -261,11 +300,12 @@ void Game::keyPressEvent(QKeyEvent *event)
     qreal y = player->y();
     bool made_move = false;
 
-    // Up
+    // Player is sliding on ice - ignore keypress
     if (player->isOnIce)
     {
         // do nothing
     }
+    // Up
     else if (event->key() == Qt::Key_Up && player->playerPtr->getUp() != nullptr) // && is for bounds checking
     {
         made_move = player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP, false);
@@ -438,19 +478,20 @@ void Game::onIce()
         // Has to be separate call here or else too many sound calls will crash
         player->playerPtr->playSound();
 
-        // Get direction
+        // Use directions to detect when to bounce
         Direction direction = player->getDirection();
         Direction prevDir = direction;
+
+        // Use to track how far player has slide for sliding animation
         qreal x_tracker = player->x();
         qreal y_tracker = player->y();
+
+        // Flag for indicating when player bounces off wall during slide
         bool isBounce = false;
 
         // Slides player along each subsequent ice space
         while (player->playerPtr->getElementType() == ICE)
         {
-            //x = player->x();
-            //y = player->y();
-
             switch (direction)
             {
             case UP:
@@ -458,7 +499,6 @@ void Game::onIce()
                 if (player->playerPtr->getUp() != nullptr && player->playerPtr->getUp()->getSpaceType() != WALL)
                 {
                     // Move player to the next space up
-                    //player->makeMove(player->playerPtr->getUp(), x, y-GRID_STEP, true);
                     player->makeMove(player->playerPtr->getUp(), 0, 0, true);
                     y_tracker -= GRID_STEP;
                 }
@@ -499,13 +539,14 @@ void Game::onIce()
                 break;
             }
 
-            // If direction has changed call animation
+            // If direction has changed call animation as a bounce
             if (prevDir != direction)
             {
                 player->animateIce(prevDir, x_tracker, y_tracker, true);
                 prevDir = direction;
                 isBounce = true;
             }
+            // If player slide off ice call animation as no bounce
             else if (player->playerPtr->getElementType() != ICE && !isBounce)
             {
                 player->animateIce(prevDir, x_tracker, y_tracker, false);

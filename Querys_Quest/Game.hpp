@@ -39,7 +39,7 @@ private:
 
     // Buttons
     QPushButton *playBtn;
-    QGraphicsProxyWidget *proxyPlay;
+    QGraphicsProxyWidget *proxyPlay; // Buttons need proxy to add/remove as widget
     QPushButton *quitBtn;
     QGraphicsProxyWidget *proxyQuit;
     QPushButton *infoBtn;
@@ -52,7 +52,11 @@ public:
 
 private:
     // Utility Methods
+    void createMainMenuDisplay();
     void resetGame();
+    void build2DBoard();
+    void createButton(QPushButton *button, int x, int y, int width, int height);
+    void drawGameInfoDisplay();
     void gameOver();
     void gameWon();
     void keyPressEvent(QKeyEvent* event);
