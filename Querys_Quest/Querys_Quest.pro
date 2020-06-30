@@ -34,7 +34,8 @@ SOURCES += \
     Door.cpp \
     Key.cpp \
     Boots.cpp \
-    Query.cpp
+    Query.cpp \
+    Level01.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -53,7 +54,8 @@ HEADERS += \
     Door.hpp \
     Key.hpp \
     Boots.hpp \
-    Query.hpp
+    Query.hpp \
+    Level01.hpp
 
 RESOURCES += \
     res.qrc

@@ -59,14 +59,14 @@ public:
     void addAllItemsToScene();
 
     // Create Room methods
-    void createGameBoard();
-    void createMainRoom();
-    void createIceRoom();
-    void createMazeRoom();
-    void createWaterRoom();
-    void createMixRoom();
-    void createFinishRoom();
-    void fillInEmptySpaces();
+//    void createGameBoard();
+//    void createMainRoom();
+//    void createIceRoom();
+//    void createMazeRoom();
+//    void createWaterRoom();
+//    void createMixRoom();
+//    void createFinishRoom();
+//    void fillInEmptySpaces();
 
     // Element Methods
     void checkForElements();
