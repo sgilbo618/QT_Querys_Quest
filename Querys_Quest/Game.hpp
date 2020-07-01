@@ -3,7 +3,11 @@
 ** File: Game.hpp
 ** Author: Samantha Guilbeault
 ** Date: 6-19-2020
-** Description:
+** Description: The main driving class of this game. It is responsible for
+**      creating the underlying gameBoard, the game display, the main menu,
+**      getting user input, making moves, responding to moves, updating the
+**      gameBoard/display, detecting items, detecting game over conditions,
+**      and resetting the game.
 ******************************************************************************/
 
 #ifndef GAME_H
@@ -66,6 +70,7 @@ private:
     // Element Methods
     void checkForElements();
     void onIce();
+    void doIceSlide();
     void onFire();
     void onWater();
 

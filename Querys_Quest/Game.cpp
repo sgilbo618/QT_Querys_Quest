@@ -3,7 +3,11 @@
 ** File: Game.cpp
 ** Author: Samantha Guilbeault
 ** Date: 6-19-2020
-** Description:
+** Description: The main driving class of this game. It is responsible for
+**      creating the underlying gameBoard, the game display, the main menu,
+**      getting user input, making moves, responding to moves, updating the
+**      gameBoard/display, detecting items, detecting game over conditions,
+**      and resetting the game.
 ******************************************************************************/
 
 #include "Game.hpp"
@@ -472,90 +476,103 @@ void Game::onIce()
     // No ice boots makes player slide to next non-ice space
     else
     {
-        // Flag to ignore keyPressEvents
-        player->isOnIce = true;
+        player->isOnIce = true; // Set flag to ignore keyPressEvents
 
         // Has to be separate call here or else too many sound calls will crash
         player->playerPtr->playSound();
 
-        // Use directions to detect when to bounce
-        Direction direction = player->getDirection();
-        Direction prevDir = direction;
+        doIceSlide();
 
-        // Use to track how far player has slide for sliding animation
-        qreal x_tracker = player->x();
-        qreal y_tracker = player->y();
+        checkForElements(); // In case slide ends on fire or water
+    }
+}
 
-        // Flag for indicating when player bounces off wall during slide
-        bool isBounce = false;
 
-        // Slides player along each subsequent ice space
-        while (player->playerPtr->getElementType() == ICE)
+/******************************************************************************
+** Function: doIceSlide()
+** Description: While a player is on ice (without boots) they will continue to
+**      'slip' to the next space until they are no longer on ice. This function
+**      uses the player's direction to determine where to slip them to on the
+**      gameBoard. It uses the player's position to determine how to call the
+**      animation for the display. Also has a flag for catching when the slide
+**      will result in a bounce back to the original space.
+******************************************************************************/
+void Game::doIceSlide()
+{
+    // Use directions to detect when to bounce
+    Direction direction = player->getDirection();
+    Direction prevDir = direction;
+
+    // Use to track how far player has slide for sliding animation
+    qreal x_tracker = player->x();
+    qreal y_tracker = player->y();
+
+    // Flag for indicating when player bounces off wall during slide
+    bool isBounce = false;
+
+    // Slides player along each subsequent ice space
+    while (player->playerPtr->getElementType() == ICE)
+    {
+        switch (direction)
         {
-            switch (direction)
+        case UP:
+            // Next space is not a border or wall
+            if (player->playerPtr->getUp() != nullptr && player->playerPtr->getUp()->getSpaceType() != WALL)
             {
-            case UP:
-                // Next space is not a border or wall
-                if (player->playerPtr->getUp() != nullptr && player->playerPtr->getUp()->getSpaceType() != WALL)
-                {
-                    // Move player to the next space up
-                    player->makeMove(player->playerPtr->getUp(), 0, 0, true);
-                    y_tracker -= GRID_STEP;
-                }
-                // Next space is a border or wall
-                else
-                    // Change to opposite direction to bounce player back
-                    direction = DOWN;
-                break;
-
-            case DOWN:
-                if (player->playerPtr->getDown() != nullptr && player->playerPtr->getDown()->getSpaceType() != WALL)
-                {
-                    player->makeMove(player->playerPtr->getDown(), 0, 0, true);
-                    y_tracker += GRID_STEP;
-                }
-                else
-                    direction = UP;
-                break;
-
-            case LEFT:
-                if (player->playerPtr->getLeft() != nullptr && player->playerPtr->getLeft()->getSpaceType() != WALL)
-                {
-                    player->makeMove(player->playerPtr->getLeft(), 0, 0, true);
-                    x_tracker -= GRID_STEP;
-                }
-                else
-                    direction = RIGHT;
-                break;
-
-            case RIGHT:
-                if (player->playerPtr->getRight() != nullptr && player->playerPtr->getRight()->getSpaceType() != WALL)
-                {
-                    player->makeMove(player->playerPtr->getRight(), 0, 0, true);
-                    x_tracker += GRID_STEP;
-                }
-                else
-                    direction = LEFT;
-                break;
+                // Move player to the next space up
+                player->makeMove(player->playerPtr->getUp(), 0, 0, true);
+                y_tracker -= GRID_STEP;
             }
+            // Next space is a border or wall
+            else
+                // Change to opposite direction to bounce player back
+                direction = DOWN;
+            break;
 
-            // If direction has changed call animation as a bounce
-            if (prevDir != direction)
+        case DOWN:
+            if (player->playerPtr->getDown() != nullptr && player->playerPtr->getDown()->getSpaceType() != WALL)
             {
-                player->animateIce(prevDir, x_tracker, y_tracker, true);
-                prevDir = direction;
-                isBounce = true;
+                player->makeMove(player->playerPtr->getDown(), 0, 0, true);
+                y_tracker += GRID_STEP;
             }
-            // If player slide off ice call animation as no bounce
-            else if (player->playerPtr->getElementType() != ICE && !isBounce)
+            else
+                direction = UP;
+            break;
+
+        case LEFT:
+            if (player->playerPtr->getLeft() != nullptr && player->playerPtr->getLeft()->getSpaceType() != WALL)
             {
-                player->animateIce(prevDir, x_tracker, y_tracker, false);
-                prevDir = direction;
+                player->makeMove(player->playerPtr->getLeft(), 0, 0, true);
+                x_tracker -= GRID_STEP;
             }
+            else
+                direction = RIGHT;
+            break;
+
+        case RIGHT:
+            if (player->playerPtr->getRight() != nullptr && player->playerPtr->getRight()->getSpaceType() != WALL)
+            {
+                player->makeMove(player->playerPtr->getRight(), 0, 0, true);
+                x_tracker += GRID_STEP;
+            }
+            else
+                direction = LEFT;
+            break;
         }
 
-        // Check for elements in case the slide ends on fire or water
-        checkForElements();
+        // If direction has changed call animation as a bounce
+        if (prevDir != direction)
+        {
+            player->animateIce(prevDir, x_tracker, y_tracker, true);
+            prevDir = direction;
+            isBounce = true;
+        }
+        // If player slide off ice call animation as no bounce
+        else if (player->playerPtr->getElementType() != ICE && !isBounce)
+        {
+            player->animateIce(prevDir, x_tracker, y_tracker, false);
+            prevDir = direction;
+        }
     }
 }
 
