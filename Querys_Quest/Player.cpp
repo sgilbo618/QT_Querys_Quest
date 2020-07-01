@@ -4,8 +4,10 @@
 ** Author: Samantha Guilbeault
 ** Date: 6-20-2020
 ** Description: Contains the implementation of class Player which represents
-**      the main character, Query, in the game Query's Quest. Player has
-**      container to keep track of keys, boots, and queries.
+**      the main character, Query, in the game Query's Quest. Is responsible
+**      for maintaining the item container, keeping track of the player's
+**      direction, moving the player on the gameBoard/display, and animating
+**      the ice sliding feature of the game.
 ******************************************************************************/
 
 #include "Player.hpp"
@@ -28,6 +30,7 @@ Player::Player()
     numberOfItems = 0;
     queries = QUERIES_NEEDED;
 
+    // Set image
     setPixmap(QPixmap(":/images/down_guy.png"));
 
     // Start timer to animate move()
@@ -57,9 +60,7 @@ Direction Player::getDirection()
 
 /******************************************************************************
 ** Function: checkIsAlive()
-** Description: Checks number of steps and what space the player is on and
-**      determines if the player is still alive or not. Sets and returns
-**      isAlive. Will return true if still alive or false if not.
+** Description: Getter for isAlive.
 ******************************************************************************/
 bool Player::checkIsAlive()
 {
@@ -69,7 +70,7 @@ bool Player::checkIsAlive()
 
 /******************************************************************************
 ** Function: updatePixmap(QPixmap pixmap)
-** Description: Destructor for Player object.
+** Description: Setter for Pixmap image of player.
 ******************************************************************************/
 void Player::updatePixmap(QPixmap pixmap)
 {
@@ -133,8 +134,10 @@ void Player::animateIce(Direction direction, qreal x_total, qreal y_total, bool 
     move_x = x_total;
     move_y = y_total;
     ice_direction = direction;
+
+    // Set these so move() knows if this is a bounce slide
     this->isBounce = isBounce;
-    bounce_x = this->x();
+    bounce_x = this->x(); // To send player back to this space if bouncing
     bounce_y = this->y();
 
     // Start timer to animate move()
@@ -183,52 +186,65 @@ void Player::move()
    resetForwardTimer();
 
    // Move coordinates match current coordinates, so stop this animation
-   if (curr_x == move_x && curr_y == move_y)
+   if (curr_x == move_x && curr_y == move_y) // These will always be ints so it is okay
    {
        timer->stop();
        isOnIce = false;
 
        // If this is a bounce animation, reset data to bounce player back to where he started
        if (isBounce)
-       {
-            move_x = bounce_x;
-            move_y = bounce_y;
-            isBounce = false;
-            isOnIce = true;
-
-            // Update direction to the opposite direction and add one more step
-            switch (ice_direction)
-            {
-            case UP:
-                ice_direction = DOWN;
-                move_y += GRID_STEP;
-                updatePixmap(QPixmap(":/images/down_guy.png"));
-                break;
-
-            case DOWN:
-                ice_direction = UP;
-                move_y -= GRID_STEP;
-                updatePixmap(QPixmap(":/images/up_guy.png"));
-                break;
-
-            case LEFT:
-                ice_direction = RIGHT;
-                move_x += GRID_STEP;
-                updatePixmap(QPixmap(":/images/right_guy.png"));
-                break;
-
-            case RIGHT:
-                ice_direction = LEFT;
-                move_x -= GRID_STEP;
-                updatePixmap(QPixmap(":/images/left_guy.png"));
-                break;
-            }
-
-            timer = new QTimer();
-            connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-            timer->start(50);
-       }
+           iceBounce();
    }
+}
+
+
+/******************************************************************************
+** Function: iceBounce()
+** Description: Called when the player slides into a wall and must bounce back
+**      to the original space. It sets the move_ positions to the starting
+**      position, changes the direction of the slide to the opposite direction,
+**      and resets the timer to trigger the move() animation.
+******************************************************************************/
+void Player::iceBounce()
+{
+     move_x = bounce_x;
+     move_y = bounce_y;
+
+     isBounce = false;
+     isOnIce = true;
+
+     // Update direction to the opposite direction and add one more step
+     switch (ice_direction)
+     {
+     case UP:
+         ice_direction = DOWN;
+         move_y += GRID_STEP;
+         updatePixmap(QPixmap(":/images/down_guy.png"));
+         break;
+
+     case DOWN:
+         ice_direction = UP;
+         move_y -= GRID_STEP;
+         updatePixmap(QPixmap(":/images/up_guy.png"));
+         break;
+
+     case LEFT:
+         ice_direction = RIGHT;
+         move_x += GRID_STEP;
+         updatePixmap(QPixmap(":/images/right_guy.png"));
+         break;
+
+     case RIGHT:
+         ice_direction = LEFT;
+         move_x -= GRID_STEP;
+         updatePixmap(QPixmap(":/images/left_guy.png"));
+         break;
+     }
+
+     // Reset timer and use move() to animate slide back
+     timer = new QTimer();
+     connect(timer, SIGNAL(timeout()), this, SLOT(move()));
+     timer->start(50);
 }
 
 
