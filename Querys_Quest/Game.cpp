@@ -11,7 +11,6 @@
 ******************************************************************************/
 
 #include "Game.hpp"
-#include "Level01.hpp"
 #include "Wall.hpp"
 #include "Free.hpp"
 #include "Ice.hpp"
@@ -24,8 +23,6 @@
 
 #include <QFont>
 #include <QMessageBox>
-#include <QGraphicsTextItem>
-#include <QGraphicsPixmapItem>
 
 
 /******************************************************************************
@@ -69,7 +66,7 @@ Game::~Game()
 void Game::createMainMenuDisplay()
 {
     // Add title
-    QGraphicsTextItem *title = new QGraphicsTextItem();
+    title = new QGraphicsTextItem();
     title->setPlainText("Query's Quest");
     title->setFont(QFont("times", 36));
 
@@ -78,11 +75,11 @@ void Game::createMainMenuDisplay()
 
     // Add images
     QPixmap big_query(":/images/big_query.gif");
-    QGraphicsPixmapItem *img1 = scene->addPixmap(big_query);
+    img1 = scene->addPixmap(big_query);
     img1->setPos(-15, 75);
-    QGraphicsPixmapItem *img2 = scene->addPixmap(big_query);
+    img2 = scene->addPixmap(big_query);
     img2->setPos(251, 75);
-    QGraphicsPixmapItem *img3 = scene->addPixmap(big_query);
+    img3 = scene->addPixmap(big_query);
     img3->setPos(517, 75);
 
     // Play game button
@@ -114,10 +111,19 @@ void Game::resetGame()
     // Reset gameBoard
     build2DBoard();
 
+    // Reset window
+//    sceneTop = 11;
+//    sceneBottom = 19;
+//    sceneLeft = 11;
+//    sceneRight = 19;
+
     // Add rooms
-    Level01 level01(gameBoard);
+    level01 = new Level01(gameBoard);
     setSpacePointers();
-    addAllItemsToScene();
+
+//    addAllItemsToScene();
+//    addStartWindowToScene();
+    level01->toggleMainRoomScene(scene, 1);
 
     // Build player
     player = new Player;
@@ -128,6 +134,9 @@ void Game::resetGame()
 
     player->setFlag(QGraphicsItem::ItemIsFocusable); // Adds focus to player
     player->setFocus();
+    player->setZValue(100);
+//    prevX = 15;
+//    prevY = 15;
 
     // Draw buttons
     quitBtn = new QPushButton();
@@ -341,6 +350,7 @@ void Game::keyPressEvent(QKeyEvent *event)
     // Made valid move so update game as needed
     if (made_move)
     {
+        level01->updateWindow(scene, player->y()/GRID_STEP, player->x()/GRID_STEP, player->direction);
         checkForElements();
         checkForItems();
         checkForQueries();
@@ -427,6 +437,54 @@ void Game::addAllItemsToScene()
     tc->setPos(-GRID_STEP, -GRID_STEP);
     scene->addItem(tc);
 }
+
+
+//void Game::addStartWindowToScene()
+//{
+//    // Add items from gameBoard
+//    for (int i = sceneTop; i <= sceneBottom; i++)
+//    {
+//        for (int j = sceneLeft; j <= sceneRight; j++)
+//        {
+//            if (gameBoard[i][j])
+//            {
+//                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+//                scene->addItem(gameBoard[i][j]);
+//            }
+//        }
+//    }
+//}
+
+
+//void Game::updateWindow()
+//{
+//    int currX = player->x() / GRID_STEP;
+//    int currY = player->y() / GRID_STEP;
+
+//    for (int i = prevX-WINDOW; i <= prevX+WINDOW; i++)
+//    {
+//        for (int j = prevY-WINDOW; j <= prevY+WINDOW; j++)
+//        {
+//            if (i >= 0 && i < ROWS && j >= 0 && j < COLS)
+//                scene->removeItem(gameBoard[j][i]);
+//        }
+//    }
+
+//    for (int i = currX-WINDOW; i <= currX+WINDOW; i++)
+//    {
+//        for (int j = currY-WINDOW; j <= currY+WINDOW; j++)
+//        {
+//            if (i >= 0 && i < ROWS && j >= 0 && j < COLS)
+//            {
+//                gameBoard[j][i]->setPos(i*GRID_STEP, j*GRID_STEP);
+//                scene->addItem(gameBoard[j][i]);
+//            }
+//        }
+//    }
+
+//    prevX = currX;
+//    prevY = currY;
+//}
 
 
 /******************************************************************************
@@ -759,10 +817,17 @@ bool Game::checkForWin()
 ******************************************************************************/
 void Game::onPlayBtnClicked()
 {
+    scene->removeItem(title);
+    scene->removeItem(img1);
+    scene->removeItem(img2);
+    scene->removeItem(img3);
+
     // Remove buttons from scene
     scene->removeItem(proxyPlay);
     scene->removeItem(proxyQuit);
     scene->removeItem(proxyInfo);
+
+    setStyleSheet("background-color: #525252;");
 
     resetGame();
 }

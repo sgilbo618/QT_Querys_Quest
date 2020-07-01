@@ -12,7 +12,10 @@
 #define LEVEL01_HPP
 
 #include "Space.hpp"
+#include "Player.hpp"
+#include <QGraphicsScene>
 
+#define GRID_STEP 30
 #define ROWS 25 // i
 #define COLS 25 // j
 
@@ -31,8 +34,16 @@ private:
 
     void fillInEmptySpaces();
 
+    void toggleIceRoomScene(QGraphicsScene *scene, bool addToScene);
+    void toggleMazeRoomScene(QGraphicsScene *scene, bool addToScene);
+    void toggleWaterRoomScene(QGraphicsScene *scene, bool addToScene);
+    void toggleMixRoomScene(QGraphicsScene *scene, bool addToScene);
+    void toggleFinishRoomScene(QGraphicsScene *scene, bool addToScene);
+
 public:
     Level01(Space ***&gameBoard);
+    void updateWindow(QGraphicsScene *scene, int xPos, int yPos, Direction direction);
+    void toggleMainRoomScene(QGraphicsScene *scene, bool addToScene);
 };
 
 #endif // LEVEL01_HPP

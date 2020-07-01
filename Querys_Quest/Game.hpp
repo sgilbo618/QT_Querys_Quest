@@ -15,6 +15,7 @@
 
 #include "Space.hpp"
 #include "Player.hpp"
+#include "Level01.hpp"
 
 #include <QPushButton>
 #include <QGraphicsView>
@@ -22,10 +23,14 @@
 #include <QKeyEvent>
 #include <QWidget>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsTextItem>
+#include <QGraphicsPixmapItem>
 
 #define ROWS 25 // i
 #define COLS 25 // j
 #define GRID_STEP 30
+#define WINDOW 8
+
 
 class Game: public QGraphicsView
 {
@@ -41,7 +46,11 @@ private:
     QGraphicsTextItem *items;
     int item_x;
 
-    // Buttons
+    // For main menu
+    QGraphicsTextItem *title;
+    QGraphicsPixmapItem *img1;
+    QGraphicsPixmapItem *img2;
+    QGraphicsPixmapItem *img3;
     QPushButton *playBtn;
     QGraphicsProxyWidget *proxyPlay; // Buttons need proxy to add/remove as widget
     QPushButton *quitBtn;
@@ -49,12 +58,28 @@ private:
     QPushButton *infoBtn;
     QGraphicsProxyWidget *proxyInfo;
 
+    // Levels
+    Level01 *level01;
+
+    // For testing scene as window
+    int prevX;
+    int prevY;
+    int sceneTop;
+    int sceneBottom;
+    int sceneLeft;
+    int sceneRight;
+
 public:
     // Constructor - Destructor
     Game(QWidget *parent = nullptr);
     ~Game();
 
 private:
+
+    // For testing scene as window
+    void addStartWindowToScene();
+    void updateWindow();
+
     // Utility Methods
     void createMainMenuDisplay();
     void resetGame();

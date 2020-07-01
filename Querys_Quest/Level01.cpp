@@ -41,6 +41,79 @@ Level01::Level01(Space ***&gameBoard)
 }
 
 
+void Level01::updateWindow(QGraphicsScene *scene, int xPos, int yPos, Direction direction)
+{
+    // Main room to ice room
+    if (xPos == 11 && (yPos == 8 || yPos == 9) && direction == UP)
+    {
+        toggleMainRoomScene(scene, 0);
+        toggleIceRoomScene(scene, 1);
+    }
+    // Ice room to main room
+    else if (xPos == 12 && (yPos == 8 || yPos == 9) && direction == DOWN)
+    {
+            toggleIceRoomScene(scene, 0);
+            toggleMainRoomScene(scene, 1);
+    }
+
+
+    // Main Room to maze room
+    if (xPos == 15 && yPos == 5 && direction == LEFT)
+    {
+        toggleMainRoomScene(scene, 0);
+        toggleMazeRoomScene(scene, 1);
+    }
+    // Maze room to main room
+    else if (xPos == 15 && yPos == 6 && direction == RIGHT)
+    {
+        toggleMazeRoomScene(scene, 0);
+        toggleMainRoomScene(scene, 1);
+    }
+
+
+    // Main room to water room
+    if (xPos == 17 && yPos == 13 && direction == DOWN)
+    {
+        toggleMainRoomScene(scene, 0);
+        toggleWaterRoomScene(scene, 1);
+    }
+    // Water room to main room
+    else if (xPos == 16 && yPos == 13 && direction == UP)
+    {
+        toggleWaterRoomScene(scene, 0);
+        toggleMainRoomScene(scene, 1);
+    }
+
+
+    // Main room to mix room
+    if (xPos == 15 && yPos == 18 && direction == RIGHT)
+    {
+        toggleMainRoomScene(scene, 0);
+        toggleMixRoomScene(scene, 1);
+    }
+    // Mix room to main room
+    else if (xPos == 15 && yPos == 17 && direction == LEFT)
+    {
+        toggleMixRoomScene(scene, 0);
+        toggleMainRoomScene(scene, 1);
+    }
+
+
+    // Main room to final room
+    if (xPos == 11 && yPos == 16 && direction == UP)
+    {
+        toggleMainRoomScene(scene, 0);
+        toggleFinishRoomScene(scene, 1);
+    }
+    // Final room to main room
+    else if (xPos == 12 && yPos == 16 && direction == DOWN)
+    {
+        toggleFinishRoomScene(scene, 0);
+        toggleMainRoomScene(scene, 1);
+    }
+}
+
+
 /******************************************************************************
 ** Function: createMainRoom()
 ** Description: Adds all the spaces that make up the central starting room.
@@ -66,6 +139,27 @@ void Level01::createMainRoom()
     gameBoard[17][14] = new Wall; gameBoard[17][15] = new Wall; gameBoard[17][16] = new Wall;
     gameBoard[17][17] = new Wall; gameBoard[17][18] = new Wall;
 
+}
+
+
+void Level01::toggleMainRoomScene(QGraphicsScene *scene, bool addToScene)
+{
+    for (int i = 11; i <= 17; i++)
+    {
+        for (int j = 5; j <= 18; j++)
+        {
+            if (addToScene)
+            {
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+                scene->addItem(gameBoard[i][j]);
+            }
+            else
+            {
+                scene->removeItem(gameBoard[i][j]);
+            }
+
+        }
+    }
 }
 
 
@@ -119,6 +213,27 @@ void Level01::createIceRoom()
 }
 
 
+void Level01::toggleIceRoomScene(QGraphicsScene *scene, bool addToScene)
+{
+    for (int i = 0; i <= 11; i++)
+    {
+        for (int j = 0; j <= 12; j++)
+        {
+            if (addToScene)
+            {
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+                scene->addItem(gameBoard[i][j]);
+            }
+            else
+            {
+                scene->removeItem(gameBoard[i][j]);
+            }
+
+        }
+    }
+}
+
+
 /******************************************************************************
 ** Function: createMazeRoom()
 ** Description: Adds all the spaces that make up the maze-like room.
@@ -156,6 +271,44 @@ void Level01::createMazeRoom()
 }
 
 
+void Level01::toggleMazeRoomScene(QGraphicsScene *scene, bool addToScene)
+{
+    for (int i = 11; i <= 24; i++)
+    {
+        for (int j = 0; j <= 5; j++)
+        {
+            if (addToScene)
+            {
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+                scene->addItem(gameBoard[i][j]);
+            }
+            else
+            {
+                scene->removeItem(gameBoard[i][j]);
+            }
+
+        }
+    }
+
+    for (int i = 17; i <= 24; i++)
+    {
+        for (int j = 6; j <= 9; j++)
+        {
+            if (addToScene)
+            {
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+                scene->addItem(gameBoard[i][j]);
+            }
+            else
+            {
+                scene->removeItem(gameBoard[i][j]);
+            }
+
+        }
+    }
+}
+
+
 /******************************************************************************
 ** Function: createWaterRoom()
 ** Description: Adds all the spaces that make up the water-maze room.
@@ -184,6 +337,27 @@ void Level01::createWaterRoom()
     gameBoard[21][16] = new Water; gameBoard[22][11] = new Water; gameBoard[22][16] = new Water;
     gameBoard[23][11] = new Water; gameBoard[23][12] = new Water; gameBoard[23][13] = new Water;
     gameBoard[23][14] = new Water; gameBoard[23][15] = new Water; gameBoard[23][16] = new Water;
+}
+
+
+void Level01::toggleWaterRoomScene(QGraphicsScene *scene, bool addToScene)
+{
+    for (int i = 17; i <= 24; i++)
+    {
+        for (int j = 9; j <= 18; j++)
+        {
+            if (addToScene)
+            {
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+                scene->addItem(gameBoard[i][j]);
+            }
+            else
+            {
+                scene->removeItem(gameBoard[i][j]);
+            }
+
+        }
+    }
 }
 
 
@@ -229,6 +403,27 @@ void Level01::createMixRoom()
     // More fire
     gameBoard[13][24] = new Fire; gameBoard[14][24] = new Fire; gameBoard[15][24] = new Fire;
     gameBoard[16][24] = new Fire; gameBoard[17][24] = new Fire; gameBoard[18][24] = new Fire;
+}
+
+
+void Level01::toggleMixRoomScene(QGraphicsScene *scene, bool addToScene)
+{
+    for (int i = 11; i <= 24; i++)
+    {
+        for (int j = 18; j <= 24; j++)
+        {
+            if (addToScene)
+            {
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+                scene->addItem(gameBoard[i][j]);
+            }
+            else
+            {
+                scene->removeItem(gameBoard[i][j]);
+            }
+
+        }
+    }
 }
 
 
@@ -282,6 +477,27 @@ void Level01::createFinishRoom()
     gameBoard[8][17] = new Water; gameBoard[8][18] = new Water; gameBoard[9][13] = new Water;
     gameBoard[9][14] = new Water; gameBoard[9][18] = new Water; gameBoard[10][14] = new Water;
     gameBoard[10][18] = new Water;
+}
+
+
+void Level01::toggleFinishRoomScene(QGraphicsScene *scene, bool addToScene)
+{
+    for (int i = 0; i <= 11; i++)
+    {
+        for (int j = 12; j <= 24; j++)
+        {
+            if (addToScene)
+            {
+                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
+                scene->addItem(gameBoard[i][j]);
+            }
+            else
+            {
+                scene->removeItem(gameBoard[i][j]);
+            }
+
+        }
+    }
 }
 
 
