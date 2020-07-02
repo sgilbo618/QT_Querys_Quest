@@ -115,9 +115,13 @@ void Game::resetGame()
     level01 = new Level01(gameBoard);
     setSpacePointers();
 
-//    addAllItemsToScene();
-    addBorderWallsToScene();
-    level01->toggleMainRoomScene(scene, 1);
+    if (easyMode)
+        addAllItemsToScene();
+    else
+    {
+        addBorderWallsToScene();
+        level01->toggleMainRoomScene(scene, 1);
+    }
 
     // Build player
     player = new Player;
@@ -342,7 +346,8 @@ void Game::keyPressEvent(QKeyEvent *event)
     // Made valid move so update game as needed
     if (made_move)
     {
-        level01->updateWindow(scene, player->y()/GRID_STEP, player->x()/GRID_STEP, player->direction);
+        if (!easyMode)
+            level01->updateWindow(scene, player->y()/GRID_STEP, player->x()/GRID_STEP, player->direction);
         checkForElements();
         checkForItems();
         checkForQueries();
@@ -776,6 +781,28 @@ bool Game::checkForWin()
 ******************************************************************************/
 void Game::onPlayBtnClicked()
 {
+    // Create winning message box
+    QMessageBox *modeBox = new QMessageBox();
+    modeBox->setIconPixmap(QPixmap(":/images/query.png"));
+    modeBox->setText("Select a mode to play");
+
+    // Add buttons
+    QAbstractButton *easy = modeBox->addButton("Easy Mode", QMessageBox::YesRole);
+    QAbstractButton *hard = modeBox->addButton("Hard Mode", QMessageBox::NoRole);
+
+    modeBox->exec();
+
+    // Handle user choice
+    if (modeBox->clickedButton() == easy)
+        easyMode = true;
+
+    else if (modeBox->clickedButton() == hard)
+        easyMode = false;
+
+    else
+        easyMode = false;
+
+    // Remove images/title from scene
     scene->removeItem(title);
     scene->removeItem(img1);
     scene->removeItem(img2);

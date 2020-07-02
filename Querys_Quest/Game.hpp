@@ -45,6 +45,7 @@ private:
     QGraphicsTextItem *query_count;
     QGraphicsTextItem *items;
     int item_x;
+    bool easyMode;
 
     // For main menu
     QGraphicsTextItem *title;
