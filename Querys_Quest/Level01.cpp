@@ -5,7 +5,8 @@
 ** Date: 6-19-2020
 ** Description: Implementation of the class Level01. It receives a reference to
 **      the gameBoard pointer and allocates the appropriate spaces to create
-**      the layout for level 1.
+**      the layout for level 1. Has methods to toggle rooms on and off of the
+**      main game scene.
 ******************************************************************************/
 
 #include "Level01.hpp"
@@ -41,6 +42,13 @@ Level01::Level01(Space ***&gameBoard)
 }
 
 
+/******************************************************************************
+** Function: updateWindow(QGraphicsScene, int, int, Direction)
+** Description: Takes in the scene with the current position of the player and
+**      the direction they are moving on the gameBoard.Checks the position to
+**      see if the player is moving through a door way. If they are, the
+**      current room is toggled off and the room being moved to is toggled on.
+******************************************************************************/
 void Level01::updateWindow(QGraphicsScene *scene, int xPos, int yPos, Direction direction)
 {
     // Main room to ice room
@@ -142,22 +150,28 @@ void Level01::createMainRoom()
 }
 
 
+/******************************************************************************
+** Function: toggleMainRoomScene(QGraphicsScene, bool)
+** Description: Takes in the scene and a bool that acts as a toggle switch. If
+**      the switch is set (=1) then the main room is toggled on to the scene.
+**      If the switch is not set, the main room is toggle off of the scene.
+******************************************************************************/
 void Level01::toggleMainRoomScene(QGraphicsScene *scene, bool addToScene)
 {
+    // Loop through values of the main room coordinates
     for (int i = 11; i <= 17; i++)
     {
         for (int j = 5; j <= 18; j++)
         {
+            // Toggle on to scene
             if (addToScene)
             {
                 gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
+            // Toggle off of scene
             else
-            {
                 scene->removeItem(gameBoard[i][j]);
-            }
-
         }
     }
 }
@@ -213,22 +227,28 @@ void Level01::createIceRoom()
 }
 
 
+/******************************************************************************
+** Function: toggleIceRoomScene(QGraphicsScene, bool)
+** Description: Takes in the scene and a bool that acts as a toggle switch. If
+**      the switch is set (=1) then the ice room is toggled on to the scene.
+**      If the switch is not set, the ice room is toggle off of the scene.
+******************************************************************************/
 void Level01::toggleIceRoomScene(QGraphicsScene *scene, bool addToScene)
 {
+    // Loop through ice room coordinates
     for (int i = 0; i <= 11; i++)
     {
         for (int j = 0; j <= 12; j++)
         {
+            // Toggle on to scene
             if (addToScene)
             {
                 gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
+            // Toggle off of scene
             else
-            {
                 scene->removeItem(gameBoard[i][j]);
-            }
-
         }
     }
 }
@@ -271,25 +291,32 @@ void Level01::createMazeRoom()
 }
 
 
+/******************************************************************************
+** Function: toggleMazeRoomScene(QGraphicsScene, bool)
+** Description: Takes in the scene and a bool that acts as a toggle switch. If
+**      the switch is set (=1) then the maze room is toggled on to the scene.
+**      If the switch is not set, the maze room is toggle off of the scene.
+******************************************************************************/
 void Level01::toggleMazeRoomScene(QGraphicsScene *scene, bool addToScene)
 {
+    // Loop through upper part of maze room - it does not have rectangular shape
     for (int i = 11; i <= 24; i++)
     {
         for (int j = 0; j <= 5; j++)
         {
+            // Toggle on to scene
             if (addToScene)
             {
                 gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
+            // Toggle off of scene
             else
-            {
                 scene->removeItem(gameBoard[i][j]);
-            }
-
         }
     }
 
+    // Loop through lower part of room
     for (int i = 17; i <= 24; i++)
     {
         for (int j = 6; j <= 9; j++)
@@ -300,10 +327,7 @@ void Level01::toggleMazeRoomScene(QGraphicsScene *scene, bool addToScene)
                 scene->addItem(gameBoard[i][j]);
             }
             else
-            {
                 scene->removeItem(gameBoard[i][j]);
-            }
-
         }
     }
 }
@@ -340,22 +364,28 @@ void Level01::createWaterRoom()
 }
 
 
+/******************************************************************************
+** Function: toggleWaterRoomScene(QGraphicsScene, bool)
+** Description: Takes in the scene and a bool that acts as a toggle switch. If
+**      the switch is set (=1) then the water room is toggled on to the scene.
+**      If the switch is not set, the water room is toggle off of the scene.
+******************************************************************************/
 void Level01::toggleWaterRoomScene(QGraphicsScene *scene, bool addToScene)
 {
+    // Loop through water room coordinates
     for (int i = 17; i <= 24; i++)
     {
         for (int j = 9; j <= 18; j++)
         {
+            // Toggle on to scene
             if (addToScene)
             {
                 gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
+            // Toggle off of scene
             else
-            {
                 scene->removeItem(gameBoard[i][j]);
-            }
-
         }
     }
 }
@@ -406,22 +436,28 @@ void Level01::createMixRoom()
 }
 
 
+/******************************************************************************
+** Function: toggleMixRoomScene(QGraphicsScene, bool)
+** Description: Takes in the scene and a bool that acts as a toggle switch. If
+**      the switch is set (=1) then the mix room is toggled on to the scene.
+**      If the switch is not set, the mix room is toggle off of the scene.
+******************************************************************************/
 void Level01::toggleMixRoomScene(QGraphicsScene *scene, bool addToScene)
 {
+    // Loop through mix room coordinates
     for (int i = 11; i <= 24; i++)
     {
         for (int j = 18; j <= 24; j++)
         {
+            // Toggle on to scene
             if (addToScene)
             {
                 gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
+            // Toggle off of scene
             else
-            {
                 scene->removeItem(gameBoard[i][j]);
-            }
-
         }
     }
 }
@@ -480,22 +516,28 @@ void Level01::createFinishRoom()
 }
 
 
+/******************************************************************************
+** Function: toggleFinishRoomScene(QGraphicsScene, bool)
+** Description: Takes in the scene and a bool that acts as a toggle switch. If
+**      the switch is set (=1) then the finish room is toggled on to the scene.
+**      If the switch is not set, the finish room is toggle off of the scene.
+******************************************************************************/
 void Level01::toggleFinishRoomScene(QGraphicsScene *scene, bool addToScene)
 {
+    // Loop through finish room coordinates
     for (int i = 0; i <= 11; i++)
     {
         for (int j = 12; j <= 24; j++)
         {
+            // Toggle on to scene
             if (addToScene)
             {
                 gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
                 scene->addItem(gameBoard[i][j]);
             }
+            // Toggle off of scene
             else
-            {
                 scene->removeItem(gameBoard[i][j]);
-            }
-
         }
     }
 }

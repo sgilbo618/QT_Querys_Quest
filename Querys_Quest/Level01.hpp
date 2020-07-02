@@ -5,7 +5,8 @@
 ** Date: 6-19-2020
 ** Description: Interface of the class Level01. The constructor takes in a
 **      reference to the game board pointer and uses it to build the level.
-**      There are functions for creating each room.
+**      There are functions for creating each room and toggling the rooms on
+**      and off of the main game scene.
 ******************************************************************************/
 
 #ifndef LEVEL01_HPP
