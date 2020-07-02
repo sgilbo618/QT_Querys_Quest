@@ -111,18 +111,12 @@ void Game::resetGame()
     // Reset gameBoard
     build2DBoard();
 
-    // Reset window
-//    sceneTop = 11;
-//    sceneBottom = 19;
-//    sceneLeft = 11;
-//    sceneRight = 19;
-
     // Add rooms
     level01 = new Level01(gameBoard);
     setSpacePointers();
 
 //    addAllItemsToScene();
-//    addStartWindowToScene();
+    addBorderWallsToScene();
     level01->toggleMainRoomScene(scene, 1);
 
     // Build player
@@ -135,8 +129,6 @@ void Game::resetGame()
     player->setFlag(QGraphicsItem::ItemIsFocusable); // Adds focus to player
     player->setFocus();
     player->setZValue(100);
-//    prevX = 15;
-//    prevY = 15;
 
     // Draw buttons
     quitBtn = new QPushButton();
@@ -362,6 +354,7 @@ void Game::keyPressEvent(QKeyEvent *event)
     player->resetForwardTimer();
 }
 
+
 /******************************************************************************
 ** Function: setSpacePointers()
 ** Description: Loop through gameBoard and set all of the Space's directional
@@ -413,78 +406,44 @@ void Game::addAllItemsToScene()
         }
     }
 
-    // Add border walls
+    addBorderWallsToScene();
+}
+
+
+/******************************************************************************
+** Function: addBorderWallsToScene()
+** Description: Loops for the size of the scene and adds wall tiles to all
+**      the boarders.
+******************************************************************************/
+void Game::addBorderWallsToScene()
+{
     for (int i = 0; i < COLS+1; i++)
     {
-        Wall *wr = new Wall;
-        wr->setPos(-GRID_STEP, i*GRID_STEP);
-        scene->addItem(wr);
-
+        // Walls on the left
         Wall *wl = new Wall;
-        wl->setPos(COLS*GRID_STEP, i*GRID_STEP);
+        wl->setPos(-GRID_STEP, i*GRID_STEP);
         scene->addItem(wl);
 
+        // Walls on the right
+        Wall *wr = new Wall;
+        wr->setPos(COLS*GRID_STEP, i*GRID_STEP);
+        scene->addItem(wr);
+
+        // Walls on the top
         Wall *wt = new Wall;
         wt->setPos(i*GRID_STEP, -GRID_STEP);
         scene->addItem(wt);
 
+        // Walls on the bottom
         Wall *wb = new Wall;
         wb->setPos(i*GRID_STEP, COLS*GRID_STEP);
         scene->addItem(wb);
     }
-    // One more wall at top corner to fill in border
+    // One more wall at top-left corner to fill in border
     Wall *tc = new Wall;
     tc->setPos(-GRID_STEP, -GRID_STEP);
     scene->addItem(tc);
 }
-
-
-//void Game::addStartWindowToScene()
-//{
-//    // Add items from gameBoard
-//    for (int i = sceneTop; i <= sceneBottom; i++)
-//    {
-//        for (int j = sceneLeft; j <= sceneRight; j++)
-//        {
-//            if (gameBoard[i][j])
-//            {
-//                gameBoard[i][j]->setPos(j*GRID_STEP, i*GRID_STEP);
-//                scene->addItem(gameBoard[i][j]);
-//            }
-//        }
-//    }
-//}
-
-
-//void Game::updateWindow()
-//{
-//    int currX = player->x() / GRID_STEP;
-//    int currY = player->y() / GRID_STEP;
-
-//    for (int i = prevX-WINDOW; i <= prevX+WINDOW; i++)
-//    {
-//        for (int j = prevY-WINDOW; j <= prevY+WINDOW; j++)
-//        {
-//            if (i >= 0 && i < ROWS && j >= 0 && j < COLS)
-//                scene->removeItem(gameBoard[j][i]);
-//        }
-//    }
-
-//    for (int i = currX-WINDOW; i <= currX+WINDOW; i++)
-//    {
-//        for (int j = currY-WINDOW; j <= currY+WINDOW; j++)
-//        {
-//            if (i >= 0 && i < ROWS && j >= 0 && j < COLS)
-//            {
-//                gameBoard[j][i]->setPos(i*GRID_STEP, j*GRID_STEP);
-//                scene->addItem(gameBoard[j][i]);
-//            }
-//        }
-//    }
-
-//    prevX = currX;
-//    prevY = currY;
-//}
 
 
 /******************************************************************************

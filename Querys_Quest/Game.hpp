@@ -61,24 +61,12 @@ private:
     // Levels
     Level01 *level01;
 
-    // For testing scene as window
-    int prevX;
-    int prevY;
-    int sceneTop;
-    int sceneBottom;
-    int sceneLeft;
-    int sceneRight;
-
 public:
     // Constructor - Destructor
     Game(QWidget *parent = nullptr);
     ~Game();
 
 private:
-
-    // For testing scene as window
-    void addStartWindowToScene();
-    void updateWindow();
 
     // Utility Methods
     void createMainMenuDisplay();
@@ -91,6 +79,7 @@ private:
     void keyPressEvent(QKeyEvent* event);
     void setSpacePointers();
     void addAllItemsToScene();
+    void addBorderWallsToScene();
 
     // Element Methods
     void checkForElements();
